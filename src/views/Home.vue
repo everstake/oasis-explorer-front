@@ -243,6 +243,10 @@ export default {
   .home {
     margin: 50px 0;
     text-align: center;
+    
+    &__section {
+      overflow: hidden;
+    }
 
     &__section:not(:last-child) {
       padding-bottom: 50px;

@@ -1,9 +1,19 @@
 .card {
-  &-text {
-    min-height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &--home {
+    & .card-text {
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    & .card-title {
+      font-size: 20px;
+    }
+
+    & .card-text {
+      font-size: 26px;
+    }
   }
   &--link {
     & .card-body {
@@ -12,15 +22,15 @@
   }
 
   &-title {
+    font-size: 18px;
     margin-bottom: 40px;
-    font-size: 20px;
     font-weight: 700;
     color: $color-gray-999;
     text-align: center;
   }
 
   &-text {
-    font-size: 26px;
+    font-size: 16px;
     font-weight: 700;
     color: $color-gray-333;
   }

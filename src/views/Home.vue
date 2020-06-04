@@ -7,7 +7,11 @@
       <b-container>
         <b-row class="mb-5">
           <b-col cols="3">
-            <b-card @click="handleCardClick" class="card--link" title="Current block height">
+            <b-card
+              @click="handleCardClick"
+              class="card--link card--home"
+              title="Current block height"
+            >
               <b-card-text>
                 <span class="home__link">
                   <font-awesome-icon v-if="!height" class="icon home__icon" icon="spinner" spin />
@@ -17,7 +21,7 @@
             </b-card>
           </b-col>
           <b-col cols="3">
-            <b-card title="Top-20 stake weight">
+            <b-card title="Top-20 stake weight" class="card--home">
               <b-card-text>
                 <font-awesome-icon
                   v-if="!topStakeWeight"
@@ -60,28 +64,28 @@
           v-if="price || marketCup || tradingVolume || circulatingSupply"
         >
           <b-col v-if="price" cols="3">
-            <b-card title="Price">
+            <b-card title="Price" class="card--home">
               <b-card-text>
                 {{ data.price }} chart
               </b-card-text>
             </b-card>
           </b-col>
           <b-col v-if="marketCup" cols="3">
-            <b-card title="Market cup">
+            <b-card title="Market cup" class="card--home">
               <b-card-text>
                 {{ data.marketCup }} chart
               </b-card-text>
             </b-card>
           </b-col>
           <b-col v-if="tradingVolume" cols="3">
-            <b-card title="Trading volume">
+            <b-card title="Trading volume" class="card--home">
               <b-card-text>
                 {{ data.tradingVolume }}
               </b-card-text>
             </b-card>
           </b-col>
           <b-col v-if="circulatingSupply" cols="3">
-            <b-card title="Circulating supply">
+            <b-card title="Circulating supply" class="card--home">
               <b-card-text>
                 {{ circulatingSupply }}
               </b-card-text>
@@ -260,6 +264,7 @@ export default {
     }
 
     &__icon {
+      font-size: 20px;
       color: $color-primary;
     }
   }

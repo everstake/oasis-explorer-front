@@ -1,0 +1,71 @@
+<template>
+  <div class="search__content">
+    <b-container>
+      <b-row class="search__row">
+        <p class="search__title">Oasis Explorer</p>
+        <p class="search__subtitle">Search by block height, hash or alias name</p>
+        <div class="search__controls">
+          <label class="search__label" for="input">
+            <font-awesome-icon class="icon search__icon" :icon="['fas', 'search']" />
+          </label>
+          <input
+            v-if="autofocus"
+            id="input"
+            v-model="query"
+            @keypress.enter.prevent="$emit('handleSubmit', query)"
+            class="search__input"
+            type="text"
+            placeholder="Enter block height, hash or alias name"
+            aria-label="Search"
+            v-autofocus
+          >
+          <input
+            v-else
+            id="input"
+            v-model="query"
+            @keypress.enter.prevent="$emit('handleSubmit', query)"
+            class="search__input"
+            type="text"
+            placeholder="Enter block height, hash or alias name"
+            aria-label="Search"
+          >
+          <button
+            @click="$emit('handleSubmit', query)"
+            class="search__submit"
+          >
+            <font-awesome-icon v-if="loading" icon="spinner" spin />
+            <span v-else>Search</span>
+          </button>
+        </div>
+      </b-row>
+    </b-container>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'SearchContent',
+  directives: {
+    autofocus: {
+      inserted(el) {
+        el.focus();
+      },
+    },
+  },
+  props: {
+    autofocus: {
+      type: Boolean,
+      default: false,
+    },
+    loading: {
+      type: Boolean,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      query: '',
+    };
+  },
+};
+</script>

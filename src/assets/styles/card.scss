@@ -1,0 +1,27 @@
+.card {
+  &-text {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &--link {
+    & .card-body {
+      cursor: pointer;
+    }
+  }
+
+  &-title {
+    margin-bottom: 40px;
+    font-size: 20px;
+    font-weight: 700;
+    color: $color-gray-999;
+    text-align: center;
+  }
+
+  &-text {
+    font-size: 26px;
+    font-weight: 700;
+    color: $color-gray-333;
+  }
+}

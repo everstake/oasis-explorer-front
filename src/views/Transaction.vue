@@ -57,47 +57,59 @@
         </b-col>
         <b-col cols="9">
           <div class="block__section">
-            <b-table
-              :busy="loading && items === null"
-              :responsive="true"
-              show-empty
-              :fields="fields"
-              :items="items"
-              class="table table--border"
-              borderless
-              no-border-collapse
-            >
-              <template #table-busy>
-                <TableLoader />
-              </template>
-              <template #cell(fees)="items">
-                {{ !items.item.fees ? '-' : items.item.fees }}
-              </template>
-              <template #cell(hash)="items">
-                {{ !items.item.hash ? '-' : items.item.hash }}
-              </template>
-              <template #cell(from)="items">
-                {{ !items.item.from ? '-' : items.item.from }}
-              </template>
-              <template #cell(to)="items">
-                {{ !items.item.to ? '-' : items.item.to }}
-              </template>
-              <template #cell(proposer)="items">
-                {{ !items.item.proposer ? '-' : items.item.proposer }}
-              </template>
-              <template #cell(timestamp)="items">
-                {{ items.item.timestamp | formatDate }}
-              </template>
-              <template #cell(amount)="items">
-                {{ !items.item.amount ? '-' : items.item.amount }}
-              </template>
-              <template #cell(storage)="items">
-                {{ !items.item.storage ? '-' : items.item.storage }}
-              </template>
-              <template #cell(gas_used)="items">
-                {{ !items.item.gas_used ? '-' : items.item.gas_used }}
-              </template>
-            </b-table>
+            <div class="block__section block__section--table">
+              <b-card>
+                <b-table
+                  id="my-table"
+                  :busy="loading && items === null"
+                  :responsive="true"
+                  show-empty
+                  :fields="fields"
+                  :items="items"
+                  class="table table--border"
+                  borderless
+                  no-border-collapse
+                >
+                  <template #table-busy>
+                    <TableLoader />
+                  </template>
+                  <template #cell(fees)="items">
+                    {{ !items.item.fees ? '-' : items.item.fees }}
+                  </template>
+                  <template #cell(hash)="items">
+                    {{ !items.item.hash ? '-' : items.item.hash }}
+                  </template>
+                  <template #cell(from)="items">
+                    {{ !items.item.from ? '-' : items.item.from }}
+                  </template>
+                  <template #cell(to)="items">
+                    {{ items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
+                    ? 'System Account' : !items.item.to ? '-' : items.item.to }}
+                  </template>
+                  <template #cell(proposer)="items">
+                    {{ !items.item.proposer ? '-' : items.item.proposer }}
+                  </template>
+                  <template #cell(timestamp)="items">
+                    {{ items.item.timestamp | formatDate }}
+                  </template>
+                  <template #cell(amount)="items">
+                    {{ !items.item.amount ? '-' : items.item.amount }}
+                  </template>
+                  <template #cell(storage)="items">
+                    {{ !items.item.storage ? '-' : items.item.storage }}
+                  </template>
+                  <template #cell(gas_used)="items">
+                    {{ !items.item.gas_used ? '-' : items.item.gas_used }}
+                  </template>
+                </b-table>
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="items.length"
+                  :per-page="perPage"
+                  aria-controls="my-table"
+                ></b-pagination>
+              </b-card>
+            </div>
           </div>
         </b-col>
       </b-row>
@@ -160,6 +172,8 @@ export default {
           active: true,
         },
       ],
+      currentPage: 0,
+      perPage: 5,
     };
   },
   async created() {

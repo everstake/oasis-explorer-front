@@ -18,7 +18,6 @@
       <template #cell(level)="data">
         <router-link
           :to="{ name: 'block', params: { id: data.item.level } }"
-          class="text-center"
         >
           {{ data.item.level }}
         </router-link>
@@ -94,14 +93,14 @@ export default {
       type: Array,
       default() {
         return [
-          { key: 'timestamp', label: 'Date', sortable: true },
-          { key: 'level', label: 'Block height', sortable: true },
+          { key: 'level', label: 'Height', sortable: true },
           { key: 'hash', label: 'Block hash', sortable: true },
           { key: 'proposer', label: 'Proposer' },
           { key: 'number_of_signatures', label: 'Signatures' },
-          { key: 'number_of_txs', label: 'Operations', sortable: true },
+          { key: 'number_of_txs', label: 'Number of Ops', sortable: true },
           { key: 'epoch', label: 'Epoch' },
           { key: 'fees', label: 'Fees' },
+          { key: 'timestamp', label: 'Date', sortable: true },
         ];
       },
     },

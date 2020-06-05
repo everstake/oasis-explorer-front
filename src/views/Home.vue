@@ -151,7 +151,12 @@
             <BlocksList
               :rows="10"
               :scrollToLoadMore="false"
-              :fields="['level', 'hash', 'proposer', 'number_of_txs', 'timestamp']"
+              :fields="[
+                { key: 'level', label: 'Height' },
+                { key: 'hash', label: 'Block hash' },
+                { key: 'number_of_txs', label: 'Number of Ops' },
+                { key: 'timestamp', label: 'Date' },
+              ]"
             />
             <b-button
               to="/blocks"
@@ -165,7 +170,12 @@
             <TransactionsList
               :rows="10"
               :scrollToLoadMore="false"
-              :fields="['level', 'hash', 'type', 'timestamp']"
+              :fields="[
+                { key: 'level', label: 'Height' },
+                { key: 'hash', label: 'Block Hash' },
+                { key: 'type', label: 'Type' },
+                { key: 'timestamp', label: 'Date' },
+              ]"
             />
             <b-button
               to="/transactions"

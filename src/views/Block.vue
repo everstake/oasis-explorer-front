@@ -55,6 +55,7 @@
           <div class="block__section block__section--table">
             <b-card>
               <b-table
+                id="my-table"
                 :busy="loading && items === null"
                 :responsive="true"
                 show-empty

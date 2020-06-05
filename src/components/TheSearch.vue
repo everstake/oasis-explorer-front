@@ -58,6 +58,11 @@ export default {
       console.log(query);
 
       setTimeout(() => {
+        this.$notify({
+          type: 'warn',
+          title: 'Oasis Explorer (warning)',
+          text: 'Feature isn\'t implemented yet',
+        });
         this.loading = false;
       }, 1000);
     },

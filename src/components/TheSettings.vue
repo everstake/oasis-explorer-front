@@ -54,9 +54,15 @@ export default {
     },
     async handleSubmit(props) {
       this.loading = true;
-      localStorage.setItem('email', props.email);
-      localStorage.setItem('name', props.name);
+      if (props.subscribe) localStorage.setItem('subscribe', props.subscribe);
+      if (props.email) localStorage.setItem('email', props.email);
+      if (props.name) localStorage.setItem('name', props.name);
       setTimeout(() => {
+        this.$notify({
+          type: 'warn',
+          title: 'Oasis Explorer (warning)',
+          text: 'Feature isn\'t implemented yet',
+        });
         this.loading = false;
       }, 1000);
     },

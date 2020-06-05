@@ -10,7 +10,6 @@
               <b-form-input
                 id="input-2"
                 v-model="name"
-                required
                 placeholder="Enter name"
                 @input="isFormSaved = false"
               ></b-form-input>
@@ -31,6 +30,9 @@
                   @input="isFormSaved = false"
                 ></b-form-input>
               </b-form-group>
+            <b-form-group id="input-group-4">
+              <b-form-checkbox v-model="subscribe">Subscribe to our newsletter</b-form-checkbox>
+            </b-form-group>
             <b-button
               type="submit"
               variant="outline-primary"
@@ -86,13 +88,14 @@ export default {
       email: null,
       name: null,
       isFormSaved: false,
+      subscribe: null,
     };
   },
   methods: {
     onSubmit(event) {
       event.preventDefault();
-      const { email, name } = this;
-      this.$emit('handleSubmit', { email, name });
+      const { email, name, subscribe } = this;
+      this.$emit('handleSubmit', { email, name, subscribe });
       this.isFormSaved = true;
     },
   },
@@ -103,6 +106,10 @@ export default {
 
     if (localStorage.getItem('name') !== null) {
       this.name = localStorage.getItem('name');
+    }
+
+    if (localStorage.getItem('subscribe') !== null) {
+      this.subscribe = localStorage.getItem('subscribe');
     }
   },
 };

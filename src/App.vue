@@ -1,10 +1,12 @@
 <template>
-  <div id="app">
+  <div id="app" class="page">
     <TheHeader class="page__header" />
 
     <main class="page__main">
       <router-view />
     </main>
+
+    <notifications class="page__notifications" />
 
     <TheFooter class="page__footer" />
   </div>

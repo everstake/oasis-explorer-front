@@ -34,27 +34,81 @@
             </b-card>
           </b-col>
           <b-col cols="3">
-            <b-card title="Escrow ratio">
-              <b-card-text class="home__chart">
+            <b-card
+              @click="handleChartClick()"
+              class="home-card__chart"
+              title="Escrow ratio"
+            >
+              <b-card-text>
                 <div v-if="!escrowRatio" class="home__loader">
                   <font-awesome-icon class="icon home__icon" icon="spinner" spin />
                 </div>
                 <line-chart
                   v-else
-                  style="height: 200px"
+                  :height="100"
                   :options="options"
                   :chart-data="getEscrowData()"
+                  class="home__chart"
                 />
               </b-card-text>
             </b-card>
           </b-col>
           <b-col cols="3">
-            <b-card title="Trading volume">
+            <b-card
+              @click="handleChartClick()"
+              class="home-card__chart"
+              title="Trading volume"
+            >
               <b-card-text class="home__chart">
                 <div v-if="!transactionVolume" class="home__loader">
                   <font-awesome-icon class="icon home__icon" icon="spinner" spin />
                 </div>
-                <line-chart v-else :options="options" :chart-data="getTransactionVolumeData()" />
+                <line-chart
+                  v-else
+                  :height="100"
+                  :options="options"
+                  :chart-data="getTransactionVolumeData()"
+                  class="home__chart"
+                />
+              </b-card-text>
+            </b-card>
+          </b-col>
+        </b-row>
+        <b-row class="mb-5">
+          <b-col cols="3">
+            <b-card
+              class="card--home"
+              title="Price"
+            >
+              <b-card-text>
+                No data
+              </b-card-text>
+            </b-card>
+          </b-col>
+          <b-col cols="3">
+            <b-card title="Market cup" class="card--home">
+              <b-card-text>
+                No data
+              </b-card-text>
+            </b-card>
+          </b-col>
+          <b-col cols="3">
+            <b-card
+              class="card--home"
+              title="Transaction volume"
+            >
+              <b-card-text>
+                No data
+              </b-card-text>
+            </b-card>
+          </b-col>
+          <b-col cols="3">
+            <b-card
+              class="card--home"
+              title="Circulating supply"
+            >
+              <b-card-text>
+                No data
               </b-card-text>
             </b-card>
           </b-col>
@@ -94,7 +148,16 @@
         </b-row>
         <b-row class="home__section">
           <b-col cols="6">
-            <BlocksList :rows="10" :scrollToLoadMore="false" />
+            <BlocksList
+              :rows="10"
+              :scrollToLoadMore="false"
+              :fields="[
+                { key: 'level', label: 'Height' },
+                { key: 'hash', label: 'Block hash' },
+                { key: 'number_of_txs', label: 'Number of Ops' },
+                { key: 'timestamp', label: 'Date' },
+              ]"
+            />
             <b-button
               to="/blocks"
               class="button button--outline"
@@ -104,7 +167,16 @@
             </b-button>
           </b-col>
           <b-col cols="6">
-            <TransactionsList :rows="10" :scrollToLoadMore="false" />
+            <TransactionsList
+              :rows="10"
+              :scrollToLoadMore="false"
+              :fields="[
+                { key: 'level', label: 'Height' },
+                { key: 'hash', label: 'Block Hash' },
+                { key: 'type', label: 'Type' },
+                { key: 'timestamp', label: 'Date' },
+              ]"
+            />
             <b-button
               to="/transactions"
               class="button button--outline"
@@ -153,6 +225,11 @@ export default {
         topTwentyStakeWeight: 0,
       },
       options: {
+        elements: {
+          point: {
+            radius: 0,
+          },
+        },
         scales: {
           xAxes: [{
             display: false,
@@ -167,11 +244,7 @@ export default {
           display: false,
         },
         tooltips: {
-          callbacks: {
-            label(tooltipItem) {
-              return String(tooltipItem.yLabel).slice(0, 5);
-            },
-          },
+          enabled: false,
         },
       },
     };
@@ -206,7 +279,14 @@ export default {
       return data;
     },
     handleCardClick() {
-      this.$router.push({ name: 'block', params: { level: this.height } });
+      this.$router.push({ name: 'block', params: { id: this.height } });
+    },
+    handleChartClick() {
+      this.$notify({
+        type: 'warn',
+        title: 'Oasis Explorer (warning)',
+        text: 'Feature isn\'t implemented yet',
+      });
     },
   },
   async created() {
@@ -258,18 +338,25 @@ export default {
 
     &__chart {
       display: block;
+      cursor: pointer;
     }
 
     &__loader {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 200px;
     }
 
     &__icon {
       font-size: 20px;
       color: $color-primary;
+    }
+
+    &-card {
+      &__chart {
+        height: 100%;
+        cursor: pointer;
+      }
     }
   }
 </style>

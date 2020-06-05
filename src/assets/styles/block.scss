@@ -1,5 +1,7 @@
 .block,
 .transaction {
+  margin-bottom: 50px;
+
   &__loading {
     margin: 50px 0;
   }
@@ -13,6 +15,31 @@
   &__header {
     color: $color-gray-999;
     font-weight: 700;
+  }
+
+  &__section {
+    height: 100%;
+
+    &--table {
+      & .table {
+        box-shadow: none;
+      }
+
+      & .card-body {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 0;
+      }
+
+      & .pagination {
+        margin: 20px;
+      }
+    }
+
+    & .card {
+      height: 100%;
+    }
   }
 
   &__content {

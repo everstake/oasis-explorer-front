@@ -5,6 +5,7 @@ import store from './store';
 import './plugins/initialization/bootstrap.plugin';
 import './plugins/initialization/icons.plugin';
 import './plugins/initialization/api.plugin';
+import './plugins/initialization/notifications.plugin';
 import './filters/date.filter';
 
 Vue.config.productionTip = false;

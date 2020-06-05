@@ -22,7 +22,7 @@ const routes = [
     },
   },
   {
-    path: '/block/:level',
+    path: '/block/:id',
     name: 'block',
     meta: {
       title: 'Block | Oasis Explorer',
@@ -30,7 +30,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "block" */ '../views/Block.vue'),
     beforeEnter(from, to, next) {
       if (from.params.level) {
-        document.title = `Block ${from.params.level} | Oasis Explorer`;
+        document.title = `Block ${String(from.params.level).slice(0, 7)} | Oasis Explorer`;
       } else {
         document.title = 'Block | Oasis Explorer';
       }
@@ -46,7 +46,7 @@ const routes = [
     },
   },
   {
-    path: '/transaction/:hash',
+    path: '/transaction/:id',
     name: 'transaction',
     component: () => import(/* webpackChunkName: "transaction" */ '../views/Transaction.vue'),
     meta: {
@@ -54,7 +54,7 @@ const routes = [
     },
     beforeEnter(from, to, next) {
       if (from.params.hash) {
-        document.title = `Transaction ${from.params.hash.slice(0, 7)}.. | Oasis Explorer`;
+        document.title = `Transaction ${String(from.params.id).slice(0, 7)} | Oasis Explorer`;
       } else {
         document.title = 'Transaction | Oasis Explorer';
       }

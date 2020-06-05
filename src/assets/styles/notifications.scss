@@ -1,0 +1,25 @@
+.page__notifications .vue-notification {
+  font-family: $nunito;
+  font-size: 16px;
+  font-weight: 700;
+
+  &.warn {
+    background: $color-primary-transparent-08;
+    border-left-color: $color-primary;
+  }
+
+  &.error {
+    background: #E54D42;
+    border-left-color: #B82E24;
+  }
+
+  &.success {
+    background: #68CD86;
+    border-left-color: #42A85F;
+  }
+}
+
+.page__notifications .notification-title {
+  padding-bottom: 10px;
+  font-weight: 700;
+}

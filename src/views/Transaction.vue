@@ -156,7 +156,7 @@ export default {
           text: 'Transactions',
         },
         {
-          text: `${this.$route.params.hash}`,
+          text: `${this.$route.params.id}`,
           active: true,
         },
       ],
@@ -164,10 +164,23 @@ export default {
   },
   async created() {
     this.loading = true;
+    const options = {};
+
+    const isLevel = Number.isInteger(Number(this.$route.params.id));
+
+    if (isLevel) {
+      options.block_level = this.$route.params.id;
+    } else {
+      options.operation_id = this.$route.params.id;
+    }
+
     const data = await this.$api.getTransactions({
       limit: 50,
-      operation_id: this.$route.params.hash,
+      ...options,
     });
+    if (data.status !== 200) {
+      this.$router.push({ name: '404' });
+    }
     this.items = data.data;
     this.loading = false;
   },

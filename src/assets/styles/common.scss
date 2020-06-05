@@ -40,10 +40,18 @@
 
 // tables overflow
 th, td {
+  color: $color-gray-333;
+}
+
+th, td, th a, td a {
   max-width: 150px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+td a {
+  display: block;
 }
 
 tr, td, th {
@@ -56,13 +64,14 @@ tr, td, th {
 .table--border {
   border: none;
   box-shadow: 0 5px 30px rgba(0,0,0,.05);
-  font-size: 17px;
+  font-size: 16px;
+  font-family: $open-sans;
   //border: 1px solid #e5e5e5;
   //border-radius: 6px;
 
   & th {
     color: $color-white;
-    background-color: rgb(255, 122, 89);
+    background-color: $color-primary;
 
     &:first-child {
       border-top-left-radius: 6px;
@@ -122,7 +131,7 @@ tr, td, th {
   box-shadow: 0 5px 30px rgba(0,0,0,.05);
 
   &-header {
-    background-color: #ff7959;
+    background-color: $color-primary;
     color: #fff;
     font-weight: bold;
     font-size: 18px;

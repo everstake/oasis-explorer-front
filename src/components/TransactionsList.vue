@@ -10,13 +10,29 @@
       class="table table--border"
       borderless
       no-border-collapse
-      hover
-      selectable
-      :select-mode="'single'"
       @row-selected="handleRowClick"
     >
       <template #table-busy>
         <TableLoader />
+      </template>
+      <template #cell(level)="data">
+        <router-link
+          :to="{ name: 'transaction', params: { id: data.item.level } }"
+          class="text-center"
+        >
+          {{ data.item.level }}
+        </router-link>
+      </template>
+      <template #cell(hash)="data">
+        <router-link
+          :to="{ name: 'transaction', params: { id: data.item.hash } }"
+        >
+          {{ data.item.hash }}
+        </router-link>
+      </template>
+      <template #cell(to)="data">
+        {{ data.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
+        ? 'System Account' : !data.item.to ? '-' : data.item.to }}
       </template>
       <template #cell(fees)="data">
         {{ !data.item.fees ? '-' : data.item.fees }}
@@ -49,7 +65,7 @@
           <font-awesome-icon class="blocks-list__icon" icon="sync-alt" :spin="loading" />
         </span>
         <span v-else>
-          Scroll down to show more
+          Show more
           <font-awesome-icon class="blocks-list__icon" icon="arrow-circle-down" :spin="loading" />
         </span>
       </b-button>
@@ -75,6 +91,21 @@ export default {
       type: Boolean,
       default: true,
     },
+    fields: {
+      type: Array,
+      default() {
+        return [
+          { key: 'timestamp', label: 'Date', sortable: true },
+          { key: 'level', label: 'Block height', sortable: true },
+          { key: 'hash', label: 'Block Hash' },
+          { key: 'from', label: 'From' },
+          { key: 'to', label: 'To' },
+          { key: 'amount', label: 'Amount', sortable: true },
+          { key: 'nonce', label: 'Nonce' },
+          { key: 'type', label: 'Type' },
+        ];
+      },
+    },
   },
   data() {
     return {
@@ -82,16 +113,6 @@ export default {
       loading: null,
       limit: 50,
       offset: 0,
-      fields: [
-        { key: 'timestamp', label: 'Date', sortable: true },
-        { key: 'level', label: 'Block height', sortable: true },
-        { key: 'hash', label: 'Hash' },
-        { key: 'from', label: 'From' },
-        { key: 'to', label: 'To' },
-        { key: 'amount', label: 'Amount', sortable: true },
-        { key: 'nonce', label: 'Nonce' },
-        { key: 'type', label: 'Type' },
-      ],
       error: false,
     };
   },

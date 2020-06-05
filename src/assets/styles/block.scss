@@ -15,6 +15,31 @@
     font-weight: 700;
   }
 
+  &__section {
+    height: 100%;
+
+    &--table {
+      & .table {
+        box-shadow: none;
+      }
+
+      & .card-body {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 0;
+      }
+
+      & .pagination {
+        margin: 20px;
+      }
+    }
+
+    & .card {
+      height: 100%;
+    }
+  }
+
   &__content {
     padding: 5px 0;
     color: $color-gray-333;

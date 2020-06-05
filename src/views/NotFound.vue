@@ -37,6 +37,7 @@ export default {
   &__content {
     padding: 100px 0;
     font-size: 26px;
+    color: $color-primary;
     text-align: center;
   }
 }

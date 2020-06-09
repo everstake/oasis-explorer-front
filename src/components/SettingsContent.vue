@@ -2,7 +2,7 @@
   <div class="search__content">
     <b-container>
       <b-row class="search__row">
-        <p class="search__title">Oasis Explorer</p>
+        <p class="search__title">Oasis Monitor</p>
         <p class="search__subtitle">Settings</p>
         <div class="search__controls search__controls--inline">
           <b-form @submit="onSubmit">

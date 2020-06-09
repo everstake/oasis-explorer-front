@@ -35,10 +35,17 @@ export default {
 <style lang="scss">
 .not-found {
   &__content {
-    padding: 100px 0;
+    height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 26px;
     color: $color-primary;
     text-align: center;
+  }
+
+  & .breadcrumbs {
+    margin-bottom: 0;
   }
 }
 </style>

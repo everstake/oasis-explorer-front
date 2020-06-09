@@ -27,6 +27,7 @@ export default {
 <style lang="scss">
 .header {
   &__menu {
+    background-color: $color-primary;
     border-top: 1px solid $color-primary-transparent-01;
   }
 }

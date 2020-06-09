@@ -40,6 +40,7 @@
 
 // tables overflow
 th, td {
+  vertical-align: middle !important;
   color: $color-gray-333;
 }
 
@@ -61,14 +62,17 @@ tr, td, th {
   }
 }
 
+th a,
+td a {
+  text-decoration: none;
+}
+
 // tables border radois
 .table--border {
   border: none;
   box-shadow: 0 5px 30px rgba(0,0,0,.05);
   font-size: 16px;
   font-family: $open-sans;
-  //border: 1px solid #e5e5e5;
-  //border-radius: 6px;
 
   & th {
     color: $color-white;

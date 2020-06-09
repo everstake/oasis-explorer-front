@@ -56,47 +56,26 @@ export default {
 </script>
 
 <style lang="scss">
-  /*.page-nav {*/
-  /*  padding: 20px 0;*/
-  /*  justify-content: space-around;*/
-  /*  overflow: auto;*/
-
-  /*&__list {*/
-  /*    display: flex;*/
-  /*    align-items: center;*/
-  /*    justify-content: center;*/
-  /*    margin: auto;*/
-  /*    padding: 0;*/
-  /*    list-style: none;*/
-  /*  }*/
-
-  /*  &__item {*/
-  /*    padding: 15px 0;*/
-  /*    margin-right: 40px;*/
-  /*    white-space: nowrap;*/
-  /*  }*/
-
-  /*  &__link {*/
-  /*    font-size: 14px;*/
-  /*    font-weight: 600;*/
-  /*    line-height: 23px;*/
-  /*    text-transform: uppercase;*/
-  /*    !*color: $color-light-gray-300;*/
-
-  /*    &:hover {*/
-  /*      color: $color-green;*/
-  /*      text-decoration: none;*/
-  /*    }*/
-
-  /*    &.router-link-active {*/
-  /*      color: $color-green;*/
-  /*    }*!*/
-  /*  }*/
-  /*}*/
-</style>
-
-<style lang="scss">
   .page {
+    &-nav {
+      & .router-link-active {
+        color: $color-primary-hover;
+        text-decoration: underline;
+      }
+
+      & .router-link-active.dropdown-item {
+        color: $color-white;
+        background-color: $color-primary;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+          color: $color-white;
+          background-color: $color-primary;
+          text-decoration: none;
+        }
+      }
+    }
     &__link {
       font-size: 15px;
       font-weight: 700;

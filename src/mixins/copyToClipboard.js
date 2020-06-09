@@ -16,7 +16,7 @@ export default {
         this.isHashCopied = true;
         this.$notify({
           type: 'success',
-          title: 'Oasis Explorer',
+          title: 'Oasis Monitor',
           text: 'Hash copied to clipboard',
         });
 

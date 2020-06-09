@@ -15,7 +15,7 @@ module.exports = {
     config
       .plugin('html')
       .tap(args => {
-        args[0].title = 'Oasis Explorer'
+        args[0].title = 'Oasis Monitor'
         return args
       })
   },

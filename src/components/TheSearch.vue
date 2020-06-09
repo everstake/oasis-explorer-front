@@ -60,7 +60,7 @@ export default {
       setTimeout(() => {
         this.$notify({
           type: 'warn',
-          title: 'Oasis Explorer (warning)',
+          title: 'Oasis Monitor (warning)',
           text: 'Feature isn\'t implemented yet',
         });
         this.loading = false;
@@ -84,7 +84,7 @@ export default {
   },
   updated() {
     if (this.isSearchActive) {
-      document.title = 'Search | Oasis Explorer';
+      document.title = 'Search | Oasis Monitor';
     } else {
       document.title = this.$route.meta.title;
     }

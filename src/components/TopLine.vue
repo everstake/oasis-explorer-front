@@ -9,16 +9,16 @@
         class="top-line__item network-selection"
       >
         <template slot="button-content">
-          <font-awesome-icon icon="network-wired" class="icon" />
-          Testnet
+           <font-awesome-icon icon="network-wired" class="icon" />
+            Testnet
         </template>
         <b-dropdown-item disabled active-class="top-line__active">
-          <font-awesome-icon icon="network-wired" class="icon" />
-          Mainnet
+           <font-awesome-icon icon="network-wired" class="icon" />
+            Mainnet
         </b-dropdown-item>
       </b-nav-item-dropdown>
       <div class="top-line__item language">
-        <b-nav-item-dropdown>
+        <b-nav-item-dropdown class="language-selection">
           <template slot="button-content">
             <font-awesome-icon icon="flag" class="icon" />
             En
@@ -86,6 +86,49 @@ export default {
   .network-selection,
   .language {
     list-style: none;
+    /*
+    @extend .animations__default;
+
+    &:hover,
+    &:focus {
+      &  a,
+      & svg {
+        color: $color-primary;
+        @extend .animations__default--hover;
+      }
+    }
+
+    & a,
+    & svg {
+      color: #999;
+      @extend .animations__default--hover;
+    }
+    */
+  }
+
+  .network-selection,
+  .language-selection {
+    &.show {
+      & > a {
+        color: $color-primary;
+        @extend .animations__default;
+
+        &:hover {
+          color: $color-primary;
+          @extend .animations__default--hover;
+        }
+      }
+    }
+
+    & > a {
+      color: #999;
+      @extend .animations__default;
+
+      &:hover {
+        color: $color-primary;
+        @extend .animations__default--hover;
+      }
+    }
   }
 
   .settings {

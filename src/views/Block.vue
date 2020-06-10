@@ -195,6 +195,7 @@ export default {
     return {
       level: null,
       id: null,
+      transactions: null,
       data: {
         blockHeight: 0,
         blockHash: 'tx12345',
@@ -229,6 +230,7 @@ export default {
         { key: 'from', label: 'From' },
         { key: 'to', label: 'To' },
         { key: 'amount', label: 'Amount' },
+        { key: 'type', label: 'Type' },
         { key: 'timestamp', label: 'Date' },
       ],
       currentPage: 0,
@@ -304,6 +306,10 @@ export default {
       limit: 50,
       ...options,
     });
+    
+    // const transactions = await this.$api.getTransactions({ ...options })
+    //
+    // this.transactions = transactions.data;
 
     if (data.status !== 200) {
       this.$router.push({ name: '404' });

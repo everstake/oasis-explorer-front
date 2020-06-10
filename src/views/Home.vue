@@ -176,7 +176,7 @@
               :scrollToLoadMore="false"
               :fields="[
                 { key: 'level', label: 'Height' },
-                { key: 'hash', label: 'Block Hash' },
+                { key: 'hash', label: 'Transaction Hash' },
                 { key: 'type', label: 'Type' },
                 { key: 'timestamp', label: 'Date' },
               ]"

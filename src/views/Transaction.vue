@@ -10,6 +10,13 @@
           </div>
         </b-col>
       </b-row>
+      <b-row v-else-if="!loading && (Array.isArray(items) && items.length === 0)">
+        <b-col cols="12">
+          <div class="text-center transaction__empty">
+            No data
+          </div>
+        </b-col>
+      </b-row>
       <b-row v-else>
         <b-col cols="3">
           <div class="transaction__section">

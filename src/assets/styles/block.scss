@@ -61,4 +61,11 @@
   &__copy {
     cursor: pointer;
   }
+
+  &__empty {
+    margin: auto;
+    padding: 50px 0;
+    font-size: 24px;
+    color: $color-primary;
+  }
 }

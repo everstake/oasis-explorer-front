@@ -315,12 +315,6 @@ export default {
 </script>
 
 <style lang="scss">
-  .block__empty {
-    margin: auto;
-    padding: 50px 0;
-    font-size: 24px;
-    color: $color-primary;
-  }
   .card__block-next,
   .card__block-prev {
     cursor: pointer;

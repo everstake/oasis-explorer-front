@@ -6,4 +6,9 @@
   &__main {
     flex: 1;
   }
+
+  &__link,
+  &__link a {
+    color: $color-white;
+  }
 }

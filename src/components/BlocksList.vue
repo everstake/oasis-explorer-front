@@ -34,6 +34,9 @@
       </template>
       <template #cell(timestamp)="items">
         {{ items.item.timestamp | formatDate }}
+        <div class="date-from-now">
+        {{ items.item.timestamp | formatDaysAgo }}
+        </div>
       </template>
       <template #cell(number_of_txs)="items">
         {{ items.item.number_of_txs ? items.item.number_of_txs : '-' }}
@@ -183,6 +186,7 @@ export default {
   .blocks-list {
     &__actions {
       margin-top: 50px;
+      margin-bottom: 50px;
     }
 
     &__button {
@@ -215,6 +219,11 @@ export default {
 
     &__icon {
       margin-left: 5px;
+    }
+
+    & .date-from-now {
+      font-size: 14px;
+      color: #999;
     }
   }
 </style>

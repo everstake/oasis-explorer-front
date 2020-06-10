@@ -11,6 +11,7 @@
     @extend .animations__default;
 
     &:hover {
+      color: $color-primary;
       @extend .animations__default--hover;
     }
   }

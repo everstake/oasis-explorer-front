@@ -2,7 +2,7 @@ import http from './http.service';
 
 const api = {
   getInfo: () => http.get('data/info'),
-  getAccounts: (accountId) => http.get(`data/accounts/${accountId}`),
+  getAccounts: (params) => http.get(`data/accounts/${params.id}`),
   getBlocks: (params) => http.get('/data/blocks', { params }),
   getTransactions: (params) => http.get('/data/transactions', { params }),
   getEscrowRatio: (params) => http.get('/chart/escrow_ratio', { params }),

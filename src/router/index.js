@@ -10,7 +10,7 @@ const routes = [
     name: 'home',
     component: Home,
     meta: {
-      title: 'Home | Oasis Explorer',
+      title: 'Home | Oasis Monitor',
     },
   },
   {
@@ -18,21 +18,21 @@ const routes = [
     name: 'blocks',
     component: () => import(/* webpackChunkName: "blocks" */ '../views/Blocks.vue'),
     meta: {
-      title: 'Blocks | Oasis Explorer',
+      title: 'Blocks | Oasis Monitor',
     },
   },
   {
     path: '/block/:id',
     name: 'block',
     meta: {
-      title: 'Block | Oasis Explorer',
+      title: 'Block | Oasis Monitor',
     },
     component: () => import(/* webpackChunkName: "block" */ '../views/Block.vue'),
     beforeEnter(from, to, next) {
       if (from.params.level) {
-        document.title = `Block ${String(from.params.level).slice(0, 7)} | Oasis Explorer`;
+        document.title = `Block ${String(from.params.level).slice(0, 7)} | Oasis Monitor`;
       } else {
-        document.title = 'Block | Oasis Explorer';
+        document.title = 'Block | Oasis Monitor';
       }
       next();
     },
@@ -42,7 +42,7 @@ const routes = [
     name: 'transactions',
     component: () => import(/* webpackChunkName: "transactions" */ '../views/Transactions.vue'),
     meta: {
-      title: 'Transactions | Oasis Explorer',
+      title: 'Transactions | Oasis Monitor',
     },
   },
   {
@@ -50,13 +50,29 @@ const routes = [
     name: 'transaction',
     component: () => import(/* webpackChunkName: "transaction" */ '../views/Transaction.vue'),
     meta: {
-      title: 'Transaction | Oasis Explorer',
+      title: 'Transaction | Oasis Monitor',
     },
     beforeEnter(from, to, next) {
       if (from.params.hash) {
-        document.title = `Transaction ${String(from.params.id).slice(0, 7)} | Oasis Explorer`;
+        document.title = `Transaction ${String(from.params.id).slice(0, 7)} | Oasis Monitor`;
       } else {
-        document.title = 'Transaction | Oasis Explorer';
+        document.title = 'Transaction | Oasis Monitor';
+      }
+      next();
+    },
+  },
+  {
+    path: '/account/:id',
+    name: 'account',
+    component: () => import(/* webpackChunkName: "transaction" */ '../views/Account.vue'),
+    meta: {
+      title: 'Account | Oasis Monitor',
+    },
+    beforeEnter(from, to, next) {
+      if (from.params.hash) {
+        document.title = `Account ${from.params.id.slice(0, 7)} | Oasis Monitor`;
+      } else {
+        document.title = 'Account | Oasis Monitor';
       }
       next();
     },
@@ -66,7 +82,7 @@ const routes = [
     name: '404',
     component: () => import(/* webpackChunkName: "404" */ '../views/NotFound.vue'),
     meta: {
-      title: '404 | Oasis Explorer',
+      title: '404 | Oasis Monitor',
     },
   },
   {

@@ -29,6 +29,15 @@
           {{ data.item.hash }}
         </router-link>
       </template>
+      <template #cell(from)="items">
+        <span v-if="!items.item.from">-</span>
+        <router-link
+          v-else
+          :to="{ name: 'account', params: { id: items.item.from } }"
+        >
+          {{ items.item.from }}
+        </router-link>
+      </template>
       <template #cell(to)="data">
         {{ data.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
         ? 'System Account' : !data.item.to ? '-' : data.item.to }}
@@ -41,6 +50,9 @@
       </template>
       <template #cell(timestamp)="items">
         {{ items.item.timestamp | formatDate }}
+        <div class="date-from-now">
+          {{ items.item.timestamp | formatDaysAgo }}
+        </div>
       </template>
     </b-table>
     <div
@@ -188,6 +200,7 @@ export default {
   .transactions-list {
     &__actions {
       margin-top: 50px;
+      margin-bottom: 50px;
     }
 
     &__button {
@@ -219,6 +232,11 @@ export default {
 
     &__icon {
       margin-left: 10px;
+    }
+
+    & .date-from-now {
+      font-size: 14px;
+      color: #999;
     }
   }
 </style>

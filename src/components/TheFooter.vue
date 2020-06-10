@@ -45,9 +45,9 @@
         <b-col cols="12">
           <div class="footer-line">
             <div class="footer-line__logo">
-              <TheLogotype class="footer__logo" />
+              <TheLogotype class="footer__logo logo--white" />
             </div>
-            <div class="footer-copyright">Oasis Explorer © 2020 All Rights Reserved</div>
+            <div class="footer-copyright">Oasis Monitor © 2020 All Rights Reserved</div>
           </div>
         </b-col>
       </b-row>
@@ -71,7 +71,7 @@ export default {
 <style lang="scss">
   .footer {
     font-family: $open-sans;
-    background-color: $color-gray;
+    background-color: #000;
     color: $color-white;
 
     &__container {

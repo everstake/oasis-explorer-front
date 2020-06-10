@@ -80,7 +80,13 @@
                     {{ !items.item.hash ? '-' : items.item.hash }}
                   </template>
                   <template #cell(from)="items">
-                    {{ !items.item.from ? '-' : items.item.from }}
+                    <span v-if="!items.item.from">-</span>
+                    <router-link
+                      v-else
+                      :to="{ name: 'account', params: { id: items.item.from } }"
+                    >
+                      {{ items.item.from }}
+                    </router-link>
                   </template>
                   <template #cell(to)="items">
                     {{ items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='

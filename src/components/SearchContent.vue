@@ -2,7 +2,7 @@
   <div class="search__content">
     <b-container>
       <b-row class="search__row">
-        <p class="search__title">Oasis Explorer</p>
+        <p class="search__title">Oasis Monitor</p>
         <p class="search__subtitle">Search by block height, hash or alias name</p>
         <div class="search__controls">
           <label class="search__label" for="input">

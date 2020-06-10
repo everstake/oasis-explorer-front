@@ -1,12 +1,19 @@
 <template>
-  <div class="block">
-    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
+  <div class="block" :key="$route.params.id">
+    <Breadcrumbs class="breadcrumbs" :crumbs="getBreadcrumbs" />
 
     <b-container>
       <b-row v-if="loading && items === null">
         <b-col cols="12">
           <div class="text-center block__loading">
             <font-awesome-icon class="icon block__icon" icon="spinner" spin />
+          </div>
+        </b-col>
+      </b-row>
+      <b-row v-else-if="!loading && (Array.isArray(items) && items.length === 0)">
+        <b-col cols="12">
+          <div class="text-center block__empty">
+            No data
           </div>
         </b-col>
       </b-row>
@@ -18,7 +25,25 @@
           >
             <b-card-text class="block__content">
               <div class="block__header">Block height</div>
-              {{ items[0].level }}
+              <div class="block__navigation">
+                <div
+                  :disabled="Number($route.params.id) === 0"
+                  @click="onNavigation('prev', Number($route.params.id) === 0)"
+                  :class="{ 'card__block-prev--disabled': Number($route.params.id) === 0 }"
+                  class="card__block-prev"
+                >
+                  <font-awesome-icon icon="chevron-left" class="ml-1"/>
+                </div>
+                {{ items[0].level }}
+                <div
+                  :disabled="Number($route.params.id) === height"
+                  @click="onNavigation('next', Number($route.params.id) === height)"
+                  :class="{ 'card__block-prev--disabled': Number($route.params.id) === height }"
+                  class="card__block-next"
+                >
+                  <font-awesome-icon icon="chevron-right" class="mr-1"/>
+                </div>
+              </div>
             </b-card-text>
             <b-card-text class="block__content">
               <div class="block__header">Block hash</div>
@@ -44,6 +69,18 @@
                <div class="block__header">Epoch</div>
                {{ items[0].epoch }}
              </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">Proposer</div>
+              {{ items[0].proposer }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">number_of_signatures</div>
+              {{ items[0].number_of_signatures }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">number_of_txs</div>
+              {{ items[0].number_of_txs }}
+            </b-card-text>
             <b-card-text class="block__content">
               <div class="block__header">Date</div>
               {{ items[0].timestamp | formatDate }}
@@ -118,6 +155,8 @@
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
+import { mapState, mapMutations } from 'vuex';
+/* eslint-disable */
 
 export default {
   name: 'Block',
@@ -182,20 +221,6 @@ export default {
         proposer: null,
         timestamp: 0,
       },
-      breadcrumbs: [
-        {
-          toRouteName: 'home',
-          text: 'Home',
-        },
-        {
-          toRouteName: 'blocks',
-          text: 'Blocks',
-        },
-        {
-          text: this.$route.params.id,
-          active: true,
-        },
-      ],
       loading: null,
       limit: 50,
       items: null,
@@ -210,11 +235,64 @@ export default {
       perPage: 5,
     };
   },
+  methods: {
+    ...mapMutations(['setInfo']),
+    onNavigation(position, disabled) {
+      if (disabled) {
+        return false;
+      }
+  
+      const { id } = this.$route.params;
+
+      if (position === 'prev') {
+        this.$router.push({ name: 'block', params: { id: id > 0 ? id - 1 : 0 } });
+        return;
+      }
+
+      if (position === 'next') {
+        this.$router.push({ name: 'block', params: { id: Number(id) + 1 } });
+      }
+    },
+  },
+  computed: {
+    ...mapState(['height']),
+    getBreadcrumbs() {
+      return [
+        {
+          toRouteName: 'home',
+          text: 'Home',
+        },
+        {
+          toRouteName: 'blocks',
+          text: 'Blocks',
+        },
+        {
+          text: this.$route.params.id,
+          active: true,
+        },
+      ];
+    },
+  },
+  async beforeRouteUpdate(to, from, next) {
+    this.loading = true;
+    const data = await this.$api.getBlocks({
+      limit: 50,
+      block_level: to.params.id
+  });
+    this.items = data.data;
+    this.loading = false;
+    next();
+  },
   async created() {
     this.loading = true;
     const options = {};
 
     const isLevel = Number.isInteger(Number(this.$route.params.id));
+    if (this.height === null) {
+      const data = await this.$api.getInfo();
+
+      this.setInfo(data.data);
+    }
 
     if (isLevel) {
       options.block_level = this.$route.params.id;
@@ -235,3 +313,21 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+  .block__empty {
+    margin: auto;
+    padding: 50px 0;
+    font-size: 24px;
+    color: $color-primary;
+  }
+  .card__block-next,
+  .card__block-prev {
+    cursor: pointer;
+  }
+  .card__block-prev--disabled {
+    color: rgba(0,0,0,0.3);
+    cursor: text;
+    pointer-events: none;
+  }
+</style>

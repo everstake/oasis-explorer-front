@@ -97,7 +97,7 @@ export default {
       default() {
         return [
           { key: 'level', label: 'Height', sortable: true },
-          { key: 'hash', label: 'Block hash', sortable: true },
+          { key: 'hash', label: 'Block hash' },
           { key: 'proposer', label: 'Proposer' },
           { key: 'number_of_signatures', label: 'Signatures' },
           { key: 'number_of_txs', label: 'Number of Ops', sortable: true },

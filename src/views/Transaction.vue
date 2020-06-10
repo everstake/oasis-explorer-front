@@ -52,6 +52,10 @@
                 <div class="block__header">Nonce</div>
                 {{ items[0].nonce }}
               </b-card-text>
+              <b-card-text v-if="items[0].type" class="block__content">
+                <div class="block__header">Type</div>
+                {{ items[0].type }}
+              </b-card-text>
             </b-card>
           </div>
         </b-col>

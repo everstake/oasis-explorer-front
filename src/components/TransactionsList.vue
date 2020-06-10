@@ -17,7 +17,7 @@
       </template>
       <template #cell(level)="data">
         <router-link
-          :to="{ name: 'transaction', params: { id: data.item.level } }"
+          :to="{ name: 'block', params: { id: data.item.level } }"
         >
           {{ data.item.level }}
         </router-link>
@@ -107,7 +107,7 @@ export default {
       default() {
         return [
           { key: 'level', label: 'Height', sortable: true },
-          { key: 'hash', label: 'Block Hash' },
+          { key: 'hash', label: 'Transaction Hash' },
           { key: 'from', label: 'From' },
           { key: 'to', label: 'To' },
           { key: 'amount', label: 'Amount', sortable: true },

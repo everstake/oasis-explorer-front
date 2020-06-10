@@ -5,8 +5,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    height: null,
   },
   mutations: {
+    setInfo(state, payload) {
+      state.height = payload.height;
+    },
   },
   actions: {
   },

@@ -74,11 +74,11 @@
               {{ items[0].proposer }}
             </b-card-text>
             <b-card-text class="block__content">
-              <div class="block__header">number_of_signatures</div>
+              <div class="block__header">Signatures</div>
               {{ items[0].number_of_signatures }}
             </b-card-text>
             <b-card-text class="block__content">
-              <div class="block__header">number_of_txs</div>
+              <div class="block__header">Operations</div>
               {{ items[0].number_of_txs }}
             </b-card-text>
             <b-card-text class="block__content">

@@ -58,7 +58,7 @@
               <b-card
                 @click="handleChartClick()"
                 class="home-card__chart"
-                title="Trading volume"
+                title="Transaction volume"
               >
                 <b-card-text class="home__chart">
                   <div v-if="!transactionVolume" class="home__loader">
@@ -96,7 +96,7 @@
           <b-col cols="3">
             <b-card
               class="card--home"
-              title="Transaction volume"
+              title="Trading volume"
             >
               <b-card-text>
                 No data
@@ -200,6 +200,7 @@ import BlocksList from '@/components/BlocksList.vue';
 import TransactionsList from '@/components/TransactionsList.vue';
 import LineChart from '@/components/charts/LineChart.vue';
 import dayjs from 'dayjs';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'Home',
@@ -260,6 +261,7 @@ export default {
     };
   },
   methods: {
+    ...mapMutations(['setInfo']),
     getEscrowData() {
       /* eslint-disable */
       if (!this.escrowRatio) return;
@@ -303,6 +305,8 @@ export default {
     const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
 
     const data = await this.$api.getInfo();
+    
+    this.setInfo(data.data);
 
     const escrowRatio = await this.$api.getEscrowRatio({
       from: thirtyDaysSec,

@@ -62,6 +62,18 @@ const routes = [
     },
   },
   {
+    path: '/accounts',
+    name: 'accounts',
+    component: () => import(/* webpackChunkName: "accounts" */ '../views/Accounts.vue'),
+    meta: {
+      title: 'Accounts | Oasis Monitor',
+    },
+    beforeEnter(from, to, next) {
+      document.title = 'Accounts | Oasis Monitor';
+      next();
+    },
+  },
+  {
     path: '/account/:id',
     name: 'account',
     component: () => import(/* webpackChunkName: "transaction" */ '../views/Account.vue'),

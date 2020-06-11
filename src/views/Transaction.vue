@@ -47,10 +47,6 @@
                   />
                 </div>
               </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Date</div>
-                {{ items[0].timestamp | formatDate }}
-              </b-card-text>
               <b-card-text v-if="items[0].epoch" class="block__content">
                 <div class="block__header">Epoch</div>
                 {{ items[0].epoch }}
@@ -62,6 +58,13 @@
               <b-card-text v-if="items[0].type" class="block__content">
                 <div class="block__header">Type</div>
                 {{ items[0].type }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Date</div>
+                {{ items[0].timestamp | formatDate }}
+                <div class="block__time-ago">
+                  ({{ items[0].timestamp | formatDaysAgo }})
+                </div>
               </b-card-text>
             </b-card>
           </div>
@@ -77,31 +80,30 @@
                   show-empty
                   :fields="fields"
                   :items="items"
-                  class="table table--border"
+                  class="table table--border table-list"
                   borderless
                   no-border-collapse
                 >
                   <template #table-busy>
                     <TableLoader />
                   </template>
-                  <template #cell(fees)="items">
-                    {{ !items.item.fees ? '-' : items.item.fees }}
-                  </template>
                   <template #cell(hash)="items">
                     {{ !items.item.hash ? '-' : items.item.hash }}
-                  </template>
-                  <template #cell(from)="items">
-                    <span v-if="!items.item.from">-</span>
-                    <router-link
-                      v-else
-                      :to="{ name: 'account', params: { id: items.item.from } }"
-                    >
-                      {{ items.item.from }}
-                    </router-link>
                   </template>
                   <template #cell(to)="items">
                     {{ items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
                     ? 'System Account' : !items.item.to ? '-' : items.item.to }}
+                  </template>
+                  <template #cell(from)="items" class="table__hash">
+                    <div class="table__hash">
+                      <span v-if="!items.item.from">-</span>
+                      <router-link
+                        v-else
+                        :to="{ name: 'account', params: { id: items.item.from } }"
+                      >
+                        {{ items.item.from }}
+                      </router-link>
+                    </div>
                   </template>
                   <template #cell(proposer)="items">
                     {{ !items.item.proposer ? '-' : items.item.proposer }}
@@ -117,6 +119,9 @@
                   </template>
                   <template #cell(gas_used)="items">
                     {{ !items.item.gas_used ? '-' : items.item.gas_used }}
+                  </template>
+                  <template #cell(fees)="items">
+                    {{ !items.item.fees ? '-' : items.item.fees }}
                   </template>
                 </b-table>
                 <b-pagination

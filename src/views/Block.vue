@@ -84,6 +84,9 @@
             <b-card-text class="block__content">
               <div class="block__header">Date</div>
               {{ items[0].timestamp | formatDate }}
+              <div class="block__time-ago">
+                ({{ items[0].timestamp | formatDaysAgo }})
+              </div>
             </b-card-text>
           </b-card>
           </div>
@@ -98,7 +101,7 @@
                 show-empty
                 :fields="fields"
                 :items="transactions"
-                class="table table--border"
+                class="table table--border table-list"
                 borderless
                 no-border-collapse
               >
@@ -109,16 +112,26 @@
                   {{ !items.item.fees ? '-' : items.item.fees }}
                 </template>
                 <template #cell(hash)="items">
-                  {{ !items.item.hash ? '-' : items.item.hash }}
+                  <div class="table__hash">
+                    <router-link
+                      v-if="items.item.hash"
+                      :to="{ name: 'transaction', params: { id: items.item.hash } }"
+                    >
+                      {{ items.item.hash }}
+                    </router-link>
+                    <span v-else>-</span>
+                  </div>
                 </template>
-                <template #cell(from)="items">
-                  <span v-if="!items.item.from">-</span>
-                  <router-link
-                    v-else
-                    :to="{ name: 'account', params: { id: items.item.from } }"
-                  >
-                    {{ items.item.from }}
-                  </router-link>
+                <template #cell(from)="items" class="table__hash">
+                  <div class="table__hash">
+                    <span v-if="!items.item.from">-</span>
+                    <router-link
+                      v-else
+                      :to="{ name: 'account', params: { id: items.item.from } }"
+                    >
+                      {{ items.item.from }}
+                    </router-link>
+                  </div>
                 </template>
                 <template #cell(to)="items">
                   {{ items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='

@@ -19,6 +19,12 @@
     margin-bottom: 10px;
   }
 
+  &__time-ago {
+    color: $color-gray-333;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
   &__navigation {
     display: flex;
     align-items: center;

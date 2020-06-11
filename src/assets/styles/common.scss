@@ -67,6 +67,12 @@ td a {
   text-decoration: none;
 }
 
+.table-list {
+  & .table__hash {
+    max-width: 60px;
+  }
+}
+
 // tables border radois
 .table--border {
   border: none;

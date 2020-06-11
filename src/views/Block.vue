@@ -97,7 +97,7 @@
                 :responsive="true"
                 show-empty
                 :fields="fields"
-                :items="items"
+                :items="transactions"
                 class="table table--border"
                 borderless
                 no-border-collapse
@@ -167,30 +167,6 @@ export default {
   mixins: [
     copyToClipboard,
   ],
-  watch: {
-    // '$route.params': {
-    //   async handler(val) {
-    //     console.log(val);
-    //     this.loading = true;
-    //     const options = {};
-    //
-    //     if (val.level) options.block_level = val.level;
-    //     if (val.hash) options.block_id = val.hash;
-    //
-    //     console.log('options', options);
-    //
-    //     const data = await this.$api.getBlocks({
-    //       limit: 50,
-    //       ...options,
-    //     });
-    //     if (data.status !== 200) {
-    //       this.$router.push({ name: '404' });
-    //     }
-    //     this.items = data.data;
-    //     this.loading = false;
-    //   },
-    // },
-  },
   data() {
     return {
       level: null,
@@ -303,13 +279,15 @@ export default {
     }
 
     const data = await this.$api.getBlocks({
-      limit: 50,
       ...options,
     });
     
-    // const transactions = await this.$api.getTransactions({ ...options })
-    //
-    // this.transactions = transactions.data;
+    const transactions = await this.$api.getTransactions({
+      ...options,
+      limit: 20,
+    });
+
+    this.transactions = transactions.data;
 
     if (data.status !== 200) {
       this.$router.push({ name: '404' });

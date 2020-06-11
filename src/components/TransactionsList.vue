@@ -195,7 +195,6 @@ export default {
 };
 </script>
 
-
 <style lang="scss">
   .transactions-list {
     &__actions {

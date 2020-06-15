@@ -26,7 +26,16 @@
         <span v-else>-</span>
       </template>
       <template #cell(general_balance)="data">
-        {{ data.item.general_balance }}
+        {{ data.item.general_balance | formatAmount }}
+      </template>
+      <template #cell(escrow_balance)="data">
+        {{ data.item.escrow_balance | formatAmount }}
+      </template>
+      <template #cell(escrow_balance_share)="data">
+        {{ data.item.escrow_balance_share | formatAmount }}
+      </template>
+      <template #cell(operations_amount)="data">
+        {{ data.item.operations_amount | formatAmount }}
       </template>
       <template #cell(account_id)="data">
         <router-link

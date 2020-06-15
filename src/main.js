@@ -7,6 +7,7 @@ import './plugins/initialization/icons.plugin';
 import './plugins/initialization/api.plugin';
 import './plugins/initialization/notifications.plugin';
 import './filters/date.filter';
+import './filters/amount.filter';
 
 Vue.config.productionTip = false;
 

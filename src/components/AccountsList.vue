@@ -16,6 +16,7 @@
       <template #table-busy>
         <TableLoader />
       </template>
+      <template #cell(#)="data">{{ data.index + 1 }}</template>
       <template #cell(delegate)="data">
         <router-link
           v-if="data.item.delegate"
@@ -106,6 +107,7 @@ export default {
       type: Array,
       default() {
         return [
+          { key: '#', label: '#' },
           { key: 'account_id', label: 'Account' },
           { key: 'delegate', label: 'Delegate' },
           { key: 'general_balance', label: 'General balance', sortable: true },
@@ -179,6 +181,7 @@ export default {
         this.error = true;
       } else {
         this.error = false;
+        // data.map((item, index) => ({...item, index}))
         this.data = [
           ...this.data,
           ...data.data,

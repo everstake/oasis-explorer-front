@@ -160,7 +160,6 @@
                 { key: 'number_of_txs', label: '# of Ops' },
                 { key: 'timestamp', label: 'Date' },
               ]"
-              :minifyTableHash="true"
               class="table-list"
             />
             <b-button

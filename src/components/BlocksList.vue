@@ -7,7 +7,7 @@
       show-empty
       :fields="fields"
       :items="data"
-      class="table table--border"
+      class="table table--border table-list"
       borderless
       no-border-collapse
       @row-selected="handleRowClick"
@@ -42,7 +42,9 @@
         </div>
       </template>
       <template #cell(number_of_txs)="items">
-        {{ items.item.number_of_txs ? items.item.number_of_txs : '-' }}
+        <div class="text-center table__hash">
+          {{ items.item.number_of_txs ? items.item.number_of_txs : '-' }}
+        </div>
       </template>
       <template #cell(number_of_signatures)="items">
         {{ items.item.number_of_signatures ? items.item.number_of_signatures : '-' }}
@@ -103,7 +105,7 @@ export default {
           { key: 'hash', label: 'Block hash' },
           { key: 'proposer', label: 'Proposer' },
           { key: 'number_of_signatures', label: 'Signatures' },
-          { key: 'number_of_txs', label: 'Number of Ops', sortable: true },
+          { key: 'number_of_txs', label: '# of Ops', sortable: true },
           { key: 'epoch', label: 'Epoch' },
           { key: 'fees', label: 'Fees' },
           { key: 'timestamp', label: 'Date', sortable: true },

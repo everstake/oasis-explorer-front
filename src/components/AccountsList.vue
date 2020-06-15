@@ -97,10 +97,10 @@ export default {
         return [
           { key: 'account_id', label: 'Account id' },
           { key: 'delegate', label: 'Delegate' },
-          { key: 'operations_amount', label: 'Operations amount', sortable: true },
+          { key: 'general_balance', label: 'General balance', sortable: true },
           { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
           { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
-          { key: 'general_balance', label: 'General balance', sortable: true },
+          { key: 'operations_amount', label: 'Operations amount', sortable: true },
           { key: 'type', label: 'Type' },
           { key: 'created_at', label: 'Created at', sortable: true },
         ];

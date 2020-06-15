@@ -220,7 +220,6 @@ export default {
   watch: {
     $route(to, from) {
       if (to.params.id !== from.params.id) {
-        console.log(123);
         this.fetchData(to.params.id);
       }
     },

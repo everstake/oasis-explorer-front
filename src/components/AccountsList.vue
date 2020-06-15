@@ -181,7 +181,6 @@ export default {
         this.error = true;
       } else {
         this.error = false;
-        // data.map((item, index) => ({...item, index}))
         this.data = [
           ...this.data,
           ...data.data,

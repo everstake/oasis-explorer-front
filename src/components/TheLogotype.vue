@@ -1,8 +1,7 @@
 <template>
   <div class="logo">
     <router-link class="logo__link" :to="{ name: 'home' }">
-<!--     <img class="logo__img" src="../assets/images/logo.svg" alt="Oasis logotype">-->
-      <p class="logo__text">Oasis Monitor</p>
+     <img class="logo__img" src="../assets/images/logo.svg" alt="Oasis logotype">
     </router-link>
   </div>
 </template>

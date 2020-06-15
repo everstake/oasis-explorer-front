@@ -7,7 +7,7 @@
       show-empty
       :fields="fields"
       :items="data"
-      class="table table--border"
+      class="table table--border table-list"
       borderless
       no-border-collapse
       @row-selected="handleRowClick"
@@ -20,6 +20,7 @@
         <router-link
           v-if="data.item.delegate"
           :to="{ name: 'account', params: { id: data.item.delegate } }"
+          class="table__hash"
         >
           {{ data.item.delegate }}
         </router-link>
@@ -41,6 +42,7 @@
         <router-link
           v-if="data.item.account_id"
           :to="{ name: 'account', params: { id: data.item.account_id } }"
+          class="table__hash"
         >
           {{ data.item.account_id }}
         </router-link>
@@ -104,12 +106,12 @@ export default {
       type: Array,
       default() {
         return [
-          { key: 'account_id', label: 'Account id' },
+          { key: 'account_id', label: 'Account' },
           { key: 'delegate', label: 'Delegate' },
           { key: 'general_balance', label: 'General balance', sortable: true },
           { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
           { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
-          { key: 'operations_amount', label: 'Operations amount', sortable: true },
+          { key: 'operations_amount', label: 'Ops amount', sortable: true },
           { key: 'type', label: 'Type' },
           { key: 'created_at', label: 'Created at', sortable: true },
         ];

@@ -35,10 +35,14 @@
                         Entity address:
                         <p class="account__value">
                           <router-link
+                            v-if="items.entity_address !== $route.params.id"
                             :to="{ name: 'account', params: { id: items.entity_address } }"
                           >
                             {{ items.entity_address }}
                           </router-link>
+                          <span v-else>
+                            {{ items.entity_address }}
+                          </span>
                         </p>
                       </div>
                       <div class="account__item">

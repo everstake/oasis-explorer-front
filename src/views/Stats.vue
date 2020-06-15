@@ -128,10 +128,14 @@ export default {
       this.loading = false;
     },
     tooltipsLabelCallback(tooltipItem, data) {
-      return `${data.labels[tooltipItem.index]}: ${data.datasets[0].data[tooltipItem.index]}`;
+      return `Transaction volume: ${data.datasets[0].data[tooltipItem.index]}`;
     },
     tooltipsLabelCallbackFormatAmount(tooltipItem, data) {
-      return `${data.labels[tooltipItem.index]}: ${numeral(data.datasets[0].data[tooltipItem.index] / 1000000000).format('0,0.000000000')}`;
+      if (data.datasets[0].data[tooltipItem.index] > 0) {
+        return `Transaction volume: ${numeral(data.datasets[0].data[tooltipItem.index] / 1000000000).format('0,0.000000000')}`;
+      }
+
+      return data.datasets[0].data[tooltipItem.index];
     },
     transactionVolumeTicksCallback(label) {
       if (label > 0) {
@@ -142,18 +146,6 @@ export default {
     },
   },
   computed: {
-    getPieChartData() {
-      return {
-        datasets: [
-          {
-            data: this.pieChartData.map(({ value }) => value),
-            backgroundColor: this.palette,
-            borderWidth: 1,
-          },
-        ],
-        labels: this.pieChartData.map(({ name }) => name),
-      };
-    },
     getEscrowRatioData() {
       return {
         datasets: [

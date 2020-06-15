@@ -156,10 +156,12 @@
               :scrollToLoadMore="false"
               :fields="[
                 { key: 'level', label: 'Height' },
-                { key: 'hash', label: 'Block hash' },
-                { key: 'number_of_txs', label: 'Number of Ops' },
+                { key: 'hash', label: 'Hash' },
+                { key: 'number_of_txs', label: '# of Ops' },
                 { key: 'timestamp', label: 'Date' },
               ]"
+              class="table-list"
+              :minify-table-hash="true"
             />
             <b-button
               to="/blocks"
@@ -176,10 +178,12 @@
               :scrollToLoadMore="false"
               :fields="[
                 { key: 'level', label: 'Height' },
-                { key: 'hash', label: 'Transaction Hash' },
+                { key: 'hash', label: 'Hash' },
                 { key: 'type', label: 'Type' },
                 { key: 'timestamp', label: 'Date' },
               ]"
+              :minifyTableHash="true"
+              class="table-list"
             />
             <b-button
               to="/transactions"

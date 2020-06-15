@@ -7,7 +7,7 @@
       show-empty
       :fields="fields"
       :items="data"
-      class="table table--border"
+      class="table table--border table-list"
       borderless
       no-border-collapse
       @row-selected="handleRowClick"
@@ -16,22 +16,34 @@
       <template #table-busy>
         <TableLoader />
       </template>
+      <template #cell(#)="data">{{ data.index + 1 }}</template>
       <template #cell(delegate)="data">
         <router-link
           v-if="data.item.delegate"
           :to="{ name: 'account', params: { id: data.item.delegate } }"
+          class="table__hash"
         >
           {{ data.item.delegate }}
         </router-link>
         <span v-else>-</span>
       </template>
       <template #cell(general_balance)="data">
-        {{ data.item.general_balance }}
+        {{ data.item.general_balance | formatAmount }}
+      </template>
+      <template #cell(escrow_balance)="data">
+        {{ data.item.escrow_balance | formatAmount }}
+      </template>
+      <template #cell(escrow_balance_share)="data">
+        {{ data.item.escrow_balance_share | formatAmount }}
+      </template>
+      <template #cell(operations_amount)="data">
+        {{ data.item.operations_amount | formatAmount }}
       </template>
       <template #cell(account_id)="data">
         <router-link
           v-if="data.item.account_id"
           :to="{ name: 'account', params: { id: data.item.account_id } }"
+          class="table__hash"
         >
           {{ data.item.account_id }}
         </router-link>
@@ -95,12 +107,13 @@ export default {
       type: Array,
       default() {
         return [
-          { key: 'account_id', label: 'Account id' },
+          { key: '#', label: '#' },
+          { key: 'account_id', label: 'Account' },
           { key: 'delegate', label: 'Delegate' },
           { key: 'general_balance', label: 'General balance', sortable: true },
           { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
           { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
-          { key: 'operations_amount', label: 'Operations amount', sortable: true },
+          { key: 'operations_amount', label: 'Ops amount', sortable: true },
           { key: 'type', label: 'Type' },
           { key: 'created_at', label: 'Created at', sortable: true },
         ];
@@ -153,12 +166,16 @@ export default {
       this.loading = false;
     },
     fetchData(params = {}) {
-      return this.$api.getAccounts({ ...params, limit: this.getTransactionsLimit });
+      return this.$api.getAccounts({
+        ...params,
+        limit: this.getTransactionsLimit,
+        offset: this.offset,
+      });
     },
     async onShowMore() {
       this.loading = true;
       this.offset += 50;
-      const data = await this.fetchData({ offset: this.offset });
+      const data = await this.fetchData();
 
       if (data.status !== 200) {
         this.error = true;

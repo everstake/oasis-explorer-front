@@ -25,6 +25,9 @@
       <template #cell(hash)="data">
         <router-link
           :to="{ name: 'transaction', params: { id: data.item.hash } }"
+          :class="{
+            'table__hash': minifyTableHash
+          }"
         >
           {{ data.item.hash }}
         </router-link>
@@ -116,6 +119,10 @@ export default {
           { key: 'timestamp', label: 'Date', sortable: true },
         ];
       },
+    },
+    minifyTableHash: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

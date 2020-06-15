@@ -5,6 +5,17 @@
         <p class="search__title">Oasis Monitor</p>
         <p class="search__subtitle">Settings</p>
         <div class="search__controls search__controls--inline">
+          <b-form>
+            <b-form-group label="Date format">
+              <b-form-radio v-model="dateFormat" name="standart" value="standart">
+                Standart format
+              </b-form-radio>
+              <b-form-radio v-model="dateFormat" name="us" value="us">
+                US format
+              </b-form-radio>
+            </b-form-group>
+          </b-form>
+
           <b-form @submit="onSubmit">
             <b-form-group id="input-group-2" label="Your Name" label-for="input-2">
               <b-form-input
@@ -25,7 +36,6 @@
                   id="input-1"
                   v-model="email"
                   type="email"
-                  required
                   placeholder="Enter email"
                   @input="isFormSaved = false"
                 ></b-form-input>
@@ -64,6 +74,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   name: 'SettingsContent',
   directives: {
@@ -89,9 +101,28 @@ export default {
       name: null,
       isFormSaved: false,
       subscribe: null,
+      dateFormat: null,
     };
   },
+  watch: {
+    dateFormat: {
+      immediate: true,
+      handler(val) {
+        if (val === 'standart') {
+          localStorage.setItem('dateFormat', this.$constants.DATE_FORMAT);
+          this.setDateFormat(this.$constants.DATE_FORMAT);
+          return;
+        }
+
+        if (val === 'us') {
+          localStorage.setItem('dateFormat', this.$constants.DATE_FORMAT_US);
+          this.setDateFormat(this.$constants.DATE_FORMAT_US);
+        }
+      },
+    },
+  },
   methods: {
+    ...mapMutations(['setDateFormat']),
     onSubmit(event) {
       event.preventDefault();
       const { email, name, subscribe } = this;
@@ -100,6 +131,18 @@ export default {
     },
   },
   created() {
+    const isDateFormatAvailable = localStorage.getItem('dateFormat');
+
+    if (isDateFormatAvailable) {
+      if (isDateFormatAvailable === this.$constants.DATE_FORMAT_US) {
+        this.dateFormat = 'us';
+        this.setDateFormat(this.$constants.DATE_FORMAT_US);
+      } else {
+        this.dateFormat = 'standart';
+        this.setDateFormat(this.$constants.DATE_FORMAT);
+      }
+    }
+
     if (localStorage.getItem('email') !== null) {
       this.email = localStorage.getItem('email');
     }

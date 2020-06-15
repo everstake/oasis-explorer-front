@@ -26,53 +26,61 @@
               <b-card-text class="account__content">
                 <b-row>
                   <b-col cols="6">
-                    <div class="account__item">
-                      Address:
-                      <p class="account__value">{{ items.address }}</p>
-                    </div>
-                    <div class="account__item" v-if="items.entity_address">
-                      Entity address:
-                      <p class="account__value">
-                        <router-link
-                          :to="{ name: 'account', params: { id: items.entity_address } }"
-                        >
-                          {{ items.entity_address }}
-                        </router-link>
-                      </p>
-                    </div>
-                    <div class="account__item">
+                    <div class="account__container">
+                      <div class="account__item">
+                        Address:
+                        <p class="account__value">{{ items.address }}</p>
+                      </div>
+                      <div class="account__item" v-if="items.entity_address">
+                        Entity address:
+                        <p class="account__value">
+                          <router-link
+                            v-if="items.entity_address !== $route.params.id"
+                            :to="{ name: 'account', params: { id: items.entity_address } }"
+                          >
+                            {{ items.entity_address }}
+                          </router-link>
+                          <span v-else>
+                            {{ items.entity_address }}
+                          </span>
+                        </p>
+                      </div>
+                      <div class="account__item">
+                        Type:
+                        <p class="account__value">{{items.type }}</p>
+                      </div>
+                      <div class="account__item">
+                        Last active:
+                        <p class="account__value">{{items.last_active | formatUTCDaysAgo }}</p>
+                      </div>
+                      <div class="account__item">
                       Created at:
                       <p class="account__value">{{items.created_at | formatUTCDate }}</p>
                     </div>
-                    <div class="account__item">
-                      Last active:
-                      <p class="account__value">{{items.last_active | formatUTCDaysAgo }}</p>
-                    </div>
-                    <div class="account__item">
-                      Type:
-                      <p class="account__value">{{items.type }}</p>
                     </div>
                   </b-col>
                   <b-col cols="6">
-                    <div class="account__item">
-                      Liquid balance:
-                      <p class="account__value">{{ items.liquid_balance }}</p>
-                    </div>
-                    <div class="account__item">
-                      Escrow balance:
-                      <p class="account__value">{{items.escrow_balance }}</p>
-                    </div>
-                    <div class="account__item">
-                      Debonding balance:
-                      <p class="account__value">{{items.debonding_balance }}</p>
-                    </div>
-                    <div class="account__item">
-                      Total balance:
-                      <p class="account__value">{{items.total_balance }}</p>
-                    </div>
-                    <div class="account__item">
+                    <div class="account__container">
+                      <div class="account__item">
+                        Total balance:
+                        <p class="account__value">{{items.total_balance | formatAmount }}</p>
+                      </div>
+                      <div class="account__item">
+                        Liquid balance:
+                        <p class="account__value">{{ items.liquid_balance | formatAmount }}</p>
+                      </div>
+                      <div class="account__item">
+                        Escrow balance:
+                        <p class="account__value">{{items.escrow_balance | formatAmount }}</p>
+                      </div>
+                      <div class="account__item">
+                        Debonding balance:
+                        <p class="account__value">{{items.debonding_balance | formatAmount }}</p>
+                      </div>
+                      <div class="account__item">
                       Nonce:
                       <p class="account__value">{{items.nonce }}</p>
+                    </div>
                     </div>
                  </b-col>
                 </b-row>
@@ -89,53 +97,57 @@
             <b-card-text class="account__content">
               <b-row>
                 <b-col cols="6">
-                  <div class="account__item">
-                    Node address:
-                    <p class="account__value">
-                      <router-link
-                        :to="{ name: 'account', params: { id: items.validator.node_address } }"
-                      >
-                        {{ items.validator.node_address }}
-                      </router-link>
-                    </p>
-                  </div>
-                  <div class="account__item">
-                    Consensus address:
-                    <p class="account__value">{{ items.validator.consensus_address }}</p>
-                  </div>
-                  <div class="account__item">
-                    Depositors count:
-                    <p class="account__value">{{ items.validator.depositors_count }}</p>
-                  </div>
-                  <div class="account__item">
-                    Blocks count:
-                    <p class="account__value">{{ items.validator.blocks_count }}</p>
-                  </div>
-                  <div class="account__item">
+                  <div class="account__container">
+                    <div class="account__item">
+                      Node address:
+                      <p class="account__value">
+                        <router-link
+                          :to="{ name: 'account', params: { id: items.validator.node_address } }"
+                        >
+                          {{ items.validator.node_address }}
+                        </router-link>
+                      </p>
+                    </div>
+                    <div class="account__item">
+                      Consensus address:
+                      <p class="account__value">{{ items.validator.consensus_address }}</p>
+                    </div>
+                    <div class="account__item">
+                      Depositors count:
+                      <p class="account__value">{{ items.validator.depositors_count }}</p>
+                    </div>
+                    <div class="account__item">
+                      Blocks count:
+                      <p class="account__value">{{ items.validator.blocks_count }}</p>
+                    </div>
+                    <div class="account__item">
                     Signatures count:
                     <p class="account__value">{{ items.validator.signatures_count }}</p>
                   </div>
+                  </div>
                 </b-col>
                 <b-col cols="6">
-                  <div class="account__item">
-                    Rate change interval:
-                    <p class="account__value">{{ items.validator.rate_change_interval }}</p>
-                  </div>
-                  <div class="account__item">
-                    Rate bound lead:
-                    <p class="account__value">{{ items.validator.rate_bound_lead }}</p>
-                  </div>
-                  <div class="account__item">
-                    Max rate steps:
-                    <p class="account__value">{{ items.validator.max_rate_steps }}</p>
-                  </div>
-                  <div class="account__item">
-                    Max bound steps:
-                    <p class="account__value">{{ items.validator.max_bound_steps }}</p>
-                  </div>
-                  <div class="account__item">
-                    Status:
-                    <p class="account__value">{{ items.validator.status }}</p>
+                  <div class="account__container">
+                    <div class="account__item">
+                      Rate change interval:
+                      <p class="account__value">{{ items.validator.rate_change_interval }}</p>
+                    </div>
+                    <div class="account__item">
+                      Rate bound lead:
+                      <p class="account__value">{{ items.validator.rate_bound_lead }}</p>
+                    </div>
+                    <div class="account__item">
+                      Max rate steps:
+                      <p class="account__value">{{ items.validator.max_rate_steps }}</p>
+                    </div>
+                    <div class="account__item">
+                      Max bound steps:
+                      <p class="account__value">{{ items.validator.max_bound_steps }}</p>
+                    </div>
+                    <div class="account__item">
+                      Status:
+                      <p class="account__value">{{ items.validator.status }}</p>
+                    </div>
                   </div>
                 </b-col>
               </b-row>
@@ -208,7 +220,6 @@ export default {
   watch: {
     $route(to, from) {
       if (to.params.id !== from.params.id) {
-        console.log(123);
         this.fetchData(to.params.id);
       }
     },
@@ -223,9 +234,15 @@ export default {
 <style lang="scss">
   .account {
     &__content {}
+    &__container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-content: space-between;
+      height: 100%;
+    }
     &__item {
       color: $color-gray-999;
-      margin-bottom: 15px;
 
       &:last-child {
         margin-bottom: 0;

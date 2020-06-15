@@ -162,12 +162,16 @@ export default {
       this.loading = false;
     },
     fetchData(params = {}) {
-      return this.$api.getAccounts({ ...params, limit: this.getTransactionsLimit });
+      return this.$api.getAccounts({
+        ...params,
+        limit: this.getTransactionsLimit,
+        offset: this.offset,
+      });
     },
     async onShowMore() {
       this.loading = true;
       this.offset += 50;
-      const data = await this.fetchData({ offset: this.offset });
+      const data = await this.fetchData();
 
       if (data.status !== 200) {
         this.error = true;

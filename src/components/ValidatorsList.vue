@@ -15,24 +15,6 @@
       <template #table-busy>
         <TableLoader />
       </template>
-      <template #cell(delegate)="data">
-        <router-link
-          v-if="data.item.delegate"
-          :to="{ name: 'account', params: { id: data.item.delegate } }"
-        >
-          {{ data.item.delegate }}
-        </router-link>
-        <span v-else>-</span>
-      </template>
-      <template #cell(account_id)="data">
-        <router-link
-          v-if="data.item.account_id"
-          :to="{ name: 'account', params: { id: data.item.account_id } }"
-        >
-          {{ data.item.account_id }}
-        </router-link>
-        <span v-else>-</span>
-      </template>
       <template #cell(created_at)="data">
         {{ data.item.created_at | formatDate }}
         <div class="date-from-now">
@@ -91,14 +73,7 @@ export default {
       type: Array,
       default() {
         return [
-          { key: 'address', label: 'Address' },
-          { key: 'balance', label: 'Balance', sortable: true },
-          { key: 'score', label: 'Score', sortable: true },
-          { key: 'fee', label: 'Fee', sortable: true },
-          { key: 'voters', label: '# Voters,', sortable: true },
-          { key: 'proposals', label: 'Block proposals', sortable: true },
-          { key: 'signatures', label: 'Block signatures', sortable: true },
-          { key: 'validator_since', label: 'Validating since' },
+          { key: 'created_at', label: 'Created at', sortable: true },
         ];
       },
     },

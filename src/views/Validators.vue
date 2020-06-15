@@ -1,21 +1,21 @@
 <template>
-  <div class="transactions">
+  <div class="validators">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
     <b-container>
-      <AccountsList ref="AccountsList" />
+      <ValidatorsList ref="ValidatorsList" />
     </b-container>
   </div>
 </template>
 
 <script>
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import AccountsList from '@/components/AccountsList.vue';
+import ValidatorsList from '@/components/ValidatorsList.vue';
 
 export default {
   name: 'Accounts',
   components: {
     Breadcrumbs,
-    AccountsList,
+    ValidatorsList,
   },
   data() {
     return {
@@ -25,8 +25,8 @@ export default {
           text: 'Home',
         },
         {
-          toRouteName: 'accounts',
-          text: 'Accounts',
+          toRouteName: 'validators',
+          text: 'Validators',
           active: true,
         },
       ],
@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     async fetchData() {
-      const data = await this.$api.getAccounts({ limit: this.limit });
+      const data = await this.$api.getValidators({ limit: this.limit });
 
       return data.data;
     },

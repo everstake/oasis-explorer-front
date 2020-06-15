@@ -59,12 +59,12 @@ export default {
       if (props.name) localStorage.setItem('name', props.name);
       setTimeout(() => {
         this.$notify({
-          type: 'warn',
-          title: 'Oasis Monitor (warning)',
-          text: 'Feature isn\'t implemented yet',
+          type: 'success',
+          title: 'Oasis Monitor',
+          text: 'Saved',
         });
         this.loading = false;
-      }, 1000);
+      }, 300);
     },
     validateForm(query) {
       this.error = null;

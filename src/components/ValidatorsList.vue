@@ -15,6 +15,7 @@
       <template #table-busy>
         <TableLoader />
       </template>
+      <template #cell(#)="data">{{ data.index + 1 }}</template>
       <template #cell(created_at)="data">
         {{ data.item.created_at | formatDate }}
         <div class="date-from-now">
@@ -73,6 +74,15 @@ export default {
       type: Array,
       default() {
         return [
+          { key: '#', label: '#' },
+          { key: 'address', label: 'Address' },
+          { key: 'staking_balance', label: 'Stacking balance', sortable: true },
+          { key: 'availability_score', label: 'Availability score', sortable: true },
+          { key: 'fee', label: 'Fee', sortable: true },
+          { key: 'num_of_voters', label: '# Voters' },
+          { key: 'proposals', label: 'Block proposals', sortable: true },
+          { key: 'signatures', label: 'Block signatures', sortable: true },
+          { key: 'validating_since', label: 'Validating since' },
           { key: 'created_at', label: 'Created at', sortable: true },
         ];
       },

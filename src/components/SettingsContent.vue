@@ -36,7 +36,6 @@
                   id="input-1"
                   v-model="email"
                   type="email"
-                  required
                   placeholder="Enter email"
                   @input="isFormSaved = false"
                 ></b-form-input>

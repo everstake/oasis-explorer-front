@@ -17,57 +17,61 @@
           </div>
         </b-col>
       </b-row>
-      <b-row class="stats__information" v-else>
-        <b-col cols="6">
-          <div class="stats__section">
-            <b-card
-              header="Chart information"
-            >
-              <b-card-text class="stats__content">
-                <div class="stats__container">
-                  <PieChart
-                    :chart-data="getPieChartData"
-                    :tooltips-label-callback="tooltipsLabelCallback"
-                  />
-                </div>
-              </b-card-text>
-            </b-card>
-          </div>
-        </b-col>
-        <b-col cols="6">
-          <div class="stats__section">
-            <b-card
-              header="Chart information"
-            >
-              <b-card-text class="stats__content">
-                <div class="stats__container">
-                  <LineChart
-                    :chart-data="getLineChartData"
-                    :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
-                    :y-axes-begin-at-zero="false"
-                  />
-                </div>
-              </b-card-text>
-            </b-card>
-          </div>
-        </b-col>
-      </b-row>
+      <div class="stats__charts" v-else>
+        <b-row class="stats__information">
+          <b-col cols="6">
+            <div class="stats__section">
+              <b-card
+                header="Escrow ratio"
+              >
+                <b-card-text class="stats__content">
+                  <div class="stats__container">
+                    <LineChart
+                      :chart-data="getEscrowRatioData"
+                      :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                      :y-axes-begin-at-zero="false"
+                    />
+                  </div>
+                </b-card-text>
+              </b-card>
+            </div>
+          </b-col>
+          <b-col cols="6">
+            <div class="stats__section">
+              <b-card
+                header="Transaction volume"
+              >
+                <b-card-text class="stats__content">
+                  <div class="stats__container">
+                    <LineChart
+                      :chart-data="getTransactionVolumeData"
+                      :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                      :y-axes-begin-at-zero="false"
+                      :tooltips-label-callback="tooltipsLabelCallbackFormatAmount"
+                      :yTicksCallback="transactionVolumeTicksCallback"
+                    />
+                  </div>
+                </b-card-text>
+              </b-card>
+            </div>
+          </b-col>
+        </b-row>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import PieChart from '@/components/charts/PieChart.vue';
 import LineChart from '@/components/charts/LineChart.vue';
 import store from '@/store';
 import dayjs from 'dayjs';
+import numeral from 'numeral';
 
 export default {
   name: 'Stats',
   components: {
     LineChart,
-    PieChart,
     Breadcrumbs,
   },
   data() {
@@ -84,146 +88,8 @@ export default {
           active: true,
         },
       ],
-      pieChartData: [
-        {
-          name: 'Label',
-          value: '1',
-        },
-        {
-          name: 'Label',
-          value: '2',
-        },
-        {
-          name: 'Label',
-          value: '3',
-        },
-        {
-          name: 'Label',
-          value: '4',
-        },
-      ],
-      lineChartData: [
-        {
-          bakers: 157,
-          timestamp: 1589673600,
-        },
-        {
-          bakers: 150,
-          timestamp: 1589760000,
-        },
-        {
-          bakers: 157,
-          timestamp: 1589846400,
-        },
-        {
-          bakers: 162,
-          timestamp: 1589932800,
-        },
-        {
-          bakers: 155,
-          timestamp: 1590019200,
-        },
-        {
-          bakers: 164,
-          timestamp: 1590105600,
-        },
-        {
-          bakers: 141,
-          timestamp: 1590192000,
-        },
-        {
-          bakers: 154,
-          timestamp: 1590278400,
-        },
-        {
-          bakers: 161,
-          timestamp: 1590364800,
-        },
-        {
-          bakers: 143,
-          timestamp: 1590451200,
-        },
-        {
-          bakers: 153,
-          timestamp: 1590537600,
-        },
-        {
-          bakers: 148,
-          timestamp: 1590624000,
-        },
-        {
-          bakers: 155,
-          timestamp: 1590710400,
-        },
-        {
-          bakers: 151,
-          timestamp: 1590796800,
-        },
-        {
-          bakers: 156,
-          timestamp: 1590883200,
-        },
-        {
-          bakers: 156,
-          timestamp: 1590969600,
-        },
-        {
-          bakers: 155,
-          timestamp: 1591056000,
-        },
-        {
-          bakers: 137,
-          timestamp: 1591142400,
-        },
-        {
-          bakers: 153,
-          timestamp: 1591228800,
-        },
-        {
-          bakers: 161,
-          timestamp: 1591315200,
-        },
-        {
-          bakers: 150,
-          timestamp: 1591401600,
-        },
-        {
-          bakers: 162,
-          timestamp: 1591488000,
-        },
-        {
-          bakers: 165,
-          timestamp: 1591574400,
-        },
-        {
-          bakers: 148,
-          timestamp: 1591660800,
-        },
-        {
-          bakers: 159,
-          timestamp: 1591747200,
-        },
-        {
-          bakers: 148,
-          timestamp: 1591833600,
-        },
-        {
-          bakers: 146,
-          timestamp: 1591920000,
-        },
-        {
-          bakers: 150,
-          timestamp: 1592006400,
-        },
-        {
-          bakers: 155,
-          timestamp: 1592092800,
-        },
-        {
-          bakers: 138,
-          timestamp: 1592179200,
-        },
-      ],
+      escrowRatioData: null,
+      transactionVolumeData: null,
       palette: [
         '#4CD4A9',
         '#1BB8A8',
@@ -238,10 +104,41 @@ export default {
   methods: {
     async fetchData() {
       this.loading = true;
+
+      const todayMs = new Date().getTime();
+      const thirtyDaysMs = new Date(new Date().setDate(new Date().getDate() - 30)).getTime();
+
+      const todaySec = Math.round(todayMs / 1000);
+      const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
+
+      const escrowRatio = await this.$api.getEscrowRatio({
+        from: thirtyDaysSec,
+        to: todaySec,
+        frame: 'D',
+      });
+
+      const transactionVolume = await this.$api.getTransactionVolume({
+        from: thirtyDaysSec,
+        to: todaySec,
+        frame: 'D',
+      });
+
+      this.escrowRatioData = escrowRatio.data;
+      this.transactionVolumeData = transactionVolume.data;
       this.loading = false;
     },
     tooltipsLabelCallback(tooltipItem, data) {
       return `${data.labels[tooltipItem.index]}: ${data.datasets[0].data[tooltipItem.index]}`;
+    },
+    tooltipsLabelCallbackFormatAmount(tooltipItem, data) {
+      return `${data.labels[tooltipItem.index]}: ${numeral(data.datasets[0].data[tooltipItem.index] / 1000000000).format('0,0.000000000')}`;
+    },
+    transactionVolumeTicksCallback(label) {
+      if (label > 0) {
+        return numeral(label / 1000000000).format('0,0.000000000');
+      }
+
+      return label;
     },
   },
   computed: {
@@ -257,16 +154,32 @@ export default {
         labels: this.pieChartData.map(({ name }) => name),
       };
     },
-    getLineChartData() {
+    getEscrowRatioData() {
       return {
         datasets: [
           {
-            data: this.lineChartData.map(({ bakers }) => bakers),
+            label: 'Escrow ratio',
+            // eslint-disable-next-line camelcase
+            data: this.escrowRatioData.map(({ escrow_ratio }) => escrow_ratio),
             borderWidth: 1,
           },
         ],
         // eslint-disable-next-line max-len
-        labels: this.lineChartData.map(({ timestamp }) => dayjs.unix(timestamp).format(store.state.dateFormat)),
+        labels: this.escrowRatioData.map(({ timestamp }) => dayjs.unix(timestamp).format(store.state.dateFormat)),
+      };
+    },
+    getTransactionVolumeData() {
+      return {
+        datasets: [
+          {
+            label: 'Transaction volume',
+            // eslint-disable-next-line camelcase
+            data: this.transactionVolumeData.map(({ transaction_volume }) => transaction_volume),
+            borderWidth: 1,
+          },
+        ],
+        // eslint-disable-next-line max-len
+        labels: this.transactionVolumeData.map(({ timestamp }) => dayjs.unix(timestamp).format(store.state.dateFormat)),
       };
     },
   },

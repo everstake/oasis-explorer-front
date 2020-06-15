@@ -298,7 +298,7 @@ export default {
       this.$router.push({ name: 'block', params: { id: this.height } });
     },
     handleChartClick() {
-      return false;
+      this.$router.push({ name: 'stats' });
     },
   },
   async created() {
@@ -382,6 +382,7 @@ export default {
     &-card {
       &__chart {
         height: 100%;
+        cursor: pointer;
       }
     }
   }

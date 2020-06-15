@@ -29,7 +29,7 @@
           </ul>
           <ul class="footer__list">
             <li class="footer__item">
-              <router-link class="footer__link" to="resources">Resources</router-link>
+              <a class="footer__link" href="https://oasismonitor.com/docs" target="_blank">API Documentation</a>
             </li>
             <li class="footer__item">
               <a class="footer__link" href="https://github.com/everstake/oasis-explorer-front" target="_blank">Github Frontend</a>
@@ -39,6 +39,9 @@
             </li>
           </ul>
           <ul class="footer__list">
+            <li class="footer__item">
+              <router-link class="footer__link" to="resources">Resources</router-link>
+            </li>
             <li class="footer__item">
               <div class="footer__socials">
                 <TheSocials class="footer__social" />

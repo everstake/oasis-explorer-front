@@ -40,7 +40,7 @@ export default {
       type: Object,
       default() {
         return {
-          facebook: 'https://www.facebook.com/everstake.one/',
+          facebook: 'https://www.facebook.com/everstake.one',
           medium: 'https://medium.com/everstake',
           twitter: 'https://twitter.com/everstake_pool',
         };

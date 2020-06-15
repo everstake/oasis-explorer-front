@@ -29,8 +29,8 @@ const routes = [
     },
     component: () => import(/* webpackChunkName: "block" */ '../views/Block.vue'),
     beforeEnter(from, to, next) {
-      if (from.params.level) {
-        document.title = `Block ${String(from.params.level).slice(0, 7)} | Oasis Monitor`;
+      if (from.params.id) {
+        document.title = `Block ${String(from.params.id).slice(0, 7)} | Oasis Monitor`;
       } else {
         document.title = 'Block | Oasis Monitor';
       }
@@ -53,7 +53,7 @@ const routes = [
       title: 'Transaction | Oasis Monitor',
     },
     beforeEnter(from, to, next) {
-      if (from.params.hash) {
+      if (from.params.id) {
         document.title = `Transaction ${String(from.params.id).slice(0, 7)} | Oasis Monitor`;
       } else {
         document.title = 'Transaction | Oasis Monitor';
@@ -81,7 +81,7 @@ const routes = [
       title: 'Account | Oasis Monitor',
     },
     beforeEnter(from, to, next) {
-      if (from.params.hash) {
+      if (from.params.id) {
         document.title = `Account ${from.params.id.slice(0, 7)} | Oasis Monitor`;
       } else {
         document.title = 'Account | Oasis Monitor';

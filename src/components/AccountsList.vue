@@ -11,6 +11,7 @@
       borderless
       no-border-collapse
       @row-selected="handleRowClick"
+      @sort-changed="handleSortChange"
     >
       <template #table-busy>
         <TableLoader />
@@ -96,7 +97,7 @@ export default {
         return [
           { key: 'account_id', label: 'Account id' },
           { key: 'delegate', label: 'Delegate' },
-          { key: 'operations_amount', label: 'Operations amount' },
+          { key: 'operations_amount', label: 'Operations amount', sortable: true },
           { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
           { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
           { key: 'general_balance', label: 'General balance', sortable: true },
@@ -131,6 +132,25 @@ export default {
         name: 'account',
         params: { hash },
       });
+    },
+    async handleSortChange(item) {
+      this.loading = true;
+      const data = await this.fetchData({
+        sort_column: item.sortBy,
+        sort_side: item.sortDesc ? 'desc' : 'asc',
+      });
+
+      if (data.status !== 200) {
+        this.error = true;
+      } else {
+        this.error = false;
+        this.data = [
+          ...this.data,
+          ...data.data,
+        ];
+      }
+
+      this.loading = false;
     },
     fetchData(params = {}) {
       return this.$api.getAccounts({ ...params, limit: this.getTransactionsLimit });

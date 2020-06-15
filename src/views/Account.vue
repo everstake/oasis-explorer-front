@@ -1,5 +1,5 @@
 <template>
-  <div class="account">
+  <div class="account" :key="$route.params.id">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
     <b-container>
@@ -30,9 +30,15 @@
                       Address:
                       <p class="account__value">{{ items.address }}</p>
                     </div>
-                    <div class="account__item">
+                    <div class="account__item" v-if="items.entity_address">
                       Entity address:
-                      <p class="account__value">{{items.entity_address }}</p>
+                      <p class="account__value">
+                        <router-link
+                          :to="{ name: 'account', params: { id: items.entity_address } }"
+                        >
+                          {{ items.entity_address }}
+                        </router-link>
+                      </p>
                     </div>
                     <div class="account__item">
                       Created at:
@@ -75,7 +81,7 @@
           </div>
         </b-col>
       </b-row>
-      <b-row class="account__validator" v-if="items.validator">
+      <b-row class="account__validator" v-if="items !== null && items.validator">
         <b-col cols="12">
           <b-card
             header="Validator information"
@@ -85,7 +91,13 @@
                 <b-col cols="6">
                   <div class="account__item">
                     Node address:
-                    <p class="account__value">{{ items.validator.node_address }}</p>
+                    <p class="account__value">
+                      <router-link
+                        :to="{ name: 'account', params: { id: items.validator.node_address } }"
+                      >
+                        {{ items.validator.node_address }}
+                      </router-link>
+                    </p>
                   </div>
                   <div class="account__item">
                     Consensus address:
@@ -179,17 +191,31 @@ export default {
       ],
     };
   },
+  methods: {
+    async fetchData(id) {
+      this.loading = true;
+
+      const data = await this.$api.getAccount({ id });
+
+      if (data.status !== 200) {
+        this.$router.push({ name: '404' });
+      }
+
+      this.items = data.data;
+      this.loading = false;
+    },
+  },
+  watch: {
+    $route(to, from) {
+      if (to.params.id !== from.params.id) {
+        console.log(123);
+        this.fetchData(to.params.id);
+      }
+    },
+  },
   async created() {
-    this.loading = true;
-
-    const data = await this.$api.getAccount({ id: this.$route.params.id });
-
-    if (data.status !== 200) {
-      this.$router.push({ name: '404' });
-    }
-
-    this.items = data.data;
-    this.loading = false;
+    const { id } = this.$route.params;
+    this.fetchData(id);
   },
 };
 </script>

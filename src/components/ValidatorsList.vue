@@ -1,5 +1,5 @@
 <template>
-  <div class="accounts-list">
+  <div class="validators-list">
     <b-table
       ref="table"
       :busy="loading && data === null"
@@ -23,9 +23,6 @@
           {{ data.item.delegate }}
         </router-link>
         <span v-else>-</span>
-      </template>
-      <template #cell(general_balance)="data">
-        {{ data.item.general_balance }}
       </template>
       <template #cell(account_id)="data">
         <router-link
@@ -77,7 +74,7 @@ import TableLoader from '@/components/TableLoader.vue';
 import debounce from 'lodash/debounce';
 
 export default {
-  name: 'AccountsList',
+  name: 'ValidatorsList',
   components: {
     TableLoader,
   },
@@ -94,14 +91,14 @@ export default {
       type: Array,
       default() {
         return [
-          { key: 'account_id', label: 'Account id' },
-          { key: 'delegate', label: 'Delegate' },
-          { key: 'operations_amount', label: 'Operations amount' },
-          { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
-          { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
-          { key: 'general_balance', label: 'General balance', sortable: true },
-          { key: 'type', label: 'Type' },
-          { key: 'created_at', label: 'Created at', sortable: true },
+          { key: 'address', label: 'Address' },
+          { key: 'balance', label: 'Balance', sortable: true },
+          { key: 'score', label: 'Score', sortable: true },
+          { key: 'fee', label: 'Fee', sortable: true },
+          { key: 'voters', label: '# Voters,', sortable: true },
+          { key: 'proposals', label: 'Block proposals', sortable: true },
+          { key: 'signatures', label: 'Block signatures', sortable: true },
+          { key: 'validator_since', label: 'Validating since' },
         ];
       },
     },
@@ -133,7 +130,7 @@ export default {
       });
     },
     fetchData(params = {}) {
-      return this.$api.getAccounts({ ...params, limit: this.getTransactionsLimit });
+      return this.$api.getValidators({ ...params, limit: this.getValidatorsLimit });
     },
     async onShowMore() {
       this.loading = true;
@@ -161,7 +158,7 @@ export default {
     },
   },
   computed: {
-    getTransactionsLimit() {
+    getValidatorsLimit() {
       return this.rows || this.limit;
     },
   },
@@ -184,7 +181,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .accounts-list {
+  .validators-list {
     &__actions {
       margin-top: 50px;
       margin-bottom: 50px;

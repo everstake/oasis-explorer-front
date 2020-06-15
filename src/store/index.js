@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-const defaultDateFormat = localStorage.getItem('dateFormat') || Vue.prototype.$constants.DATE_FORMAT_US;
+const defaultDateFormat = localStorage.getItem('dateFormat') || Vue.prototype.$constants.DATE_FORMAT;
 
 export default new Vuex.Store({
   state: {

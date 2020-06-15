@@ -1,5 +1,5 @@
 <template>
-  <div class="accounts-list">
+  <div class="validators-list">
     <b-table
       ref="table"
       :busy="loading && data === null"
@@ -11,31 +11,9 @@
       borderless
       no-border-collapse
       @row-selected="handleRowClick"
-      @sort-changed="handleSortChange"
     >
       <template #table-busy>
         <TableLoader />
-      </template>
-      <template #cell(delegate)="data">
-        <router-link
-          v-if="data.item.delegate"
-          :to="{ name: 'account', params: { id: data.item.delegate } }"
-        >
-          {{ data.item.delegate }}
-        </router-link>
-        <span v-else>-</span>
-      </template>
-      <template #cell(general_balance)="data">
-        {{ data.item.general_balance }}
-      </template>
-      <template #cell(account_id)="data">
-        <router-link
-          v-if="data.item.account_id"
-          :to="{ name: 'account', params: { id: data.item.account_id } }"
-        >
-          {{ data.item.account_id }}
-        </router-link>
-        <span v-else>-</span>
       </template>
       <template #cell(created_at)="data">
         {{ data.item.created_at | formatDate }}
@@ -78,7 +56,7 @@ import TableLoader from '@/components/TableLoader.vue';
 import debounce from 'lodash/debounce';
 
 export default {
-  name: 'AccountsList',
+  name: 'ValidatorsList',
   components: {
     TableLoader,
   },
@@ -95,13 +73,6 @@ export default {
       type: Array,
       default() {
         return [
-          { key: 'account_id', label: 'Account id' },
-          { key: 'delegate', label: 'Delegate' },
-          { key: 'general_balance', label: 'General balance', sortable: true },
-          { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
-          { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
-          { key: 'operations_amount', label: 'Operations amount', sortable: true },
-          { key: 'type', label: 'Type' },
           { key: 'created_at', label: 'Created at', sortable: true },
         ];
       },
@@ -133,27 +104,8 @@ export default {
         params: { hash },
       });
     },
-    async handleSortChange(item) {
-      this.loading = true;
-      const data = await this.fetchData({
-        sort_column: item.sortBy,
-        sort_side: item.sortDesc ? 'desc' : 'asc',
-      });
-
-      if (data.status !== 200) {
-        this.error = true;
-      } else {
-        this.error = false;
-        this.data = [
-          ...this.data,
-          ...data.data,
-        ];
-      }
-
-      this.loading = false;
-    },
     fetchData(params = {}) {
-      return this.$api.getAccounts({ ...params, limit: this.getTransactionsLimit });
+      return this.$api.getValidators({ ...params, limit: this.getValidatorsLimit });
     },
     async onShowMore() {
       this.loading = true;
@@ -181,7 +133,7 @@ export default {
     },
   },
   computed: {
-    getTransactionsLimit() {
+    getValidatorsLimit() {
       return this.rows || this.limit;
     },
   },
@@ -204,7 +156,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .accounts-list {
+  .validators-list {
     &__actions {
       margin-top: 50px;
       margin-bottom: 50px;

@@ -1,19 +1,73 @@
 <template>
   <div class="transactions-list">
     <div class="transactions-list__filter" v-if="filters">
-      <div class="transactions-list__label">Filter by date</div>
-      <date-range-picker
-        class="transactions-list__calendar"
-        ref="picker"
-        v-model="dateRange"
-        :ranges="false"
-        :opens="'right'"
-        :min-date="getMinCalendarDate"
-        :max-date="new Date()"
-        :locale-data="getLocaleData"
-        :key="getLocaleData.format"
-        @update="handleCalendarUpdate"
-      />
+      <div class="transactions-list__title">Operations filters</div>
+      <div class="transactions-list__container">
+        <date-range-picker
+          class="transactions-list__calendar"
+          ref="picker"
+          v-model="dateRange"
+          :ranges="false"
+          :opens="'right'"
+          :min-date="getMinCalendarDate"
+          :max-date="new Date()"
+          :locale-data="getLocaleData"
+          :key="getLocaleData.format"
+          @update="handleCalendarUpdate"
+        >
+          <div class="transactions-list__label" slot="input">
+            Select date
+            <font-awesome-icon class="transactions-list__icon" icon="calendar-check" />
+          </div>
+        </date-range-picker>
+        <div class="transactions-dropdown">
+          <b-dropdown id="dropdown-1" text="Select type" class="m-md-2">
+            <b-dropdown-form
+              class="transactions-dropdown__content"
+              :disabled="dropdownIsBusy"
+              :class="{
+                'transactions-dropdown--disabled': dropdownIsBusy
+              }"
+            >
+              <b-form-checkbox
+                :disabled="operations.length === 1 && operations[0] === 'transactions'"
+                v-model="operations"
+                value="transactions"
+                class="mb-3"
+              >
+                Transactions
+              </b-form-checkbox>
+
+              <b-form-checkbox
+                :disabled="operations.length === 1 && operations[0] === 'escrow/unbonding'"
+                v-model="operations"
+                value="escrow/unbonding"
+                class="mb-3"
+              >
+
+                Escrow/Unbonding
+              </b-form-checkbox>
+
+              <b-form-checkbox
+                :disabled="operations.length === 1 && operations[0] === 'burn'"
+                v-model="operations"
+                value="burn"
+                class="mb-3"
+              >
+                Burn
+              </b-form-checkbox>
+
+              <b-form-checkbox
+                :disabled="operations.length === 1 && operations[0] === 'other'"
+                v-model="operations"
+                value="other"
+              >
+                Other
+              </b-form-checkbox>
+            </b-dropdown-form>
+          </b-dropdown>
+        </div>
+      </div>
     </div>
     <b-table
       ref="table"
@@ -22,7 +76,11 @@
       show-empty
       :fields="fields"
       :items="data"
-      class="table table--border"
+      class="table table--border transactions-list__table"
+      :class="{
+        'transactions-list__table--disabled': dropdownIsBusy
+      }"
+      :disabled="dropdownIsBusy"
       borderless
       no-border-collapse
       @row-selected="handleRowClick"
@@ -110,7 +168,7 @@ import { mapState } from 'vuex';
 import dayjs from 'dayjs';
 
 export default {
-  name: 'TransactionsList',
+  name: 'OperationsList',
   components: {
     TableLoader,
     DateRangePicker,
@@ -129,7 +187,7 @@ export default {
       default() {
         return [
           { key: 'level', label: 'Height', sortable: true },
-          { key: 'hash', label: 'Transaction Hash' },
+          { key: 'hash', label: 'Operation Hash' },
           { key: 'from', label: 'From' },
           { key: 'to', label: 'To' },
           { key: 'amount', label: 'Amount', sortable: true },
@@ -159,7 +217,21 @@ export default {
         startDate: null,
         endDate: null,
       },
+      operations: ['transactions'],
+      dropdownIsBusy: false,
     };
+  },
+  watch: {
+    operations: {
+      deep: true,
+      handler() {
+        this.dropdownIsBusy = true;
+
+        setTimeout(() => {
+          this.dropdownIsBusy = false;
+        }, 800);
+      },
+    },
   },
   methods: {
     async handleCalendarUpdate(val) {
@@ -314,18 +386,91 @@ export default {
     }
 
     &__filter {
-      margin-bottom: 40px;
+      margin-bottom: 10px;
       font-family: $open-sans;
       font-size: 16px;
     }
 
-    &__label {
-      display: inline-block;
-      margin-right: 10px;
+    &__container {
+      display: flex;
+      align-items: center;
+    }
+
+    &__title {
+      font-size: 16px;
+      font-family: $open-sans;
     }
 
     &__calendar {
       text-align: center;
+      background-color: $color-primary;
+      border-radius: 4px;
+    }
+
+    &__label {
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    &__icon {
+      margin-left: 5px;
+    }
+
+    &__table {
+      position: relative;
+
+      &--disabled {
+        & a {
+          pointer-events: none;
+        }
+
+        &:before {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          display: block;
+          background-color: $color-primary-transparent-01;
+        }
+      }
+    }
+  }
+</style>
+
+<style lang="scss">
+  .transactions-dropdown {
+
+    &__content {
+      font-size: 15px;
+
+      & form:focus {
+        outline: none !important;
+      }
+    }
+
+    & .btn-secondary {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+      background-color: $color-primary !important;
+      border-color: $color-primary !important;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    &--disabled:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: block;
+      background-color: $color-primary-transparent-01;
+      pointer-events: none;
     }
   }
 </style>

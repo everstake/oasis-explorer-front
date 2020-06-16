@@ -58,13 +58,8 @@ export default {
       if (props.email) localStorage.setItem('email', props.email);
       if (props.name) localStorage.setItem('name', props.name);
       setTimeout(() => {
-        this.$notify({
-          type: 'success',
-          title: 'Oasis Monitor',
-          text: 'Saved',
-        });
         this.loading = false;
-      }, 300);
+      }, 200);
     },
     validateForm(query) {
       this.error = null;

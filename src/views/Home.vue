@@ -270,35 +270,33 @@ export default {
       /* eslint-disable */
       if (!this.escrowRatio) return;
 
-      const data = {
-          labels: [...this.escrowRatio.map(({ timestamp }) => dayjs.unix(timestamp).format('DD/MM/YYYY'))],
-          datasets: [{
-            backgroundColor: '#4cd4a9',
-            borderColor: '#4cd4a9',
-            data: [...this.escrowRatio.map(({ escrow_ratio }) => escrow_ratio)],
-          }],
-        };
-      return data;
+      return {
+        labels: [...this.escrowRatio.map(({timestamp}) => dayjs.unix(timestamp).format('DD/MM/YYYY'))],
+        datasets: [{
+          backgroundColor: '#4cd4a9',
+          borderColor: '#4cd4a9',
+          data: [...this.escrowRatio.map(({escrow_ratio}) => escrow_ratio)],
+        }],
+      };
     },
     getTransactionVolumeData() {
       /* eslint-disable */
       if (!this.transactionVolume) return;
 
-      const data = {
-          labels: [...this.transactionVolume.map(({ timestamp }) => dayjs.unix(timestamp).format('DD/MM/YYYY'))],
-          datasets: [{
-            backgroundColor: '#4cd4a9',
-            borderColor: '#4cd4a9',
-            data: [...this.transactionVolume.map(({ transaction_volume }) => transaction_volume)],
-          }],
-        };
-      return data;
+      return {
+        labels: [...this.transactionVolume.map(({timestamp}) => dayjs.unix(timestamp).format('DD/MM/YYYY'))],
+        datasets: [{
+          backgroundColor: '#4cd4a9',
+          borderColor: '#4cd4a9',
+          data: [...this.transactionVolume.map(({transaction_volume}) => transaction_volume)],
+        }],
+      };
     },
     handleCardClick() {
       this.$router.push({ name: 'block', params: { id: this.height } });
     },
     handleChartClick() {
-      return false;
+      this.$router.push({ name: 'stats' });
     },
   },
   async created() {
@@ -309,7 +307,10 @@ export default {
     const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
 
     const data = await this.$api.getInfo();
-    
+
+    this.height = data.data.height;
+    this.topStakeWeight = data.data.top_escrow;
+
     this.setInfo(data.data);
 
     const escrowRatio = await this.$api.getEscrowRatio({
@@ -318,17 +319,15 @@ export default {
       frame: 'D',
     });
 
+    this.escrowRatio = escrowRatio.data;
+
     const transactionVolume = await this.$api.getTransactionVolume({
       from: thirtyDaysSec,
       to: todaySec,
       frame: 'D',
     });
 
-    this.escrowRatio = escrowRatio.data;
     this.transactionVolume = transactionVolume.data;
-
-    this.height = data.data.height;
-    this.topStakeWeight = data.data.top_escrow;
   },
 };
 </script>
@@ -382,6 +381,7 @@ export default {
     &-card {
       &__chart {
         height: 100%;
+        cursor: pointer;
       }
     }
   }

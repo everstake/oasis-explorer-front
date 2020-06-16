@@ -3,6 +3,11 @@
     <div class="transactions-list__filter" v-if="filters">
       <div class="transactions-list__title">Operations filters</div>
       <div class="transactions-list__container">
+        <div class="transactions-list__reset">
+          <b-btn @click="clearFilters">
+            <font-awesome-icon icon="times-circle" />
+          </b-btn>
+        </div>
         <date-range-picker
           class="transactions-list__calendar"
           ref="picker"
@@ -234,6 +239,21 @@ export default {
     },
   },
   methods: {
+    async clearFilters() {
+      this.dateRange.startDate = null;
+      this.dateRange.endDate = null;
+      this.offset = 0;
+      this.operations = ['transactions'];
+
+      const data = await this.fetchData();
+
+      if (data.status !== 200) {
+        this.error = true;
+      } else {
+        this.error = false;
+        this.data = data.data;
+      }
+    },
     async handleCalendarUpdate(val) {
       const from = +val.startDate / 1000;
       const to = +val.endDate / 1000;
@@ -389,6 +409,14 @@ export default {
       margin-bottom: 10px;
       font-family: $open-sans;
       font-size: 16px;
+    }
+
+    &__reset {
+      margin-right: 10px;
+      & .btn-secondary {
+        background-color: $color-primary !important;
+        border-color: $color-primary !important;
+      }
     }
 
     &__container {

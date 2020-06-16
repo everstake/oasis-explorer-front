@@ -19,7 +19,6 @@
       <template #cell(account_id)="data">
         <router-link
           :to="{ name: 'account', params: { id: data.item.account_id } }"
-          class="table__hash"
         >
           {{ data.item.account_name || data.item.account_id }}
         </router-link>
@@ -133,13 +132,13 @@ export default {
           { key: '#', label: '#' },
           { key: 'account_id', label: 'Account' },
           { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
-          { key: 'available_score', label: 'Available score', sortable: true },
+          { key: 'available_score', label: 'Availability', sortable: true },
           { key: 'depositors_count', label: 'Delegators' },
           { key: 'blocks_count', label: 'Proposals', sortable: true },
           { key: 'signatures_count', label: 'Signatures', sortable: true },
           { key: 'fee', label: 'Fee', sortable: true },
           { key: 'status', label: 'Status' },
-          { key: 'validate_since', label: 'Validate since', sortable: true },
+          { key: 'validate_since', label: 'Registered', sortable: true },
         ];
       },
     },

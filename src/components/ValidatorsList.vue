@@ -131,13 +131,14 @@ export default {
           { key: '#', label: '#' },
           { key: 'account_id', label: 'Account' },
           { key: 'node_address', label: 'Node address' },
-          { key: 'escrow_balance', label: 'Escrow balance' },
-          { key: 'available_score', label: 'Available score' },
+          { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
+          { key: 'available_score', label: 'Available score', sortable: true },
           { key: 'depositors_count', label: 'Depositors count' },
-          { key: 'blocks_count', label: 'Block proposals' },
-          { key: 'signatures_count', label: 'Block signatures' },
+          { key: 'blocks_count', label: 'Block proposals', sortable: true },
+          { key: 'signatures_count', label: 'Block signatures', sortable: true },
+          { key: 'fee', label: 'Fee', sortable: true },
           { key: 'status', label: 'Status' },
-          { key: 'validate_since', label: 'Validate since' },
+          { key: 'validate_since', label: 'Validate since', sortable: true },
         ];
       },
     },
@@ -263,7 +264,7 @@ export default {
     }
 
     &__status {
-      font-weight: bold;
+      font-weight: 600;
 
       &--active {
         color: #28a745;

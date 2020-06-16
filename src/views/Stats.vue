@@ -138,7 +138,6 @@ export default {
       return data.datasets[0].data[tooltipItem.index];
     },
     transactionVolumeTicksCallback(label) {
-      console.log('lab', label);
       if (label > 0) {
         return numeral(label / 1000000000).format('0,0.[000000000]');
       }

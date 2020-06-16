@@ -29,6 +29,17 @@
       <template #cell(available_score)="data">
         {{ data.item.available_score | formatAmount }}
       </template>
+      <template #cell(status)="data">
+        <div
+          class="validators-list__status"
+          :class="{
+            'validators-list__status--active': data.item.status === 'active',
+            'validators-list__status--inactive': data.item.status === 'inactive'
+          }"
+        >
+          {{ data.item.status }}
+        </div>
+      </template>
       <template #cell(node_address)="data">
         <router-link
           :to="{ name: 'account', params: { id: data.item.node_address } }"
@@ -122,14 +133,10 @@ export default {
           { key: 'node_address', label: 'Node address' },
           { key: 'escrow_balance', label: 'Escrow balance' },
           { key: 'available_score', label: 'Available score' },
-          { key: 'rate_change_interval', label: 'Rate change interval' },
-          { key: 'rate_bound_lead', label: 'Rate bound lead' },
-          { key: 'max_rate_steps', label: 'Max rate steps' },
-          { key: 'max_bound_steps', label: 'Max bound steps' },
-          { key: 'status', label: 'Status' },
           { key: 'depositors_count', label: 'Depositors count' },
-          { key: 'blocks_count', label: 'Blocks count' },
-          { key: 'signatures_count', label: 'Signatures count' },
+          { key: 'blocks_count', label: 'Block proposals' },
+          { key: 'signatures_count', label: 'Block signatures' },
+          { key: 'status', label: 'Status' },
           { key: 'validate_since', label: 'Validate since' },
         ];
       },
@@ -253,6 +260,18 @@ export default {
     & .date-from-now {
       font-size: 14px;
       color: #999;
+    }
+
+    &__status {
+      font-weight: bold;
+
+      &--active {
+        color: #28a745;
+      }
+
+      &--inactive {
+        color: #dc3545;
+      }
     }
   }
 </style>

@@ -7,7 +7,7 @@
       show-empty
       :fields="fields"
       :items="data"
-      class="table table--border"
+      class="table table--border table-list"
       borderless
       no-border-collapse
       @row-selected="handleRowClick"
@@ -15,10 +15,56 @@
       <template #table-busy>
         <TableLoader />
       </template>
-      <template #cell(created_at)="data">
-        {{ data.item.created_at | formatDate }}
+      <template #cell(#)="data">{{ data.index + 1 }}</template>
+      <template #cell(account_id)="data">
+        <router-link
+          :to="{ name: 'account', params: { id: data.item.account_id } }"
+        >
+          {{ data.item.account_name || data.item.account_id }}
+        </router-link>
+      </template>
+      <template #cell(escrow_balance)="data">
+        {{ data.item.escrow_balance | formatAmount }}
+      </template>
+      <template #cell(available_score)="data">
+        {{ data.item.available_score | formatAmount }}
+      </template>
+      <template #cell(status)="data">
+        <div
+          class="validators-list__status text-center"
+          :class="{
+            'validators-list__status--active': data.item.status === 'active',
+            'validators-list__status--inactive': data.item.status === 'inactive'
+          }"
+        >
+          <font-awesome-icon v-if="data.item.status === 'active'" icon="check-circle" />
+          <font-awesome-icon v-else-if="data.item.status === 'inactive'" icon="times-circle" />
+        </div>
+      </template>
+      <template #cell(node_address)="data">
+        <router-link
+          :to="{ name: 'account', params: { id: data.item.node_address } }"
+        >
+          {{ data.item.node_address }}
+        </router-link>
+      </template>
+<!--      account_id-->
+<!--      escrow_balance-->
+<!--      available_score-->
+<!--      rate_change_interval-->
+<!--      rate_bound_lead-->
+<!--      max_rate_steps-->
+<!--      max_bound_steps-->
+<!--      status-->
+<!--      node_address-->
+<!--      depositors_count-->
+<!--      blocks_count-->
+<!--      signatures_count-->
+<!--      validate_since-->
+      <template #cell(validate_since)="data">
+        {{ data.item.validate_since | formatYear }}
         <div class="date-from-now">
-          {{ data.item.created_at | formatDaysAgo }}
+          {{ data.item.validate_since | formatDaysAgo }}
         </div>
       </template>
     </b-table>
@@ -73,7 +119,26 @@ export default {
       type: Array,
       default() {
         return [
-          { key: 'created_at', label: 'Created at', sortable: true },
+          // { key: '#', label: '#' },
+          // { key: 'account_id', label: 'Account' },
+          // { key: 'staking_balance', label: 'Stacking balance', sortable: true },
+          // { key: 'availability_score', label: 'Availability score', sortable: true },
+          // { key: 'fee', label: 'Fee', sortable: true },
+          // { key: 'num_of_voters', label: '# Voters' },
+          // { key: 'proposals', label: 'Block proposals', sortable: true },
+          // { key: 'signatures', label: 'Block signatures', sortable: true },
+          // { key: 'validating_since', label: 'Validating since' },
+          // { key: 'created_at', label: 'Created at', sortable: true },
+          { key: '#', label: '#' },
+          { key: 'account_id', label: 'Account' },
+          { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
+          { key: 'available_score', label: 'Availability', sortable: true },
+          { key: 'depositors_count', label: 'Delegators' },
+          { key: 'blocks_count', label: 'Proposals', sortable: true },
+          { key: 'signatures_count', label: 'Signatures', sortable: true },
+          { key: 'fee', label: 'Fee', sortable: true },
+          { key: 'status', label: 'Status' },
+          { key: 'validate_since', label: 'Registered', sortable: true },
         ];
       },
     },
@@ -196,6 +261,18 @@ export default {
     & .date-from-now {
       font-size: 14px;
       color: #999;
+    }
+
+    &__status {
+      font-weight: 600;
+
+      &--active {
+        color: #28a745;
+      }
+
+      &--inactive {
+        color: #dc3545;
+      }
     }
   }
 </style>

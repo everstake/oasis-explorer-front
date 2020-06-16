@@ -1,0 +1,14 @@
+.daterangepicker td.in-range {
+  background-color: $color-primary-transparent-08;
+  color: $color-white;
+}
+
+.daterangepicker td.active, .daterangepicker td.active:hover {
+  background-color: $color-primary;
+  color: $color-white;
+}
+
+.applyBtn.btn-success {
+  background-color: $color-primary;
+  border-color: $color-primary;
+}

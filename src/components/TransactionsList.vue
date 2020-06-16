@@ -1,5 +1,20 @@
 <template>
   <div class="transactions-list">
+    <div class="transactions-list__filter">
+      <div class="transactions-list__label">Filter by date</div>
+      <date-range-picker
+        class="transactions-list__calendar"
+        ref="picker"
+        v-model="dateRange"
+        :ranges="false"
+        :opens="'right'"
+        :min-date="getMinCalendarDate"
+        :max-date="new Date()"
+        :locale-data="getLocaleData"
+        :key="getLocaleData.format"
+        @update="handleCalendarUpdate"
+      />
+    </div>
     <b-table
       ref="table"
       :busy="loading && data === null"
@@ -90,11 +105,15 @@
 <script>
 import TableLoader from '@/components/TableLoader.vue';
 import debounce from 'lodash/debounce';
+import DateRangePicker from 'vue2-daterange-picker';
+import { mapState } from 'vuex';
+import dayjs from 'dayjs';
 
 export default {
   name: 'TransactionsList',
   components: {
     TableLoader,
+    DateRangePicker,
   },
   props: {
     rows: {
@@ -132,9 +151,27 @@ export default {
       limit: 50,
       offset: 0,
       error: false,
+      dateRange: {
+        startDate: null,
+        endDate: null,
+      },
     };
   },
   methods: {
+    async handleCalendarUpdate(val) {
+      const from = +val.startDate / 1000;
+      const to = +val.endDate / 1000;
+
+      const data = await this.fetchData({ from, to });
+
+      if (data.status !== 200) {
+        this.error = true;
+      } else {
+        this.error = false;
+        this.offset = 0;
+        this.data = data.data;
+      }
+    },
     scrollToTop() {
       window.scrollTo(0, 0);
     },
@@ -155,9 +192,19 @@ export default {
       return this.$api.getTransactions({ ...params, limit: this.getTransactionsLimit });
     },
     async onShowMore() {
+      let data;
       this.loading = true;
       this.offset += 50;
-      const data = await this.fetchData({ offset: this.offset });
+
+      const isDateReady = this.dateRange.startDate && this.dateRange.endDate;
+
+      if (isDateReady) {
+        const from = +this.dateRange.startDate / 1000;
+        const to = this.dateRange.endDate / 1000;
+        data = await this.fetchData({ offset: this.offset, from, to });
+      } else {
+        data = await this.fetchData({ offset: this.offset });
+      }
 
       if (data.status !== 200) {
         this.error = true;
@@ -180,8 +227,25 @@ export default {
     },
   },
   computed: {
+    ...mapState(['dateFormat']),
+    getMinCalendarDate() {
+      const now = new Date();
+
+      return dayjs(now.setFullYear(now.getFullYear() - 3)).$d;
+    },
     getTransactionsLimit() {
       return this.rows || this.limit;
+    },
+    getLocaleData() {
+      if (this.dateFormat === this.$constants.DATE_FORMAT_US) {
+        return {
+          format: 'mm/dd/yyyy',
+        };
+      }
+
+      return {
+        format: 'dd/mm/yyyy',
+      };
     },
   },
   async created() {
@@ -243,6 +307,21 @@ export default {
     & .date-from-now {
       font-size: 14px;
       color: #999;
+    }
+
+    &__filter {
+      margin-bottom: 40px;
+      font-family: $open-sans;
+      font-size: 16px;
+    }
+
+    &__label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    &__calendar {
+      text-align: center;
     }
   }
 </style>

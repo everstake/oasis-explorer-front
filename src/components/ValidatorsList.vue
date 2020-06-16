@@ -15,10 +15,44 @@
       <template #table-busy>
         <TableLoader />
       </template>
-      <template #cell(created_at)="data">
-        {{ data.item.created_at | formatDate }}
+      <template #cell(#)="data">{{ data.index + 1 }}</template>
+      <template #cell(account_id)="data">
+        <router-link
+          :to="{ name: 'account', params: { id: data.item.account_id } }"
+        >
+          {{ data.item.account_name || data.item.account_id }}
+        </router-link>
+      </template>
+      <template #cell(escrow_balance)="data">
+        {{ data.item.escrow_balance | formatAmount }}
+      </template>
+      <template #cell(available_score)="data">
+        {{ data.item.available_score | formatAmount }}
+      </template>
+      <template #cell(node_address)="data">
+        <router-link
+          :to="{ name: 'account', params: { id: data.item.node_address } }"
+        >
+          {{ data.item.node_address }}
+        </router-link>
+      </template>
+<!--      account_id-->
+<!--      escrow_balance-->
+<!--      available_score-->
+<!--      rate_change_interval-->
+<!--      rate_bound_lead-->
+<!--      max_rate_steps-->
+<!--      max_bound_steps-->
+<!--      status-->
+<!--      node_address-->
+<!--      depositors_count-->
+<!--      blocks_count-->
+<!--      signatures_count-->
+<!--      validate_since-->
+      <template #cell(validate_since)="data">
+        {{ data.item.validate_since | formatDate }}
         <div class="date-from-now">
-          {{ data.item.created_at | formatDaysAgo }}
+          {{ data.item.validate_since | formatDaysAgo }}
         </div>
       </template>
     </b-table>
@@ -73,7 +107,30 @@ export default {
       type: Array,
       default() {
         return [
-          { key: 'created_at', label: 'Created at', sortable: true },
+          // { key: '#', label: '#' },
+          // { key: 'account_id', label: 'Account' },
+          // { key: 'staking_balance', label: 'Stacking balance', sortable: true },
+          // { key: 'availability_score', label: 'Availability score', sortable: true },
+          // { key: 'fee', label: 'Fee', sortable: true },
+          // { key: 'num_of_voters', label: '# Voters' },
+          // { key: 'proposals', label: 'Block proposals', sortable: true },
+          // { key: 'signatures', label: 'Block signatures', sortable: true },
+          // { key: 'validating_since', label: 'Validating since' },
+          // { key: 'created_at', label: 'Created at', sortable: true },
+          { key: '#', label: '#' },
+          { key: 'account_id', label: 'Account' },
+          { key: 'node_address', label: 'Node address' },
+          { key: 'escrow_balance', label: 'Escrow balance' },
+          { key: 'available_score', label: 'Available score' },
+          { key: 'rate_change_interval', label: 'Rate change interval' },
+          { key: 'rate_bound_lead', label: 'Rate bound lead' },
+          { key: 'max_rate_steps', label: 'Max rate steps' },
+          { key: 'max_bound_steps', label: 'Max bound steps' },
+          { key: 'status', label: 'Status' },
+          { key: 'depositors_count', label: 'Depositors count' },
+          { key: 'blocks_count', label: 'Blocks count' },
+          { key: 'signatures_count', label: 'Signatures count' },
+          { key: 'validate_since', label: 'Validate since' },
         ];
       },
     },

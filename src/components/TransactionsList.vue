@@ -1,6 +1,6 @@
 <template>
   <div class="transactions-list">
-    <div class="transactions-list__filter">
+    <div class="transactions-list__filter" v-if="filters">
       <div class="transactions-list__label">Filter by date</div>
       <date-range-picker
         class="transactions-list__calendar"
@@ -140,6 +140,10 @@ export default {
       },
     },
     minifyTableHash: {
+      type: Boolean,
+      default: false,
+    },
+    filters: {
       type: Boolean,
       default: false,
     },

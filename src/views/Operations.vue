@@ -2,7 +2,7 @@
   <div class="transactions">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
     <b-container>
-      <TransactionsList ref="transactionsList" />
+      <TransactionsList ref="transactionsList" :filters="true" />
     </b-container>
   </div>
 </template>
@@ -12,7 +12,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TransactionsList from '@/components/TransactionsList.vue';
 
 export default {
-  name: 'Transactions',
+  name: 'Operations',
   components: {
     Breadcrumbs,
     TransactionsList,

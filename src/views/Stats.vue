@@ -157,7 +157,13 @@ export default {
           },
         ],
         // eslint-disable-next-line max-len
-        labels: this.escrowRatioData.map(({ timestamp }) => dayjs.unix(timestamp).format(store.state.dateFormat)),
+        labels: this.escrowRatioData.map(({ timestamp }) => {
+          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            return dayjs.unix(timestamp).format('DD.MM.YYYY');
+          }
+
+          return dayjs.unix(timestamp).format('MM.DD.YYYY');
+        }),
       };
     },
     getTransactionVolumeData() {
@@ -171,7 +177,13 @@ export default {
           },
         ],
         // eslint-disable-next-line max-len
-        labels: this.transactionVolumeData.map(({ timestamp }) => dayjs.unix(timestamp).format(store.state.dateFormat)),
+        labels: this.transactionVolumeData.map(({ timestamp }) => {
+          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            return dayjs.unix(timestamp).format('DD.MM.YYYY');
+          }
+
+          return dayjs.unix(timestamp).format('MM.DD.YYYY');
+        }),
       };
     },
   },

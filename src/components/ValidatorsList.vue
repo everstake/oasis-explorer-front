@@ -7,7 +7,7 @@
       show-empty
       :fields="fields"
       :items="data"
-      class="table table--border"
+      class="table table--border table-list"
       borderless
       no-border-collapse
       @row-selected="handleRowClick"
@@ -19,6 +19,7 @@
       <template #cell(account_id)="data">
         <router-link
           :to="{ name: 'account', params: { id: data.item.account_id } }"
+          class="table__hash"
         >
           {{ data.item.account_name || data.item.account_id }}
         </router-link>
@@ -31,13 +32,14 @@
       </template>
       <template #cell(status)="data">
         <div
-          class="validators-list__status"
+          class="validators-list__status text-center"
           :class="{
             'validators-list__status--active': data.item.status === 'active',
             'validators-list__status--inactive': data.item.status === 'inactive'
           }"
         >
-          {{ data.item.status }}
+          <font-awesome-icon v-if="data.item.status === 'active'" icon="check-circle" />
+          <font-awesome-icon v-else-if="data.item.status === 'inactive'" icon="times-circle" />
         </div>
       </template>
       <template #cell(node_address)="data">
@@ -61,7 +63,7 @@
 <!--      signatures_count-->
 <!--      validate_since-->
       <template #cell(validate_since)="data">
-        {{ data.item.validate_since | formatDate }}
+        {{ data.item.validate_since | formatYear }}
         <div class="date-from-now">
           {{ data.item.validate_since | formatDaysAgo }}
         </div>
@@ -130,12 +132,11 @@ export default {
           // { key: 'created_at', label: 'Created at', sortable: true },
           { key: '#', label: '#' },
           { key: 'account_id', label: 'Account' },
-          { key: 'node_address', label: 'Node address' },
           { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
           { key: 'available_score', label: 'Available score', sortable: true },
-          { key: 'depositors_count', label: 'Depositors count' },
-          { key: 'blocks_count', label: 'Block proposals', sortable: true },
-          { key: 'signatures_count', label: 'Block signatures', sortable: true },
+          { key: 'depositors_count', label: 'Delegators' },
+          { key: 'blocks_count', label: 'Proposals', sortable: true },
+          { key: 'signatures_count', label: 'Signatures', sortable: true },
           { key: 'fee', label: 'Fee', sortable: true },
           { key: 'status', label: 'Status' },
           { key: 'validate_since', label: 'Validate since', sortable: true },

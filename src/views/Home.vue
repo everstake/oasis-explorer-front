@@ -173,7 +173,7 @@
           </b-col>
           <b-col cols="6">
             <p class="home__title">Transactions list</p>
-            <TransactionsList
+            <OperationsList
               :rows="10"
               :scrollToLoadMore="false"
               :fields="[
@@ -202,7 +202,7 @@
 
 <script>
 import BlocksList from '@/components/BlocksList.vue';
-import TransactionsList from '@/components/TransactionsList.vue';
+import OperationsList from '@/components/OperationsList.vue';
 import LineChart from '@/components/charts/LineChart.vue';
 import dayjs from 'dayjs';
 import { mapMutations } from 'vuex';
@@ -211,7 +211,7 @@ export default {
   name: 'Home',
   components: {
     BlocksList,
-    TransactionsList,
+    OperationsList,
     LineChart,
   },
   data() {

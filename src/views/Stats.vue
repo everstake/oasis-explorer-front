@@ -139,7 +139,7 @@ export default {
     },
     transactionVolumeTicksCallback(label) {
       if (label > 0) {
-        return numeral(label / 1000000000).format('0,0.000000000');
+        return numeral(label / 1000000000).format('0,0.[000000000]');
       }
 
       return label;

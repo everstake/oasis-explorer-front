@@ -114,7 +114,7 @@ export default {
               borderColor: 'rgba(76, 212, 169, .6)',
               borderWidth: 2,
               fill: true,
-              backgroundColor: 'rgba(76, 212, 169, 0.15)',
+              backgroundColor: 'rgba(76, 212, 169, 0.6)',
               cubicInterpolationMode: 'monotone',
             },
             point: {

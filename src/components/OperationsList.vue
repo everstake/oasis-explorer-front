@@ -229,8 +229,17 @@ export default {
   watch: {
     operations: {
       deep: true,
-      handler() {
+      async handler() {
         this.dropdownIsBusy = true;
+
+        const data = await this.fetchData();
+
+        if (data.status !== 200) {
+          this.error = true;
+        } else {
+          this.error = false;
+          this.data = data.data;
+        }
 
         setTimeout(() => {
           this.dropdownIsBusy = false;
@@ -285,7 +294,11 @@ export default {
       });
     },
     fetchData(params = {}) {
-      return this.$api.getTransactions({ ...params, limit: this.getTransactionsLimit });
+      return this.$api.getTransactions({
+        ...params,
+        limit: this.getTransactionsLimit,
+        operation_kind: this.operations,
+      });
     },
     async onShowMore() {
       let data;

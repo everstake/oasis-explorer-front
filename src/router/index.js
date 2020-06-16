@@ -38,11 +38,11 @@ const routes = [
     },
   },
   {
-    path: '/transactions',
-    name: 'transactions',
-    component: () => import(/* webpackChunkName: "transactions" */ '../views/Transactions.vue'),
+    path: '/operations',
+    name: 'operations',
+    component: () => import(/* webpackChunkName: "operations" */ '../views/Operations.vue'),
     meta: {
-      title: 'Transactions | Oasis Monitor',
+      title: 'Operations | Oasis Monitor',
     },
   },
   {

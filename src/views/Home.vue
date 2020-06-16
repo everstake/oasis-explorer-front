@@ -183,6 +183,7 @@
                 { key: 'timestamp', label: 'Date' },
               ]"
               :minifyTableHash="true"
+              :filters="false"
               class="table-list"
             />
             <b-button

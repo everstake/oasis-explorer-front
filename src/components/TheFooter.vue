@@ -11,7 +11,7 @@
               <router-link class="footer__link" to="blocks">Blocks</router-link>
             </li>
             <li class="footer__item">
-              <router-link class="footer__link" to="transactions">Transactions</router-link>
+              <router-link class="footer__link" to="operations">Operations</router-link>
             </li>
           </ul>
           <ul class="footer__list">

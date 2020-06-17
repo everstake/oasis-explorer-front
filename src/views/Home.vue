@@ -371,7 +371,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 53px;
+      height: 60px;
     }
 
     &__icon {

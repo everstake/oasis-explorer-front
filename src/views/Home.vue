@@ -58,7 +58,7 @@
               <b-card
                 @click="handleChartClick()"
                 class="home-card__chart"
-                title="Transaction volume"
+                title="Transfer volume"
               >
                 <b-card-text class="home__chart">
                   <div v-if="!transactionVolume" class="home__loader">
@@ -172,7 +172,7 @@
             </b-button>
           </b-col>
           <b-col cols="6">
-            <p class="home__title">Transactions list</p>
+            <p class="home__title">Transfers list</p>
             <OperationsList
               :rows="10"
               :scrollToLoadMore="false"

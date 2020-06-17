@@ -115,7 +115,7 @@
                   <div class="table__hash">
                     <router-link
                       v-if="items.item.hash"
-                      :to="{ name: 'transaction', params: { id: items.item.hash } }"
+                      :to="{ name: 'transfer', params: { id: items.item.hash } }"
                     >
                       {{ items.item.hash }}
                     </router-link>
@@ -144,7 +144,7 @@
                   {{ items.item.timestamp | formatDate }}
                 </template>
                 <template #cell(amount)="items">
-                  {{ !items.item.amount ? '-' : items.item.amount }}
+                  {{ items.item.amount | formatAmount }}
                 </template>
                 <template #cell(gas_used)="items">
                   {{ !items.item.gas_used ? '-' : items.item.gas_used }}

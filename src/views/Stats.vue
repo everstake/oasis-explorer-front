@@ -39,7 +39,7 @@
           <b-col cols="6">
             <div class="stats__section">
               <b-card
-                header="Transaction volume"
+                header="Transfer volume"
               >
                 <b-card-text class="stats__content">
                   <div class="stats__container">
@@ -128,11 +128,11 @@ export default {
       this.loading = false;
     },
     tooltipsLabelCallback(tooltipItem, data) {
-      return `Transaction volume: ${data.datasets[0].data[tooltipItem.index]}`;
+      return `Transfer volume: ${data.datasets[0].data[tooltipItem.index]}`;
     },
     tooltipsLabelCallbackFormatAmount(tooltipItem, data) {
       if (data.datasets[0].data[tooltipItem.index] > 0) {
-        return `Transaction volume: ${numeral(data.datasets[0].data[tooltipItem.index] / 1000000000).format('0,0.000000000')}`;
+        return `Transfer volume: ${numeral(data.datasets[0].data[tooltipItem.index] / 1000000000).format('0,0.000000000')}`;
       }
 
       return data.datasets[0].data[tooltipItem.index];
@@ -170,7 +170,7 @@ export default {
       return {
         datasets: [
           {
-            label: 'Transaction volume',
+            label: 'Transfer volume',
             // eslint-disable-next-line camelcase
             data: this.transactionVolumeData.map(({ transaction_volume }) => transaction_volume),
             borderWidth: 1,

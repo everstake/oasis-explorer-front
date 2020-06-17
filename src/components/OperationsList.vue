@@ -83,7 +83,7 @@
               </b-form-checkbox>
 
               <b-form-checkbox
-                :disabled="operations.length === 1 && operations[0] === ' '"
+                :disabled="operations.length === 1 && operations[0] === 'other'"
                 v-model="operations"
                 value="other"
               >
@@ -253,7 +253,7 @@ export default {
         startDate: null,
         endDate: null,
       },
-      operations: ['transfer'],
+      operations: ['transfer', 'addescrow', 'reclaimescrow', 'other'],
       dropdownIsBusy: false,
     };
   },
@@ -300,7 +300,7 @@ export default {
       this.dateRange.startDate = null;
       this.dateRange.endDate = null;
       this.offset = 0;
-      this.operations = ['transfer'];
+      this.operations = ['transfer', 'addescrow', 'reclaimescrow', 'other'];
     },
     async handleCalendarUpdate(val) {
       this.dropdownIsBusy = true;

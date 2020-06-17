@@ -187,7 +187,7 @@
               class="table-list"
             />
             <b-button
-              to="/transactions"
+              to="/operations"
               class="button button--outline"
               variant="outline-primary"
             >

@@ -21,14 +21,14 @@
         <b-col cols="3">
           <div class="transaction__section">
             <b-card
-              header="Transfer information"
+              header="Operation information"
             >
               <b-card-text class="block__content">
-                <div class="block__header">Block height</div>
+                <div class="block__header">Operation height</div>
                 {{ items[0].level }}
               </b-card-text>
               <b-card-text class="block__content">
-                <div class="block__header">Transfer hash</div>
+                <div class="block__header">Operation hash</div>
                 <div
                   @click="copyToClipboard(items[0].hash)"
                   class="block__copy"
@@ -144,7 +144,7 @@ import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 
 export default {
-  name: 'Transfer',
+  name: 'Operation',
   components: {
     Breadcrumbs,
     TableLoader,

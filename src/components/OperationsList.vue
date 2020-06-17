@@ -122,7 +122,7 @@
       </template>
       <template #cell(hash)="data">
         <router-link
-          :to="{ name: 'transfer', params: { id: data.item.hash } }"
+          :to="{ name: 'operation', params: { id: data.item.hash } }"
           :class="{
             'table__hash': minifyTableHash
           }"

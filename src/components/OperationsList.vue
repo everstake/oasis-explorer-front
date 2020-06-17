@@ -335,18 +335,21 @@ export default {
       });
     },
     fetchData(params = {}) {
+      let operations;
       const otherIndex = this.operations.findIndex((operation) => operation === 'other');
       if (otherIndex >= 0) {
-        this.operations = [
+        operations = [
           ...this.operations.slice(0, otherIndex),
           ...['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
           ...this.operations.slice(otherIndex + 1),
         ];
+      } else {
+        operations = this.operations;
       }
       return this.$api.getTransactions({
         ...params,
         limit: this.getTransactionsLimit,
-        operation_kind: this.operations,
+        operation_kind: operations,
       });
     },
     async onShowMore() {

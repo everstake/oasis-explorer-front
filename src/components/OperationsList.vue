@@ -274,6 +274,12 @@ export default {
         let data;
 
         if (isDateRangeReady) {
+          const isDatesEqual = this.dateRange.startDate.getTime()
+            === this.dateRange.endDate.getTime();
+          if (isDatesEqual) {
+            this.dateRange.endDate.setTime(this.dateRange.endDate.getTime()
+              + (12 * 60 * 60 * 1000));
+          }
           const from = +this.dateRange.startDate / 1000;
           const to = +this.dateRange.endDate / 1000;
           data = await this.fetchData({ from, to });
@@ -368,6 +374,12 @@ export default {
       const isDateReady = this.dateRange.startDate && this.dateRange.endDate;
 
       if (isDateReady) {
+        const isDatesEqual = this.dateRange.startDate.getTime()
+          === this.dateRange.endDate.getTime();
+        if (isDatesEqual) {
+          this.dateRange.endDate.setTime(this.dateRange.endDate.getTime()
+            + (12 * 60 * 60 * 1000));
+        }
         const from = +this.dateRange.startDate / 1000;
         const to = this.dateRange.endDate / 1000;
         data = await this.fetchData({ offset: this.offset, from, to });

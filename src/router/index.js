@@ -46,17 +46,17 @@ const routes = [
     },
   },
   {
-    path: '/transfer/:id',
-    name: 'transfer',
-    component: () => import(/* webpackChunkName: "transfer" */ '../views/Transfer.vue'),
+    path: '/operation/:id',
+    name: 'operation',
+    component: () => import(/* webpackChunkName: "operation" */ '../views/Operation.vue'),
     meta: {
-      title: 'Transfer | Oasis Monitor',
+      title: 'Operation | Oasis Monitor',
     },
     beforeEnter(from, to, next) {
       if (from.params.id) {
-        document.title = `Transfer ${String(from.params.id).slice(0, 7)} | Oasis Monitor`;
+        document.title = `Operation ${String(from.params.id).slice(0, 7)} | Oasis Monitor`;
       } else {
-        document.title = 'Transfer | Oasis Monitor';
+        document.title = 'Operation | Oasis Monitor';
       }
       next();
     },

@@ -172,7 +172,7 @@
             </b-button>
           </b-col>
           <b-col cols="6">
-            <p class="home__title">Transfers list</p>
+            <p class="home__title">Operations list</p>
             <OperationsList
               :rows="10"
               :scrollToLoadMore="false"

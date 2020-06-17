@@ -115,7 +115,7 @@
                   <div class="table__hash">
                     <router-link
                       v-if="items.item.hash"
-                      :to="{ name: 'transfer', params: { id: items.item.hash } }"
+                      :to="{ name: 'operation', params: { id: items.item.hash } }"
                     >
                       {{ items.item.hash }}
                     </router-link>

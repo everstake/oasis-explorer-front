@@ -83,7 +83,7 @@
               </b-form-checkbox>
 
               <b-form-checkbox
-                :disabled="operations.length === 1 && operations[0] === 'other'"
+                :disabled="operations.length === 1 && operations[0] === ' '"
                 v-model="operations"
                 value="other"
               >
@@ -335,6 +335,14 @@ export default {
       });
     },
     fetchData(params = {}) {
+      const otherIndex = this.operations.findIndex((operation) => operation === 'other');
+      if (otherIndex >= 0) {
+        this.operations = [
+          ...this.operations.slice(0, otherIndex),
+          ...['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
+          ...this.operations.slice(otherIndex + 1),
+        ];
+      }
       return this.$api.getTransactions({
         ...params,
         limit: this.getTransactionsLimit,

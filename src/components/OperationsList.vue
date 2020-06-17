@@ -26,10 +26,15 @@
           :key="getLocaleData.format"
           @update="handleCalendarUpdate"
         >
-          <div class="transactions-list__label" slot="input">
-            Select date
-            <font-awesome-icon class="transactions-list__icon" icon="calendar-check" />
-          </div>
+          <template v-slot:input="picker" style="min-width: 350px;">
+            <div class="transactions-list__label" slot="input">
+              Select date
+              <font-awesome-icon class="transactions-list__icon" icon="calendar-check" />
+            </div>
+            <span class="transactions-list__date" v-if="dateRange.startDate && dateRange.endDate">
+              {{ formatDate(picker.startDate) }} - {{ formatDate(picker.endDate) }}
+            </span>
+          </template>
         </date-range-picker>
         <div class="transactions-dropdown">
           <b-dropdown id="dropdown-1" text="Select type">
@@ -41,26 +46,35 @@
               }"
             >
               <b-form-checkbox
-                :disabled="operations.length === 1 && operations[0] === 'transactions'"
+                :disabled="operations.length === 1 && operations[0] === 'transfer'"
                 v-model="operations"
-                value="transactions"
+                value="transfer"
                 class="mb-3"
               >
                 Transactions
               </b-form-checkbox>
 
               <b-form-checkbox
-                :disabled="operations.length === 1 && operations[0] === 'escrow/unbonding'"
+                :disabled="operations.length === 1 && operations[0] === 'addescrow'"
                 v-model="operations"
-                value="escrow/unbonding"
+                value="addescrow"
                 class="mb-3"
               >
 
-                Escrow/Unbonding
+                Escrow
               </b-form-checkbox>
 
               <b-form-checkbox
-                :disabled="operations.length === 1 && operations[0] === 'burn'"
+                :disabled="operations.length === 1 && operations[0] === 'reclaimescrow'"
+                v-model="operations"
+                value="reclaimescrow"
+                class="mb-3"
+              >
+                Unbonding
+              </b-form-checkbox>
+
+              <b-form-checkbox
+                disabled
                 v-model="operations"
                 value="burn"
                 class="mb-3"
@@ -126,14 +140,25 @@
         </router-link>
       </template>
       <template #cell(to)="data">
-        {{ data.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
-        ? 'System Account' : !data.item.to ? '-' : data.item.to }}
+        <span v-if="!data.item.to">-</span>
+        <span v-else-if="data.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='">
+          System Account
+        </span>
+        <router-link
+          v-else
+          :to="{ name: 'account', params: { id: data.item.to } }"
+        >
+          {{ data.item.to }}
+        </router-link>
       </template>
       <template #cell(fees)="data">
         {{ !data.item.fees ? '-' : data.item.fees }}
       </template>
       <template #cell(amount)="data">
-        {{ !data.item.amount ? '-' : data.item.amount }}
+        {{ !data.item.amount ? '-' : data.item.amount | formatAmount }}
+      </template>
+      <template #cell(nonce)="data">
+        {{ !data.item.nonce ? '-' : data.item.nonce }}
       </template>
       <template #cell(timestamp)="items">
         {{ items.item.timestamp | formatDate }}
@@ -228,7 +253,7 @@ export default {
         startDate: null,
         endDate: null,
       },
-      operations: ['transactions'],
+      operations: ['transfer'],
       dropdownIsBusy: false,
     };
   },
@@ -237,8 +262,16 @@ export default {
       deep: true,
       async handler() {
         this.dropdownIsBusy = true;
+        const isDateRangeReady = this.dateRange.startDate && this.dateRange.endDate;
+        let data;
 
-        const data = await this.fetchData();
+        if (isDateRangeReady) {
+          const from = +this.dateRange.startDate / 1000;
+          const to = +this.dateRange.endDate / 1000;
+          data = await this.fetchData({ from, to });
+        } else {
+          data = await this.fetchData();
+        }
 
         if (data.status !== 200) {
           this.error = true;
@@ -247,27 +280,27 @@ export default {
           this.data = data.data;
         }
 
-        setTimeout(() => {
-          this.dropdownIsBusy = false;
-        }, 800);
+        this.dropdownIsBusy = false;
       },
     },
   },
   methods: {
+    formatDate(date) {
+      let format;
+
+      if (this.dateFormat === this.$constants.DATE_FORMAT_US) {
+        format = 'MM.DD.YYYY';
+      } else {
+        format = 'DD.MM.YYYY';
+      }
+
+      return dayjs(date).format(format);
+    },
     async clearFilters() {
       this.dateRange.startDate = null;
       this.dateRange.endDate = null;
       this.offset = 0;
-      this.operations = ['transactions'];
-
-      // const data = await this.fetchData();
-      //
-      // if (data.status !== 200) {
-      //   this.error = true;
-      // } else {
-      //   this.error = false;
-      //   this.data = data.data;
-      // }
+      this.operations = ['transfer'];
     },
     async handleCalendarUpdate(val) {
       this.dropdownIsBusy = true;
@@ -419,6 +452,12 @@ export default {
 
     &__icon {
       margin-left: 10px;
+    }
+
+    &__date {
+      margin-left: 10px;
+      font-weight: 700;
+      color: $color-white;
     }
 
     & .date-from-now {

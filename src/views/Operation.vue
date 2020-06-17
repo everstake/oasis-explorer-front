@@ -24,7 +24,7 @@
               header="Operation information"
             >
               <b-card-text class="block__content">
-                <div class="block__header">Operation height</div>
+                <div class="block__header">Block height</div>
                 {{ items[0].level }}
               </b-card-text>
               <b-card-text class="block__content">

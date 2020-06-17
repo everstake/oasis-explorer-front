@@ -51,7 +51,7 @@
                 value="transfer"
                 class="mb-3"
               >
-                Transactions
+                Transfers
               </b-form-checkbox>
 
               <b-form-checkbox
@@ -61,7 +61,7 @@
                 class="mb-3"
               >
 
-                Escrow
+                Addescrow
               </b-form-checkbox>
 
               <b-form-checkbox
@@ -70,7 +70,7 @@
                 value="reclaimescrow"
                 class="mb-3"
               >
-                Unbonding
+                Reclaimescrow
               </b-form-checkbox>
 
               <b-form-checkbox
@@ -166,12 +166,12 @@
         </span>
       </template>
       <template #cell(nonce)="data">
-        {{ !data.item.nonce ? '-' : data.item.nonce }}
+        {{ data.item.nonce }}
       </template>
-      <template #cell(timestamp)="items">
-        {{ items.item.timestamp | formatDate }}
+      <template #cell(timestamp)="data">
+        {{ data.item.timestamp | formatDate }}
         <div class="date-from-now">
-          {{ items.item.timestamp | formatDaysAgo }}
+          {{ data.item.timestamp | formatDaysAgo }}
         </div>
       </template>
     </b-table>

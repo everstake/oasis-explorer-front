@@ -30,7 +30,7 @@
                     icon="spinner"
                     spin
                   />
-                  <span v-else>{{ topStakeWeight.toFixed(3) }}%</span>
+                  <span v-else>{{ parseFloat(topStakeWeight.toFixed(3)) }}%</span>
                 </b-card-text>
               </b-card>
             </b-col>

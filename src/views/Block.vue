@@ -264,49 +264,44 @@ export default {
       ];
     },
   },
-  async beforeRouteUpdate(to, from, next) {
-    this.loading = true;
-    const data = await this.$api.getBlocks({
-      limit: 50,
-      block_level: to.params.id
-  });
-    this.items = data.data;
-    this.loading = false;
-    next();
-  },
-  async created() {
-    this.loading = true;
-    const options = {};
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        this.items = null;
+        this.loading = true;
+        const options = {};
 
-    const isLevel = Number.isInteger(Number(this.$route.params.id));
-    if (this.height === null) {
-      const data = await this.$api.getInfo();
+        if (this.height === null) {
+          const data = await this.$api.getInfo();
 
-      this.setInfo(data.data);
+          this.setInfo(data.data);
+        }
+
+        if (Number.isInteger(Number(this.$route.params.id))) {
+          options.block_level = this.$route.params.id;
+        } else {
+          options.block_id = this.$route.params.id;
+        }
+
+        const data = await this.$api.getBlocks({
+          ...options,
+        });
+
+        const transactions = await this.$api.getTransactions({
+          ...options,
+          limit: 20,
+        });
+
+        this.transactions = transactions.data;
+
+        if (data.status !== 200) {
+          this.$router.push({ name: '404' });
+        }
+        this.items = data.data;
+        this.loading = false;
+      }
     }
-
-    if (isLevel) {
-      options.block_level = this.$route.params.id;
-    } else {
-      options.block_id = this.$route.params.id;
-    }
-
-    const data = await this.$api.getBlocks({
-      ...options,
-    });
-    
-    const transactions = await this.$api.getTransactions({
-      ...options,
-      limit: 20,
-    });
-
-    this.transactions = transactions.data;
-
-    if (data.status !== 200) {
-      this.$router.push({ name: '404' });
-    }
-    this.items = data.data;
-    this.loading = false;
   },
 };
 </script>

@@ -49,22 +49,43 @@ export default {
       document.body.className = 'scroll-disabled';
     },
     hideSearch() {
+      this.loading = false;
       this.isSearchActive = false;
       document.body.className = '';
     },
     async handleSubmit(query) {
       this.loading = true;
+      const queryString = query.trim();
+      const isQueryNumber = !Number.isNaN(Number(queryString));
+      const options = {};
+      let data;
 
-      console.log(query);
+      // eslint-disable-next-line eqeqeq
+      if (this.$route.params.id == queryString) {
+        this.hideSearch();
+        return;
+      }
 
-      setTimeout(() => {
+      if (isQueryNumber) {
+        data = await this.$api.getBlocks({ block_level: Number(queryString) });
+        options.id = Number(queryString);
+      } else {
+        data = await this.$api.getBlocks({ block_id: queryString });
+        options.id = queryString;
+      }
+
+      this.loading = false;
+
+      if (data.status !== 200 || data.data.length === 0) {
         this.$notify({
-          type: 'warn',
-          title: 'Oasis Monitor (warning)',
-          text: 'Feature isn\'t implemented yet',
+          type: 'error',
+          title: 'Oasis Monitor',
+          text: 'Block not found',
         });
-        this.loading = false;
-      }, 1000);
+        return;
+      }
+
+      this.$router.push({ name: 'block', params: { ...options } }).catch(() => {});
     },
     validateForm(query) {
       this.error = null;

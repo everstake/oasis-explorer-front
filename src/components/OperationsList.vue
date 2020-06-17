@@ -99,8 +99,8 @@
       :busy="loading && data === null"
       :responsive="true"
       show-empty
-      :fields="fields"
       :items="data"
+      :fields="fields"
       class="table table--border transactions-list__table"
       :class="{
         'transactions-list__table--disabled': dropdownIsBusy
@@ -155,7 +155,15 @@
         {{ !data.item.fees ? '-' : data.item.fees }}
       </template>
       <template #cell(amount)="data">
-        {{ !data.item.amount ? '-' : data.item.amount | formatAmount }}
+        <span v-if="data.item.escrow_amount">
+          {{ data.item.escrow_amount | formatAmount }}
+        </span>
+        <span v-else-if="data.item.reclaim_escrow_amount">
+          {{ data.item.reclaim_escrow_amount | formatAmount }}
+        </span>
+        <span v-else>
+          {{ data.item.amount | formatAmount }}
+        </span>
       </template>
       <template #cell(nonce)="data">
         {{ !data.item.nonce ? '-' : data.item.nonce }}

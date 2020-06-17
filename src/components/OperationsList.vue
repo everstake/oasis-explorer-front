@@ -230,7 +230,7 @@ export default {
       type: Array,
       default() {
         return [
-          { key: 'level', label: 'Height', sortable: true },
+          { key: 'level', label: 'Height' },
           { key: 'hash', label: 'Operation Hash' },
           { key: 'from', label: 'From' },
           { key: 'to', label: 'To' },

@@ -141,6 +141,9 @@ export default {
         this.dateFormat = 'standart';
         this.setDateFormat(this.$constants.DATE_FORMAT);
       }
+    } else {
+      this.dateFormat = 'standart';
+      this.setDateFormat(this.$constants.DATE_FORMAT);
     }
 
     if (localStorage.getItem('email') !== null) {

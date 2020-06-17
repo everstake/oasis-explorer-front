@@ -4,8 +4,14 @@
       <div class="transactions-list__title">Operations filters</div>
       <div class="transactions-list__container">
         <div class="transactions-list__reset">
-          <b-btn @click="clearFilters">
-            <font-awesome-icon icon="times-circle" />
+          <b-btn
+            @click="clearFilters"
+            class="transactions-list__btn"
+          >
+            <font-awesome-icon
+              icon="sync"
+              :spin="dropdownIsBusy"
+            />
           </b-btn>
         </div>
         <date-range-picker
@@ -26,7 +32,7 @@
           </div>
         </date-range-picker>
         <div class="transactions-dropdown">
-          <b-dropdown id="dropdown-1" text="Select type" class="m-md-2">
+          <b-dropdown id="dropdown-1" text="Select type">
             <b-dropdown-form
               class="transactions-dropdown__content"
               :disabled="dropdownIsBusy"
@@ -254,16 +260,17 @@ export default {
       this.offset = 0;
       this.operations = ['transactions'];
 
-      const data = await this.fetchData();
-
-      if (data.status !== 200) {
-        this.error = true;
-      } else {
-        this.error = false;
-        this.data = data.data;
-      }
+      // const data = await this.fetchData();
+      //
+      // if (data.status !== 200) {
+      //   this.error = true;
+      // } else {
+      //   this.error = false;
+      //   this.data = data.data;
+      // }
     },
     async handleCalendarUpdate(val) {
+      this.dropdownIsBusy = true;
       const from = +val.startDate / 1000;
       const to = +val.endDate / 1000;
 
@@ -276,6 +283,7 @@ export default {
         this.offset = 0;
         this.data = data.data;
       }
+      this.dropdownIsBusy = false;
     },
     scrollToTop() {
       window.scrollTo(0, 0);
@@ -432,17 +440,30 @@ export default {
       }
     }
 
+    &__btn {
+      &:focus,
+      &:active,
+      &:hover,
+      &:active:focus {
+        box-shadow: none !important;
+      }
+    }
+
     &__container {
       display: flex;
       align-items: center;
+      justify-content: flex-start;
     }
 
     &__title {
-      font-size: 16px;
+      margin-bottom: 5px;
       font-family: $open-sans;
+      font-size: 16px;
+      color: $color-gray-666;
     }
 
     &__calendar {
+      margin-right: 10px;
       text-align: center;
       background-color: $color-primary;
       border-radius: 4px;
@@ -483,7 +504,6 @@ export default {
 
 <style lang="scss">
   .transactions-dropdown {
-
     &__content {
       font-size: 15px;
 
@@ -497,7 +517,7 @@ export default {
       align-items: center;
       font-size: 15px;
       background-color: $color-primary !important;
-      border-color: $color-primary !important;
+      border: 2px solid $color-primary !important;
       font-weight: bold;
       border-radius: 4px;
     }

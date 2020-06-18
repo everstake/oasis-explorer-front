@@ -93,7 +93,10 @@
                   <template #cell(to)="items">
                     <div class="table__hash">
                       <span v-if="!items.item.to">-</span>
-                      <span v-else-if="items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='">
+                      <span
+                        v-else-if="items.item.to ===
+                        'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='"
+                      >
                         System Account
                       </span>
                       <router-link

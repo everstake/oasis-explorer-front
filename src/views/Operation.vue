@@ -91,8 +91,16 @@
                     {{ !items.item.hash ? '-' : items.item.hash }}
                   </template>
                   <template #cell(to)="items">
-                    {{ items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
-                    ? 'System Account' : !items.item.to ? '-' : items.item.to }}
+                    <div class="table__hash">
+                      <span v-if="!items.item.to">-</span>
+                      <span v-else-if="items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='">System Account</span>
+                      <router-link
+                        v-else
+                        :to="{ name: 'account', params: { id: items.item.to } }"
+                      >
+                        {{ items.item.to }}
+                      </router-link>
+                    </div>
                   </template>
                   <template #cell(from)="items" class="table__hash">
                     <div class="table__hash">

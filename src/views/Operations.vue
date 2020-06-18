@@ -2,20 +2,20 @@
   <div class="transactions">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
     <b-container>
-      <TransactionsList ref="transactionsList" />
+      <OperationsList ref="operationsList" :filters="true" />
     </b-container>
   </div>
 </template>
 
 <script>
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import TransactionsList from '@/components/TransactionsList.vue';
+import OperationsList from '@/components/OperationsList.vue';
 
 export default {
-  name: 'Transactions',
+  name: 'Operations',
   components: {
     Breadcrumbs,
-    TransactionsList,
+    OperationsList,
   },
   data() {
     return {
@@ -25,8 +25,8 @@ export default {
           text: 'Home',
         },
         {
-          toRouteName: 'transactions',
-          text: 'Transactions',
+          toRouteName: 'operations',
+          text: 'Operations',
           active: true,
         },
       ],

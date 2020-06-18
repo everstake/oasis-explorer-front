@@ -19,34 +19,39 @@
           Blocks
         </router-link>
       </b-nav-item>
-      <b-nav-item-dropdown
-        text="Operations"
-        variant='link'
-        class="page__link"
-      >
-        <b-dropdown-item
-          to="/transactions"
-          class="page__link"
+      <b-nav-item class="page-nav__item">
+        <router-link
+          to="/operations"
+          class="page__link page-nav__link"
         >
-          Transactions
-        </b-dropdown-item>
-      </b-nav-item-dropdown>
-      <b-nav-item to="/validators" class="page__link">
-        Validators
+          Operations
+        </router-link>
       </b-nav-item>
 
-      <b-nav-item to="/accounts" class="page__link">
-        Accounts
+      <b-nav-item class="page-nav__item">
+        <router-link class="page__link page-nav__link" :to="{ name: 'validators' }">
+          Validators
+        </router-link>
       </b-nav-item>
 
-      <b-nav-item to="/stats" class="page__link">
+      <b-nav-item class="page-nav__item">
+        <router-link class="page__link page-nav__link" :to="{ name: 'accounts' }">
+          Accounts
+        </router-link>
+      </b-nav-item>
+
+    <b-nav-item class="page-nav__item">
+      <router-link class="page__link page-nav__link" :to="{ name: 'stats' }">
         Stats
-      </b-nav-item>
+      </router-link>
+    </b-nav-item>
 
-      <b-nav-item to="/resources" class="page__link">
+    <b-nav-item to="/resources" class="page-nav__item">
+      <router-link class="page__link page-nav__link" :to="{ name: '404' }">
         Resources
-      </b-nav-item>
-    </b-nav>
+      </router-link>
+    </b-nav-item>
+  </b-nav>
 </template>
 
 <script>

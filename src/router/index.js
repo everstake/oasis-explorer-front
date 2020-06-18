@@ -38,25 +38,25 @@ const routes = [
     },
   },
   {
-    path: '/transactions',
-    name: 'transactions',
-    component: () => import(/* webpackChunkName: "transactions" */ '../views/Transactions.vue'),
+    path: '/operations',
+    name: 'operations',
+    component: () => import(/* webpackChunkName: "operations" */ '../views/Operations.vue'),
     meta: {
-      title: 'Transactions | Oasis Monitor',
+      title: 'Operations | Oasis Monitor',
     },
   },
   {
-    path: '/transaction/:id',
-    name: 'transaction',
-    component: () => import(/* webpackChunkName: "transaction" */ '../views/Transaction.vue'),
+    path: '/operation/:id',
+    name: 'operation',
+    component: () => import(/* webpackChunkName: "operation" */ '../views/Operation.vue'),
     meta: {
-      title: 'Transaction | Oasis Monitor',
+      title: 'Operation | Oasis Monitor',
     },
     beforeEnter(from, to, next) {
       if (from.params.id) {
-        document.title = `Transaction ${String(from.params.id).slice(0, 7)} | Oasis Monitor`;
+        document.title = `Operation ${String(from.params.id).slice(0, 7)} | Oasis Monitor`;
       } else {
-        document.title = 'Transaction | Oasis Monitor';
+        document.title = 'Operation | Oasis Monitor';
       }
       next();
     },

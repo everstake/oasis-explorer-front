@@ -21,14 +21,14 @@
         <b-col cols="3">
           <div class="transaction__section">
             <b-card
-              header="Transaction information"
+              header="Operation information"
             >
               <b-card-text class="block__content">
                 <div class="block__header">Block height</div>
                 {{ items[0].level }}
               </b-card-text>
               <b-card-text class="block__content">
-                <div class="block__header">Transaction hash</div>
+                <div class="block__header">Operation hash</div>
                 <div
                   @click="copyToClipboard(items[0].hash)"
                   class="block__copy"
@@ -112,7 +112,7 @@
                     {{ items.item.timestamp | formatDate }}
                   </template>
                   <template #cell(amount)="items">
-                    {{ !items.item.amount ? '-' : items.item.amount }}
+                    {{ items.item.amount | formatAmount }}
                   </template>
                   <template #cell(storage)="items">
                     {{ !items.item.storage ? '-' : items.item.storage }}
@@ -144,7 +144,7 @@ import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 
 export default {
-  name: 'Transaction',
+  name: 'Operation',
   components: {
     Breadcrumbs,
     TableLoader,
@@ -186,8 +186,8 @@ export default {
           text: 'Home',
         },
         {
-          toRouteName: 'transactions',
-          text: 'Transactions',
+          toRouteName: 'operations',
+          text: 'Operations',
         },
         {
           text: `${this.$route.params.id}`,

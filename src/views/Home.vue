@@ -30,7 +30,7 @@
                     icon="spinner"
                     spin
                   />
-                  <span v-else>{{ topStakeWeight.toFixed(3) }}%</span>
+                  <span v-else>{{ parseFloat(topStakeWeight.toFixed(3)) }}%</span>
                 </b-card-text>
               </b-card>
             </b-col>
@@ -58,7 +58,7 @@
               <b-card
                 @click="handleChartClick()"
                 class="home-card__chart"
-                title="Transaction volume"
+                title="Transfer volume"
               >
                 <b-card-text class="home__chart">
                   <div v-if="!transactionVolume" class="home__loader">
@@ -172,8 +172,8 @@
             </b-button>
           </b-col>
           <b-col cols="6">
-            <p class="home__title">Transactions list</p>
-            <TransactionsList
+            <p class="home__title">Operations list</p>
+            <OperationsList
               :rows="10"
               :scrollToLoadMore="false"
               :fields="[
@@ -183,10 +183,11 @@
                 { key: 'timestamp', label: 'Date' },
               ]"
               :minifyTableHash="true"
+              :filters="false"
               class="table-list"
             />
             <b-button
-              to="/transactions"
+              to="/operations"
               class="button button--outline"
               variant="outline-primary"
             >
@@ -201,7 +202,7 @@
 
 <script>
 import BlocksList from '@/components/BlocksList.vue';
-import TransactionsList from '@/components/TransactionsList.vue';
+import OperationsList from '@/components/OperationsList.vue';
 import LineChart from '@/components/charts/LineChart.vue';
 import dayjs from 'dayjs';
 import { mapMutations } from 'vuex';
@@ -210,7 +211,7 @@ export default {
   name: 'Home',
   components: {
     BlocksList,
-    TransactionsList,
+    OperationsList,
     LineChart,
   },
   data() {
@@ -370,7 +371,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 53px;
+      height: 60px;
     }
 
     &__icon {

@@ -105,7 +105,7 @@ export default {
           ],
         },
         tooltips: {
-          mode: 'x',
+          mode: 'x-axis',
           enabled: Boolean(this.customTooltip),
           titleFontFamily: 'Nunito',
           bodyFontFamily: 'Nunito',

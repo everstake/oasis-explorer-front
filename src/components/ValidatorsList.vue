@@ -18,7 +18,7 @@
       <template #cell(#)="data">{{ data.index + 1 }}</template>
       <template #cell(account_id)="data">
         <router-link
-          :to="{ name: 'account', params: { id: data.item.account_id } }"
+          :to="{ name: 'validator', params: { id: data.item.account_id } }"
         >
           {{ data.item.account_name || data.item.account_id }}
         </router-link>
@@ -48,19 +48,6 @@
           {{ data.item.node_address }}
         </router-link>
       </template>
-<!--      account_id-->
-<!--      escrow_balance-->
-<!--      available_score-->
-<!--      rate_change_interval-->
-<!--      rate_bound_lead-->
-<!--      max_rate_steps-->
-<!--      max_bound_steps-->
-<!--      status-->
-<!--      node_address-->
-<!--      depositors_count-->
-<!--      blocks_count-->
-<!--      signatures_count-->
-<!--      validate_since-->
       <template #cell(validate_since)="data">
         {{ data.item.validate_since | formatYear }}
         <div class="date-from-now">

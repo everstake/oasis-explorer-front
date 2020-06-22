@@ -222,7 +222,7 @@ export default {
         { key: 'type', label: 'Type' },
         { key: 'timestamp', label: 'Date' },
       ],
-      currentPage: 0,
+      currentPage: 1,
       perPage: 5,
     };
   },

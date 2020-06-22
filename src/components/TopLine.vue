@@ -10,7 +10,7 @@
       >
         <template slot="button-content">
            <font-awesome-icon icon="network-wired" class="icon" />
-            Testnet
+            Amber
         </template>
         <b-dropdown-item disabled active-class="top-line__active">
            <font-awesome-icon icon="network-wired" class="icon" />

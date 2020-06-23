@@ -8,15 +8,16 @@ module.exports = {
           @import "@/assets/styles/mixins";
           @import "@/assets/styles/animations";
         `,
+        sourceMap: true,
       },
     },
   },
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config
       .plugin('html')
-      .tap(args => {
-        args[0].title = 'Oasis Monitor'
-        return args
-      })
+      .tap((args) => {
+        args[0].title = 'Oasis Monitor';
+        return args;
+      });
   },
 };

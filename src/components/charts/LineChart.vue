@@ -46,12 +46,6 @@ export default {
         return label.toFixed(5);
       },
     },
-    tooltipsLabelCallback: {
-      type: Function,
-      default(tooltipItem, data) {
-        return `${data.datasets[0].label}: ${tooltipItem.value}`;
-      },
-    },
     options: {
       type: Object,
       default() {
@@ -114,9 +108,6 @@ export default {
           bodyAlign: 'center',
           titleAlign: 'center',
           cornerRadius: 4,
-          callbacks: {
-            label: this.tooltipsLabelCallback,
-          },
         },
         elements: {
           line: {

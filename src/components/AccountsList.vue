@@ -13,6 +13,7 @@
       @row-selected="handleRowClick"
       @sort-changed="handleSortChange"
       :no-local-sorting="true"
+      :no-sort-reset="true"
     >
       <template #table-busy>
         <TableLoader />
@@ -149,8 +150,10 @@ export default {
       window.scrollTo(0, 0);
     },
     handleScroll() {
-      if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
-        this.onShowMore();
+      if (this.$refs.table) {
+        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
+          this.onShowMore();
+        }
       }
     },
     handleRowClick(item) {

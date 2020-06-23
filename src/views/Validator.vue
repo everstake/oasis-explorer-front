@@ -383,7 +383,11 @@ export default {
       }
     },
     async onShowMore() {
-      this.updateTableData();
+      const { activeTab } = this;
+      this.tableItems = [
+        ...this.tableItems,
+        ...await this.fetchData(activeTab),
+      ];
       this.offset += 50;
     },
     setEventListenerOnScroll() {
@@ -400,8 +404,9 @@ export default {
     setActiveTab(tabName) {
       this.activeTab = tabName;
     },
-    updateTableData(type) {
-      this.fetchData(type);
+    async updateTableData(type) {
+      this.offset = 0;
+      this.tableItems = await this.fetchData(type);
       this.setActiveTab(type);
     },
     async fetchData(type) {
@@ -475,8 +480,8 @@ export default {
         this.isShowMoreDisabled = false;
       }
 
-      this.tableItems = data.data;
       this.loading = false;
+      return data.data;
     },
   },
   computed: {
@@ -539,7 +544,9 @@ export default {
   }
 
   &__shadow {
+    overflow-y: scroll;
     height: 100%;
+    max-height: 85vh;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
   }
 

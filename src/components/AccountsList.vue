@@ -171,10 +171,7 @@ export default {
         this.error = true;
       } else {
         this.error = false;
-        this.data = [
-          ...this.data,
-          ...data.data,
-        ];
+        this.data = data.data;
       }
 
       this.loading = false;

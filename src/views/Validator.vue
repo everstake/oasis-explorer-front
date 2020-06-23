@@ -171,7 +171,10 @@
           <div class="block__section">
             <div class="block__section block__section--table">
               <b-card class="validator__card">
-                <div class="validator__shadow">
+                <div
+                  v-if="activeTab !== 'charts'"
+                  class="validator__container validator__shadow"
+                >
                   <b-table
                     id="my-table"
                     :busy="loading && tableItems === null"
@@ -253,6 +256,21 @@
                     <template #cell(timestamp)="tableItems">
                       {{ tableItems.item.timestamp | formatDate }}
                     </template>
+                    <template #cell(level)="tableItems">
+                      <router-link
+                        :to="{ name: 'block', params: { id: tableItems.item.level } }"
+                      >
+                        {{ tableItems.item.level }}
+                      </router-link>
+                    </template>
+                    <template #cell(hash)="tableItems">
+                      <router-link
+                        class="table__hash"
+                        :to="{ name: 'operation', params: { id: tableItems.item.hash } }"
+                      >
+                        {{ tableItems.item.hash }}
+                      </router-link>
+                    </template>
                     <template #cell(amount)="tableItems">
                       {{ tableItems.item.amount | formatAmount }}
                     </template>
@@ -298,6 +316,65 @@
                     </b-button>
                   </div>
                 </div>
+                <div v-else>
+                  <div class="stats__container">
+                    <b-row v-if="loading && items === null">
+                      <b-col cols="12">
+                        <div class="text-center account__loading">
+                          <font-awesome-icon class="icon account__icon" icon="spinner" spin />
+                        </div>
+                      </b-col>
+                    </b-row>
+                    <b-row v-else-if="!loading && (Array.isArray(items) && items.length === 0)">
+                      <b-col cols="12">
+                        <div class="text-center block__empty">
+                          No data
+                        </div>
+                      </b-col>
+                    </b-row>
+                    <div class="stats__charts" v-else>
+                      <b-row class="stats__information">
+                        <b-col cols="12">
+                          <div class="stats__section">
+                            <b-card
+                              header="Uptime"
+                            >
+                              <b-card-text class="stats__content">
+                                <div class="stats__container">
+                                  <LineChart
+                                    :chart-data="getUptimeChartData"
+                                    :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                                    :y-axes-begin-at-zero="false"
+                                  />
+                                </div>
+                              </b-card-text>
+                            </b-card>
+                          </div>
+                        </b-col>
+                      </b-row>
+                      <b-row>
+                        <b-col cols="12">
+                          <div class="stats__section">
+                            <b-card
+                              header="Stake change"
+                            >
+                              <b-card-text class="stats__content">
+                                <div class="stats__container">
+                                  <LineChart
+                                    :chart-data="getStakeChartData"
+                                    :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                                    :y-axes-begin-at-zero="false"
+                                    :yTicksCallback="transactionVolumeTicksCallback"
+                                  />
+                                </div>
+                              </b-card-text>
+                            </b-card>
+                          </div>
+                        </b-col>
+                      </b-row>
+                    </div>
+                  </div>
+                </div>
               </b-card>
             </div>
           </div>
@@ -313,12 +390,17 @@ import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 import debounce from 'lodash/debounce';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
+import numeral from 'numeral';
+import store from '@/store';
+import dayjs from 'dayjs';
+import LineChart from '@/components/charts/LineChart.vue';
 
 export default {
   name: 'Validator',
   components: {
     Breadcrumbs,
     TableLoader,
+    LineChart,
   },
   mixins: [
     copyToClipboard,
@@ -333,7 +415,7 @@ export default {
   data() {
     return {
       loading: null,
-      limit: 15,
+      limit: 10,
       offset: 0,
       items: null,
       delegators: [],
@@ -360,6 +442,15 @@ export default {
       },
       isShowMoreDisabled: false,
       handleDebouncedScroll: null,
+      palette: [
+        '#4CD4A9',
+        '#1BB8A8',
+        '#009B9F',
+        '#187E8D',
+        '#2A6275',
+        '#2F4858',
+      ],
+      xAxesMaxTicksLimit: 28,
     };
   },
   watch: {
@@ -375,6 +466,13 @@ export default {
     },
   },
   methods: {
+    transactionVolumeTicksCallback(label) {
+      if (label > 1) {
+        return numeral(label / 1000000000).format('0,0.[000000000]');
+      }
+
+      return label.toFixed();
+    },
     handleScroll() {
       if (this.$refs.table) {
         if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
@@ -420,7 +518,7 @@ export default {
       };
 
       if (type === 'charts') {
-        uptimeChart = this.$api.getValidatorUptime({
+        uptimeChart = await this.$api.getValidatorUptime({
           limit: this.limit,
           from: this.thirtyDaysAgoInSeconds,
           to: this.todayInSeconds,
@@ -428,7 +526,7 @@ export default {
           id: this.$route.params.id,
         });
 
-        stakeChart = this.$api.getValidatorStake({
+        stakeChart = await this.$api.getValidatorStake({
           limit: this.limit,
           from: this.thirtyDaysAgoInSeconds,
           to: this.todayInSeconds,
@@ -436,8 +534,8 @@ export default {
           id: this.$route.params.id,
         });
 
-        this.charts.uptime = uptimeChart;
-        this.charts.stake = stakeChart;
+        this.charts.uptime = uptimeChart.data;
+        this.charts.stake = stakeChart.data;
       }
 
       switch (type) {
@@ -485,6 +583,76 @@ export default {
     },
   },
   computed: {
+    getUptimeChartData() {
+      return {
+        datasets: [
+          {
+            label: 'Availability score',
+            // eslint-disable-next-line camelcase
+            data: this.charts.uptime.map(({ availability_score }) => availability_score),
+            borderWidth: 1,
+          },
+          {
+            label: 'Proposals count',
+            // eslint-disable-next-line camelcase
+            data: this.charts.uptime.map(({ blocks_count }) => blocks_count),
+            borderWidth: 1,
+          },
+          {
+            label: 'Signatures count',
+            // eslint-disable-next-line camelcase
+            data: this.charts.uptime.map(({ signatures_count }) => signatures_count),
+            borderWidth: 1,
+          },
+        ],
+        // eslint-disable-next-line max-len
+        labels: this.charts.uptime.map(({ timestamp }) => {
+          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            return dayjs.unix(timestamp).format('DD.MM.YYYY');
+          }
+
+          return dayjs.unix(timestamp).format('MM.DD.YYYY');
+        }),
+      };
+    },
+    getStakeChartData() {
+      return {
+        datasets: [
+          {
+            label: 'Total balance',
+            // eslint-disable-next-line camelcase
+            data: this.charts.stake.map(({ total_balance }) => total_balance),
+            borderWidth: 1,
+          },
+          {
+            label: 'Escrow balance',
+            // eslint-disable-next-line camelcase
+            data: this.charts.stake.map(({ escrow_balance }) => escrow_balance),
+            borderWidth: 1,
+          },
+          {
+            label: 'Debonding balance',
+            // eslint-disable-next-line camelcase
+            data: this.charts.stake.map(({ debonding_balance }) => debonding_balance),
+            borderWidth: 1,
+          },
+          {
+            label: 'Self stake balance',
+            // eslint-disable-next-line camelcase
+            data: this.charts.stake.map(({ self_stake_balance }) => self_stake_balance),
+            borderWidth: 1,
+          },
+        ],
+        // eslint-disable-next-line max-len
+        labels: this.charts.stake.map(({ timestamp }) => {
+          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            return dayjs.unix(timestamp).format('DD.MM.YYYY');
+          }
+
+          return dayjs.unix(timestamp).format('MM.DD.YYYY');
+        }),
+      };
+    },
     getTableFields() {
       if (this.activeTab === 'transfers') {
         return [
@@ -510,8 +678,21 @@ export default {
       if (this.activeTab === 'delegators') {
         return [
           { key: 'account_id', label: 'Account' },
-          { key: 'escrow_amount', label: 'Escrow amount' },
-          { key: 'delegate_since', label: 'Delegate since' },
+          { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
+          { key: 'delegate_since', label: 'Delegate since', sortable: true },
+        ];
+      }
+
+      if (this.activeTab === 'other') {
+        return [
+          { key: 'level', label: 'Height' },
+          { key: 'hash', label: 'Hash' },
+          { key: 'amount', label: 'Amount', sortable: true },
+          { key: 'from', label: 'From' },
+          { key: 'to', label: 'To' },
+          { key: 'nonce', label: 'Nonce' },
+          { key: 'type', label: 'Type' },
+          { key: 'timestamp', label: 'Timestamp', sortable: true },
         ];
       }
 
@@ -551,9 +732,12 @@ export default {
     box-shadow: none;
   }
 
-  &__shadow {
+  &__container {
     overflow-y: scroll;
-    max-height: 85vh;
+  }
+
+  &__shadow {
+    max-height: 90vh;
     height: 100%;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
   }

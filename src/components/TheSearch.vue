@@ -57,6 +57,7 @@ export default {
       this.loading = true;
       const queryString = query.trim();
       const isQueryNumber = !Number.isNaN(Number(queryString));
+      const isQueryAnAccount = queryString.slice(0, 5) === 'oasis';
       const options = {};
       let data;
 
@@ -66,7 +67,10 @@ export default {
         return;
       }
 
-      if (isQueryNumber) {
+      if (isQueryAnAccount) {
+        data = await this.$api.getAccount({ id: queryString });
+        options.id = queryString;
+      } else if (isQueryNumber) {
         data = await this.$api.getBlocks({ block_level: Number(queryString) });
         options.id = Number(queryString);
       } else {
@@ -80,12 +84,16 @@ export default {
         this.$notify({
           type: 'error',
           title: 'Oasis Monitor',
-          text: 'Block not found',
+          text: `${isQueryAnAccount ? 'Account' : 'Block'} not found`,
         });
         return;
       }
 
-      this.$router.push({ name: 'block', params: { ...options } }).catch(() => {});
+      if (isQueryAnAccount) {
+        this.$router.push({ name: 'account', params: { ...options } }).catch(() => {});
+      } else {
+        this.$router.push({ name: 'block', params: { ...options } }).catch(() => {});
+      }
     },
     validateForm(query) {
       this.error = null;

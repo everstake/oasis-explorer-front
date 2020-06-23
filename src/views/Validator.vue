@@ -31,22 +31,22 @@
               header="Operation information"
             >
               <b-card-text
-                v-if="items[0].account_name"
+                v-if="items.account_name"
                 class="block__content"
               >
                 <div class="block__header">Name</div>
-                {{ items[0].account_name }}
+                {{ items.account_name }}
               </b-card-text>
               <b-card-text class="block__content">
                 <div class="block__header">Address</div>
                 <div
-                  @click="copyToClipboard(items[0].account_id)"
+                  @click="copyToClipboard(items.account_id)"
                   class="block__copy"
                 >
                   <span
-                    :ref="items[0].account_id"
+                    :ref="items.account_id"
                   >
-                    {{ items[0].account_id }}
+                    {{ items.account_id }}
                   </span>
                   <font-awesome-icon
                     :icon="['fas', 'copy']"
@@ -57,59 +57,59 @@
                   />
                 </div>
               </b-card-text>
-              <b-card-text v-if="items[0].escrow_balance" class="block__content">
+              <b-card-text v-if="items.escrow_balance" class="block__content">
                 <div class="block__header">Escrow balance</div>
-                {{ items[0].escrow_balance | formatAmount }}
+                {{ items.escrow_balance | formatAmount }}
               </b-card-text>
-              <b-card-text v-if="items[0].signatures_count" class="block__content">
+              <b-card-text v-if="items.signatures_count" class="block__content">
                 <div class="block__header">Signatures</div>
-                {{ items[0].signatures_count }}
+                {{ items.signatures_count }}
               </b-card-text>
-              <b-card-text v-if="items[0].blocks_count" class="block__content">
+              <b-card-text v-if="items.blocks_count" class="block__content">
                 <div class="block__header">Proposals (blocks_count)</div>
-                {{ items[0].blocks_count }}
+                {{ items.blocks_count }}
               </b-card-text>
               <b-card-text class="block__content">
                 <div
-                  v-if="items[0].depositors_count"
+                  v-if="items.depositors_count"
                   class="block__header"
                 >
                   Depositors (depositors_count)
                 </div>
-                {{ items[0].depositors_count }}
+                {{ items.depositors_count }}
               </b-card-text>
               <b-card-text class="block__content">
-                <div class="block__header" v-if="items[0].available_score">Available score</div>
-                {{ items[0].available_score | formatAmount }}
+                <div class="block__header" v-if="items.available_score">Available score</div>
+                {{ items.available_score | formatAmount }}
               </b-card-text>
               <b-card-text class="block__content">
                 <div class="block__header">Fee</div>
-                {{ items[0].fee }}
+                {{ items.fee }}
               </b-card-text>
               <b-card-text class="block__content">
                   <div
-                    v-if="items[0].status"
+                    v-if="items.status"
                     :class="{
-                      'validator__status--active': items[0].status === 'active',
-                      'validator__status--inactive': items[0].status === 'inactive'
+                      'validator__status--active': items.status === 'active',
+                      'validator__status--inactive': items.status === 'inactive'
                     }"
                   >
                     <div class="block__header">Status</div>
                     <font-awesome-icon
-                      v-if="items[0].status === 'active'"
+                      v-if="items.status === 'active'"
                       icon="check-circle"
                     />
                     <font-awesome-icon
-                      v-else-if="items[0].status === 'inactive'"
+                      v-else-if="items.status === 'inactive'"
                       icon="times-circle"
                     />
                   </div>
               </b-card-text>
               <b-card-text class="block__content">
-                <div class="block__header" v-if="items[0].validate_since">Validate since</div>
-                {{ items[0].validate_since | formatDate }}
+                <div class="block__header" v-if="items.validate_since">Validate since</div>
+                {{ items.validate_since | formatDate }}
                 <div class="date-from-now">
-                  ({{ items[0].validate_since | formatDaysAgo }})
+                  ({{ items.validate_since | formatDaysAgo }})
                 </div>
               </b-card-text>
             </b-card>
@@ -490,6 +490,7 @@ export default {
       this.$router.push({ name: '404' });
     }
     this.items = data.data;
+    console.log('this.items', this.items);
 
     this.getValidatorTransfers();
 

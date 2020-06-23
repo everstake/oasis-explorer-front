@@ -269,6 +269,7 @@ export default {
     operations: {
       deep: true,
       async handler() {
+        this.offset = 0;
         this.dropdownIsBusy = true;
         const isDateRangeReady = this.dateRange.startDate && this.dateRange.endDate;
         let data;

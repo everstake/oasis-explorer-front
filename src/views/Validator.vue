@@ -270,12 +270,37 @@
                       {{ !tableItems.item.fees ? '-' : tableItems.item.fees }}
                     </template>
                   </b-table>
-                  <b-pagination
-                    v-model="currentPage"
-                    :total-rows="tableItems.length"
-                    :per-page="perPage"
-                    aria-controls="my-table"
-                  ></b-pagination>
+                  <div
+                    v-if="scrollToLoadMore"
+                    class="blocks-list__actions"
+                  >
+                    <b-button
+                      @click="onShowMore"
+                      variant="outline-primary"
+                      class="blocks-list__button font-weight-bold"
+                      :class="{
+                        'blocks-list__button--loading': loading
+                      }"
+                        :disabled="loading || isShowMoreDisabled"
+                      >
+                      <span v-if="loading" disabled>
+                        Loading
+                        <font-awesome-icon
+                          class="blocks-list__icon"
+                          icon="sync-alt"
+                          :spin="loading"
+                        />
+                      </span>
+                      <span v-else>
+                        Show more
+                        <font-awesome-icon
+                          class="blocks-list__icon"
+                          icon="arrow-circle-down"
+                          :spin="loading"
+                        />
+                      </span>
+                    </b-button>
+                  </div>
                 </div>
               </b-card>
             </div>
@@ -289,6 +314,7 @@
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
+import debounce from 'lodash/debounce';
 /* eslint-disable */
 
 export default {
@@ -300,10 +326,17 @@ export default {
   mixins: [
     copyToClipboard,
   ],
+  props: {
+    scrollToLoadMore: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       loading: null,
-      limit: 50,
+      limit: 15,
+      offset: 0,
       items: null,
       delegators: [],
       breadcrumbs: [
@@ -321,7 +354,6 @@ export default {
         },
       ],
       currentPage: 1,
-      perPage: 5,
       transfers: null,
       otherOps: null,
       activeTab: 'transfers',
@@ -330,9 +362,43 @@ export default {
         uptime: null,
         stake: null,
       },
+      isShowMoreDisabled: false,
+      handleDebouncedScroll: null,
     };
   },
+  watch: {
+    isShowMoreDisabled: {
+      immediate: false,
+      handler(val) {
+        if (val && this.handleDebouncedScroll !== null) {
+          this.removeEventListenerOnScroll();
+        } else if (this.handleDebouncedScroll === null) {
+          this.setEventListenerOnScroll();
+        }
+      },
+    },
+  },
   methods: {
+    handleScroll() {
+      if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
+        this.onShowMore();
+      }
+    },
+    async onShowMore() {
+      this.handleTableUpdate();
+      this.offset += 50;
+    },
+    setEventListenerOnScroll() {
+      this.handleDebouncedScroll = debounce(this.handleScroll, 100);
+      window.addEventListener('scroll', this.handleDebouncedScroll);
+    },
+    removeEventListenerOnScroll() {
+      if (this.handleDebouncedScroll !== null) {
+        this.handleDebouncedScroll.cancel();
+      }
+      window.removeEventListener('scroll', this.handleDebouncedScroll);
+      this.handleDebouncedScroll = null;
+    },
     setActiveTab(label) {
       this.activeTab = label;
     },
@@ -370,10 +436,19 @@ export default {
     async getValidatorTransfers() {
       this.loading = true;
       const transfers = await this.$api.getTransactions({
-        limit: 15,
+        limit: this.limit,
         sender: this.$route.params.id,
         receiver: this.$route.params.id,
+        offset: this.offset,
       });
+
+      if (Array.isArray(transfers.data) && transfers.data.length === 0) {
+        this.isShowMoreDisabled = true;
+      } else if (Array.isArray(transfers.data) && transfers.data.length > 0) {
+        this.isShowMoreDisabled = false;
+      } else {
+        console.log('not array', transfers.data);
+      }
 
       this.tableItems = transfers.data;
       this.loading = false;
@@ -381,8 +456,9 @@ export default {
     async getValidatorEscrowEvents() {
       this.loading = true;
       const transfers = await this.$api.getTransactions({
-        limit: 15,
+        limit: this.limit,
         operation_kind: ['addescrow', 'reclaimescrow'],
+        offset: this.offset,
       });
 
       this.tableItems = transfers.data;
@@ -391,8 +467,9 @@ export default {
     async getValidatorOtherOps() {
       this.loading = true;
       const otherOps = await this.$api.getTransactions({
-        limit: 15,
+        limit: this.limit,
         operation_kind: ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
+        offset: this.offset,
       });
 
       this.tableItems = otherOps.data;
@@ -401,8 +478,9 @@ export default {
     async getValidatorDelegators() {
       this.loading = true;
       const delegators = await this.$api.getValidatorDelegators({
-        limit: 15,
+        limit: this.limit,
         id: this.$route.params.id,
+        offset: this.offset,
       });
 
       this.tableItems = delegators.data;
@@ -421,7 +499,7 @@ export default {
       const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
 
       const uptime = await this.$api.getValidatorUptime({
-        limit: 15,
+        limit: this.limit,
         from: thirtyDaysSec,
         to: todaySec,
         frame: 'D',
@@ -440,7 +518,7 @@ export default {
       const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
 
       const stake = await this.$api.getValidatorStake({
-        limit: 15,
+        limit: this.limit,
         from: thirtyDaysSec,
         to: todaySec,
         frame: 'D',
@@ -482,7 +560,7 @@ export default {
     this.loading = true;
 
     const data = await this.$api.getValidator({
-      limit: 15,
+      limit: this.limit,
       id: this.$route.params.id,
     });
 
@@ -490,7 +568,6 @@ export default {
       this.$router.push({ name: '404' });
     }
     this.items = data.data;
-    console.log('this.items', this.items);
 
     this.getValidatorTransfers();
 

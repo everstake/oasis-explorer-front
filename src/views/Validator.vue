@@ -90,6 +90,41 @@
                   {{ items.account_name }}
                 </b-card-text>
                 <b-card-text class="block__content">
+                  <div class="block__header">Website</div>
+                  <a href="https://everstake.one/" target="_blank">everstake.one</a>
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">Email</div>
+                  <a href="mailto:inbox@everstake.one" target="_blank">inbox@everstake.one</a>
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">Social</div>
+                  <a href="https://t.me/everstake" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'telegram' }"
+                    />
+                  </a>
+                  <a href="https://twitter.com/everstake_pool" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'twitter' }"
+                    />
+                  </a>
+                  <a href="https://www.facebook.com/everstake.one/" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'facebook' }"
+                    />
+                  </a>
+                  <a href="https://medium.com/everstake" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'medium' }"
+                    />
+                  </a>
+                </b-card-text>
+                <b-card-text class="block__content">
                   <div class="block__header">Address</div>
                   <div
                     @click="copyToClipboard(items.account_id)"
@@ -747,7 +782,6 @@ export default {
   }
 
   &__shadow {
-    max-height: 90vh;
     height: 100%;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
   }

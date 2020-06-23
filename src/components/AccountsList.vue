@@ -13,6 +13,7 @@
       @row-selected="handleRowClick"
       @sort-changed="handleSortChange"
       :no-local-sorting="true"
+      :no-sort-reset="true"
     >
       <template #table-busy>
         <TableLoader />

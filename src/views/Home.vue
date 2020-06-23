@@ -206,6 +206,7 @@ import OperationsList from '@/components/OperationsList.vue';
 import LineChart from '@/components/charts/LineChart.vue';
 import dayjs from 'dayjs';
 import { mapMutations } from 'vuex';
+import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 
 export default {
   name: 'Home',
@@ -214,6 +215,9 @@ export default {
     OperationsList,
     LineChart,
   },
+  mixins: [
+    getDatesInSeconds,
+  ],
   data() {
     return {
       loading: null,
@@ -301,12 +305,6 @@ export default {
     },
   },
   async created() {
-    const todayMs = new Date().getTime();
-    const thirtyDaysMs = new Date(new Date().setDate(new Date().getDate() - 30)).getTime();
-
-    const todaySec = Math.round(todayMs / 1000);
-    const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
-
     const data = await this.$api.getInfo();
 
     this.height = data.data.height;
@@ -315,16 +313,16 @@ export default {
     this.setInfo(data.data);
 
     const escrowRatio = await this.$api.getEscrowRatio({
-      from: thirtyDaysSec,
-      to: todaySec,
+      from: this.thirtyDaysAgoInSeconds,
+      to: this.todayInSeconds,
       frame: 'D',
     });
 
     this.escrowRatio = escrowRatio.data;
 
     const transactionVolume = await this.$api.getTransactionVolume({
-      from: thirtyDaysSec,
-      to: todaySec,
+      from: this.thirtyDaysAgoInSeconds,
+      to: this.todayInSeconds,
       frame: 'D',
     });
 

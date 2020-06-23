@@ -68,6 +68,7 @@ import LineChart from '@/components/charts/LineChart.vue';
 import store from '@/store';
 import dayjs from 'dayjs';
 import numeral from 'numeral';
+import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 
 export default {
   name: 'Stats',
@@ -75,6 +76,9 @@ export default {
     LineChart,
     Breadcrumbs,
   },
+  mixins: [
+    getDatesInSeconds,
+  ],
   data() {
     return {
       loading: null,
@@ -109,21 +113,15 @@ export default {
     async fetchData() {
       this.loading = true;
 
-      const todayMs = new Date().getTime();
-      const thirtyDaysMs = new Date(new Date().setDate(new Date().getDate() - 30)).getTime();
-
-      const todaySec = Math.round(todayMs / 1000);
-      const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
-
       const escrowRatio = await this.$api.getEscrowRatio({
-        from: thirtyDaysSec,
-        to: todaySec,
+        from: this.thirtyDaysAgoInSeconds,
+        to: this.todayInSeconds,
         frame: 'D',
       });
 
       const transactionVolume = await this.$api.getTransactionVolume({
-        from: thirtyDaysSec,
-        to: todaySec,
+        from: this.thirtyDaysAgoInSeconds,
+        to: this.todayInSeconds,
         frame: 'D',
       });
 
@@ -146,7 +144,7 @@ export default {
         return numeral(label / 1000000000).format('0,0.[000000000]');
       }
 
-      return label.toFixed(2);
+      return label.toFixed();
     },
   },
   computed: {

@@ -147,8 +147,10 @@ export default {
   },
   methods: {
     handleScroll() {
-      if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
-        this.onShowMore();
+      if (this.$refs.table) {
+        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
+          this.onShowMore();
+        }
       }
     },
     fetchData(params = {}) {

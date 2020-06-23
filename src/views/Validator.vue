@@ -23,158 +23,154 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-else>
-        <b-col cols="3">
-          <div class="validator__section transaction__section">
-            <b-card
-              class="validator__info"
-              header="Operation information"
-            >
-              <b-card-text
-                v-if="items.account_name"
-                class="block__content"
+      <div v-else>
+        <b-row>
+          <b-col cols="12">
+            <div class="validator__actions">
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'transfers'
+                    }"
+                @click="updateTableData('transfers')"
               >
-                <div class="block__header">Name</div>
-                {{ items.account_name }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Address</div>
-                <div
-                  @click="copyToClipboard(items.account_id)"
-                  class="block__copy"
-                >
-                  <span
-                    :ref="items.account_id"
-                  >
-                    {{ items.account_id }}
-                  </span>
-                  <font-awesome-icon
-                    :icon="['fas', 'copy']"
-                    :class="{
-                      'icon--success': isHashCopied
+                Transfers
+              </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'addescrow/reclaimescrow'
                     }"
-                    class="icon icon-copy delegator-card__icon"
-                  />
-                </div>
-              </b-card-text>
-              <b-card-text v-if="items.escrow_balance" class="block__content">
-                <div class="block__header">Escrow balance</div>
-                {{ items.escrow_balance | formatAmount }}
-              </b-card-text>
-              <b-card-text v-if="items.signatures_count" class="block__content">
-                <div class="block__header">Signatures</div>
-                {{ items.signatures_count }}
-              </b-card-text>
-              <b-card-text v-if="items.blocks_count" class="block__content">
-                <div class="block__header">Proposals (blocks_count)</div>
-                {{ items.blocks_count }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div
-                  v-if="items.depositors_count"
-                  class="block__header"
+                @click="updateTableData('addescrow/reclaimescrow')"
+              >
+                Escrow events
+              </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'other'
+                    }"
+                @click="updateTableData('other')"
+              >
+                Other ops
+              </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'delegators'
+                    }"
+                @click="updateTableData('delegators')"
+              >
+                Delegators
+              </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'charts'
+                    }"
+                @click="updateTableData('charts')"
+              >
+                Charts
+              </b-btn>
+            </div>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="3">
+            <div class="validator__section transaction__section">
+              <b-card
+                class="validator__info"
+                header="Operation information"
+              >
+                <b-card-text
+                  v-if="items.account_name"
+                  class="block__content"
                 >
-                  Depositors (depositors_count)
-                </div>
-                {{ items.depositors_count }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header" v-if="items.available_score">Available score</div>
-                {{ items.available_score | formatAmount }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Fee</div>
-                {{ items.fee }}
-              </b-card-text>
-              <b-card-text class="block__content">
+                  <div class="block__header">Name</div>
+                  {{ items.account_name }}
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">Address</div>
                   <div
-                    v-if="items.status"
-                    :class="{
-                      'validator__status--active': items.status === 'active',
-                      'validator__status--inactive': items.status === 'inactive'
-                    }"
+                    @click="copyToClipboard(items.account_id)"
+                    class="block__copy"
                   >
-                    <div class="block__header">Status</div>
+                    <span
+                      :ref="items.account_id"
+                    >
+                      {{ items.account_id }}
+                    </span>
                     <font-awesome-icon
-                      v-if="items.status === 'active'"
-                      icon="check-circle"
-                    />
-                    <font-awesome-icon
-                      v-else-if="items.status === 'inactive'"
-                      icon="times-circle"
+                      :icon="['fas', 'copy']"
+                      :class="{
+                        'icon--success': isHashCopied
+                      }"
+                      class="icon icon-copy delegator-card__icon"
                     />
                   </div>
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header" v-if="items.validate_since">Validate since</div>
-                {{ items.validate_since | formatDate }}
-                <div class="date-from-now">
-                  ({{ items.validate_since | formatDaysAgo }})
-                </div>
-              </b-card-text>
-            </b-card>
-          </div>
-        </b-col>
-        <b-col cols="9">
+                </b-card-text>
+                <b-card-text v-if="items.escrow_balance" class="block__content">
+                  <div class="block__header">Escrow balance</div>
+                  {{ items.escrow_balance | formatAmount }}
+                </b-card-text>
+                <b-card-text v-if="items.signatures_count" class="block__content">
+                  <div class="block__header">Signatures</div>
+                  {{ items.signatures_count }}
+                </b-card-text>
+                <b-card-text v-if="items.blocks_count" class="block__content">
+                  <div class="block__header">Proposals (blocks_count)</div>
+                  {{ items.blocks_count }}
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div
+                    v-if="items.depositors_count"
+                    class="block__header"
+                  >
+                    Depositors (depositors_count)
+                  </div>
+                  {{ items.depositors_count }}
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header" v-if="items.available_score">Available score</div>
+                  {{ items.available_score | formatAmount }}
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">Fee</div>
+                  {{ items.fee }}
+                </b-card-text>
+                <b-card-text class="block__content">
+                    <div
+                      v-if="items.status"
+                      :class="{
+                        'validator__status--active': items.status === 'active',
+                        'validator__status--inactive': items.status === 'inactive'
+                      }"
+                    >
+                      <div class="block__header">Status</div>
+                      <font-awesome-icon
+                        v-if="items.status === 'active'"
+                        icon="check-circle"
+                      />
+                      <font-awesome-icon
+                        v-else-if="items.status === 'inactive'"
+                        icon="times-circle"
+                      />
+                    </div>
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header" v-if="items.validate_since">Validate since</div>
+                  {{ items.validate_since | formatDate }}
+                  <div class="date-from-now">
+                    ({{ items.validate_since | formatDaysAgo }})
+                  </div>
+                </b-card-text>
+              </b-card>
+            </div>
+          </b-col>
+          <b-col cols="9">
           <div class="block__section">
             <div class="block__section block__section--table">
               <b-card class="validator__card">
-                <div class="validator__actions">
-                  <b-btn
-                    class="validator__btn"
-                    :class="{
-                      'validator__btn--active': activeTab === 'transfers'
-                    }"
-                    @click="handleTableUpdate('transfers')"
-                  >
-                    Transfers
-                  </b-btn>
-                  <b-btn
-                    class="validator__btn"
-                    :class="{
-                      'validator__btn--active': activeTab === 'addescrow/reclaimescrow'
-                    }"
-                    @click="handleTableUpdate('addescrow/reclaimescrow')"
-                  >
-                    Escrow events
-                  </b-btn>
-                  <b-btn
-                    class="validator__btn"
-                    :class="{
-                      'validator__btn--active': activeTab === 'other'
-                    }"
-                    @click="handleTableUpdate('other')"
-                  >
-                    Other ops
-                  </b-btn>
-                  <b-btn
-                    class="validator__btn"
-                    :class="{
-                      'validator__btn--active': activeTab === 'delegators'
-                    }"
-                    @click="handleTableUpdate('delegators')"
-                  >
-                    Delegators
-                  </b-btn>
-                  <b-btn
-                    class="validator__btn"
-                    :class="{
-                      'validator__btn--active': activeTab === 'performance'
-                    }"
-                    @click="handleTableUpdate('performance')"
-                  >
-                    Validator performance
-                  </b-btn>
-                  <b-btn
-                    class="validator__btn"
-                    :class="{
-                      'validator__btn--active': activeTab === 'charts'
-                    }"
-                    @click="handleTableUpdate('charts')"
-                  >
-                    Charts
-                  </b-btn>
-                </div>
                 <div class="validator__shadow">
                   <b-table
                     id="my-table"
@@ -306,7 +302,8 @@
             </div>
           </div>
         </b-col>
-      </b-row>
+        </b-row>
+      </div>
     </b-container>
   </div>
 </template>
@@ -315,7 +312,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 import debounce from 'lodash/debounce';
-/* eslint-disable */
+import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 
 export default {
   name: 'Validator',
@@ -325,6 +322,7 @@ export default {
   },
   mixins: [
     copyToClipboard,
+    getDatesInSeconds,
   ],
   props: {
     scrollToLoadMore: {
@@ -354,8 +352,6 @@ export default {
         },
       ],
       currentPage: 1,
-      transfers: null,
-      otherOps: null,
       activeTab: 'transfers',
       tableItems: [],
       charts: {
@@ -380,12 +376,14 @@ export default {
   },
   methods: {
     handleScroll() {
-      if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
-        this.onShowMore();
+      if (this.$refs.table) {
+        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
+          this.onShowMore();
+        }
       }
     },
     async onShowMore() {
-      this.handleTableUpdate();
+      this.updateTableData();
       this.offset += 50;
     },
     setEventListenerOnScroll() {
@@ -399,133 +397,85 @@ export default {
       window.removeEventListener('scroll', this.handleDebouncedScroll);
       this.handleDebouncedScroll = null;
     },
-    setActiveTab(label) {
-      this.activeTab = label;
+    setActiveTab(tabName) {
+      this.activeTab = tabName;
     },
-    handleTableUpdate(type) {
+    updateTableData(type) {
+      this.fetchData(type);
+      this.setActiveTab(type);
+    },
+    async fetchData(type) {
+      this.loading = true;
+      let data = null;
+      let uptimeChart = null;
+      let stakeChart = null;
+      const requestOptions = {
+        limit: this.limit,
+        offset: this.offset,
+      };
+
+      if (type === 'charts') {
+        uptimeChart = this.$api.getValidatorUptime({
+          limit: this.limit,
+          from: this.thirtyDaysAgoInSeconds,
+          to: this.todayInSeconds,
+          frame: 'D',
+          id: this.$route.params.id,
+        });
+
+        stakeChart = this.$api.getValidatorStake({
+          limit: this.limit,
+          from: this.thirtyDaysAgoInSeconds,
+          to: this.todayInSeconds,
+          frame: 'D',
+          id: this.$route.params.id,
+        });
+
+        this.charts.uptime = uptimeChart;
+        this.charts.stake = stakeChart;
+      }
+
       switch (type) {
         case 'transfers':
-          this.getValidatorTransfers();
-          this.setActiveTab('transfers');
+          data = await this.$api.getTransactions({
+            ...requestOptions,
+            sender: this.$route.params.id,
+            receiver: this.$route.params.id,
+          });
           break;
         case 'delegators':
-          this.getValidatorDelegators();
-          this.setActiveTab('delegators');
+          data = await this.$api.getValidatorDelegators({
+            ...requestOptions,
+            id: this.$route.params.id,
+          });
           break;
         case 'addescrow/reclaimescrow':
-          this.getValidatorEscrowEvents();
-          this.setActiveTab('addescrow/reclaimescrow');
-          break;
-        case 'performance':
-          this.getValidatorUptime();
-          this.setActiveTab('performance');
-          break;
-        case 'charts':
-          this.getValidatorCharts();
-          this.setActiveTab('charts');
+          data = await this.$api.getTransactions({
+            ...requestOptions,
+            operation_kind: ['addescrow', 'reclaimescrow'],
+          });
           break;
         case 'other':
-          this.getValidatorOtherOps();
-          this.setActiveTab('other');
+          data = await this.$api.getTransactions({
+            ...requestOptions,
+            operation_kind: ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
+          });
           break;
         default:
-          this.getValidatorTransfers();
-          this.setActiveTab('transfers');
+          data = await this.$api.getTransactions({
+            ...requestOptions,
+            sender: this.$route.params.id,
+            receiver: this.$route.params.id,
+          });
       }
-    },
-    async getValidatorTransfers() {
-      this.loading = true;
-      const transfers = await this.$api.getTransactions({
-        limit: this.limit,
-        sender: this.$route.params.id,
-        receiver: this.$route.params.id,
-        offset: this.offset,
-      });
 
-      if (Array.isArray(transfers.data) && transfers.data.length === 0) {
+      if (Array.isArray(data.data) && (data.data.length === 0 || data.data.length < this.limit)) {
         this.isShowMoreDisabled = true;
-      } else if (Array.isArray(transfers.data) && transfers.data.length > 0) {
+      } else if (Array.isArray(data.data) && data.data.length > 0) {
         this.isShowMoreDisabled = false;
-      } else {
-        console.log('not array', transfers.data);
       }
 
-      this.tableItems = transfers.data;
-      this.loading = false;
-    },
-    async getValidatorEscrowEvents() {
-      this.loading = true;
-      const transfers = await this.$api.getTransactions({
-        limit: this.limit,
-        operation_kind: ['addescrow', 'reclaimescrow'],
-        offset: this.offset,
-      });
-
-      this.tableItems = transfers.data;
-      this.loading = false;
-    },
-    async getValidatorOtherOps() {
-      this.loading = true;
-      const otherOps = await this.$api.getTransactions({
-        limit: this.limit,
-        operation_kind: ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
-        offset: this.offset,
-      });
-
-      this.tableItems = otherOps.data;
-      this.loading = false;
-    },
-    async getValidatorDelegators() {
-      this.loading = true;
-      const delegators = await this.$api.getValidatorDelegators({
-        limit: this.limit,
-        id: this.$route.params.id,
-        offset: this.offset,
-      });
-
-      this.tableItems = delegators.data;
-      this.loading = false;
-    },
-    getValidatorCharts() {
-      this.getValidatorUptime();
-      this.getValidatorStake();
-    },
-    async getValidatorUptime() {
-      this.loading = true;
-      const todayMs = new Date().getTime();
-      const thirtyDaysMs = new Date(new Date().setDate(new Date().getDate() - 30)).getTime();
-
-      const todaySec = Math.round(todayMs / 1000);
-      const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
-
-      const uptime = await this.$api.getValidatorUptime({
-        limit: this.limit,
-        from: thirtyDaysSec,
-        to: todaySec,
-        frame: 'D',
-        id: this.$route.params.id,
-      });
-
-      this.charts.uptime = uptime.data;
-      this.loading = false;
-    },
-    async getValidatorStake() {
-      this.loading = true;
-      const todayMs = new Date().getTime();
-      const thirtyDaysMs = new Date(new Date().setDate(new Date().getDate() - 30)).getTime();
-
-      const todaySec = Math.round(todayMs / 1000);
-      const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
-
-      const stake = await this.$api.getValidatorStake({
-        limit: this.limit,
-        from: thirtyDaysSec,
-        to: todaySec,
-        frame: 'D',
-        id: this.$route.params.id,
-      });
-
-      this.charts.stake = stake.data;
+      this.tableItems = data.data;
       this.loading = false;
     },
   },
@@ -550,9 +500,8 @@ export default {
           { key: 'amount', label: 'Amount' },
           { key: 'timestamp', label: 'Date' },
         ];
-        return;
       }
-      
+
       return [];
     },
   },
@@ -569,7 +518,7 @@ export default {
     }
     this.items = data.data;
 
-    this.getValidatorTransfers();
+    this.updateTableData('transfers');
 
     this.loading = false;
   },
@@ -587,10 +536,6 @@ export default {
 
   &__card {
     box-shadow: none;
-
-    & .card-body {
-      flex-grow: 0;
-    }
   }
 
   &__shadow {

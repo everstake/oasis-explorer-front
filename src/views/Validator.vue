@@ -316,7 +316,7 @@
                     </b-button>
                   </div>
                 </div>
-                <div v-else>
+                <div v-else class="validator-chart">
                   <div class="stats__container">
                     <b-row v-if="loading && items === null">
                       <b-col cols="12">
@@ -333,10 +333,11 @@
                       </b-col>
                     </b-row>
                     <div class="stats__charts" v-else>
-                      <b-row class="stats__information">
+                      <b-row class="stats__information mb-5">
                         <b-col cols="12">
                           <div class="stats__section">
                             <b-card
+                              class="validator-chart__header"
                               header="Uptime"
                             >
                               <b-card-text class="stats__content">
@@ -356,6 +357,7 @@
                         <b-col cols="12">
                           <div class="stats__section">
                             <b-card
+                              class="validator-chart__header"
                               header="Stake change"
                             >
                               <b-card-text class="stats__content">
@@ -542,6 +544,7 @@ export default {
         case 'transfers':
           data = await this.$api.getTransactions({
             ...requestOptions,
+            operation_kind: 'transfer',
             sender: this.$route.params.id,
             receiver: this.$route.params.id,
           });
@@ -550,23 +553,30 @@ export default {
           data = await this.$api.getValidatorDelegators({
             ...requestOptions,
             id: this.$route.params.id,
+            sender: this.$route.params.id,
+            receiver: this.$route.params.id,
           });
           break;
         case 'addescrow/reclaimescrow':
           data = await this.$api.getTransactions({
             ...requestOptions,
             operation_kind: ['addescrow', 'reclaimescrow'],
+            sender: this.$route.params.id,
+            receiver: this.$route.params.id,
           });
           break;
         case 'other':
           data = await this.$api.getTransactions({
             ...requestOptions,
             operation_kind: ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
+            sender: this.$route.params.id,
+            receiver: this.$route.params.id,
           });
           break;
         default:
           data = await this.$api.getTransactions({
             ...requestOptions,
+            operation_kind: 'transfers',
             sender: this.$route.params.id,
             receiver: this.$route.params.id,
           });
@@ -773,6 +783,12 @@ export default {
 
     &--inactive {
       color: #dc3545;
+    }
+  }
+
+  &-chart__header {
+    & .card-header {
+      margin-bottom: 20px;
     }
   }
 }

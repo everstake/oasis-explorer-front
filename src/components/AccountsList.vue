@@ -12,6 +12,7 @@
       no-border-collapse
       @row-selected="handleRowClick"
       @sort-changed="handleSortChange"
+      :no-local-sorting="true"
     >
       <template #table-busy>
         <TableLoader />

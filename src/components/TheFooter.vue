@@ -8,23 +8,23 @@
               <router-link class="footer__link" to="/">Home</router-link>
             </li>
             <li class="footer__item">
-              <router-link class="footer__link" to="blocks">Blocks</router-link>
+              <router-link class="footer__link" to="/blocks">Blocks</router-link>
             </li>
             <li class="footer__item">
-              <router-link class="footer__link" to="operations">Operations</router-link>
+              <router-link class="footer__link" to="/operations">Operations</router-link>
             </li>
           </ul>
           <ul class="footer__list">
             <li class="footer__item">
-              <router-link class="footer__link" to="validators">
+              <router-link class="footer__link" to="/validators">
                 Validators
               </router-link>
             </li>
             <li class="footer__item">
-              <router-link class="footer__link" to="accounts">Accounts</router-link>
+              <router-link class="footer__link" to="/accounts">Accounts</router-link>
             </li>
             <li class="footer__item">
-              <router-link class="footer__link" to="visualization">Stats</router-link>
+              <router-link class="footer__link" to="/stats">Stats</router-link>
             </li>
           </ul>
           <ul class="footer__list">
@@ -40,7 +40,7 @@
           </ul>
           <ul class="footer__list">
             <li class="footer__item">
-              <router-link class="footer__link" to="resources">Resources</router-link>
+              <router-link class="footer__link" to="/resources">Resources</router-link>
             </li>
             <li class="footer__item">
               <div class="footer__socials">

@@ -207,7 +207,7 @@ export default {
           active: true,
         },
       ],
-      currentPage: 0,
+      currentPage: 1,
       perPage: 5,
     };
   },

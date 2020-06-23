@@ -102,6 +102,22 @@ const routes = [
     },
   },
   {
+    path: '/validator/:id',
+    name: 'validator',
+    component: () => import(/* webpackChunkName: "validator" */ '../views/Validator.vue'),
+    meta: {
+      title: 'Validator | Oasis Monitor',
+    },
+    beforeEnter(from, to, next) {
+      if (from.params.id) {
+        document.title = `Validator ${from.params.id.slice(0, 7)} | Oasis Monitor`;
+      } else {
+        document.title = 'Validator | Oasis Monitor';
+      }
+      next();
+    },
+  },
+  {
     path: '/stats',
     name: 'stats',
     component: () => import(/* webpackChunkName: "stats" */ '../views/Stats.vue'),

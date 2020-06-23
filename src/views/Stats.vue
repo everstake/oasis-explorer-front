@@ -27,6 +27,7 @@
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
+                      @on-receive="handleChartClick"
                       :chart-data="getEscrowRatioData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
@@ -102,6 +103,9 @@ export default {
     };
   },
   methods: {
+    handleChartClick(item) {
+      console.log('Stats click handling', item);
+    },
     async fetchData() {
       this.loading = true;
 
@@ -142,7 +146,7 @@ export default {
         return numeral(label / 1000000000).format('0,0.[000000000]');
       }
 
-      return label;
+      return label.toFixed(2);
     },
   },
   computed: {

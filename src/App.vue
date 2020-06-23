@@ -6,7 +6,7 @@
       <router-view />
     </main>
 
-    <notifications class="page__notifications" />
+    <notifications position="top left" class="page__notifications" />
 
     <TheFooter class="page__footer" />
   </div>

@@ -492,8 +492,8 @@ export default {
           { key: 'hash', label: 'Transaction hash' },
           { key: 'from', label: 'From' },
           { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount' },
-          { key: 'timestamp', label: 'Date' },
+          { key: 'amount', label: 'Amount', sortable: true },
+          { key: 'timestamp', label: 'Date', sortable: true },
         ];
       }
 
@@ -502,8 +502,16 @@ export default {
           { key: 'level', label: 'Height' },
           { key: 'hash', label: 'Operation hash' },
           { key: 'type', label: 'Type' },
-          { key: 'amount', label: 'Amount' },
-          { key: 'timestamp', label: 'Date' },
+          { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
+          { key: 'timestamp', label: 'Date', sortable: true },
+        ];
+      }
+
+      if (this.activeTab === 'delegators') {
+        return [
+          { key: 'account_id', label: 'Account' },
+          { key: 'escrow_amount', label: 'Escrow amount' },
+          { key: 'delegate_since', label: 'Delegate since' },
         ];
       }
 
@@ -545,8 +553,8 @@ export default {
 
   &__shadow {
     overflow-y: scroll;
-    height: 100%;
     max-height: 85vh;
+    height: 100%;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
   }
 

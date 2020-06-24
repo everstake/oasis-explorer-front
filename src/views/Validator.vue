@@ -604,40 +604,34 @@ export default {
           data = await this.$api.getTransactions({
             ...requestOptions,
             operation_kind: 'transfer',
-            sender: this.$route.params.id,
-            receiver: this.$route.params.id,
+            account_id: this.$route.params.id,
           });
           break;
         case 'delegators':
           data = await this.$api.getValidatorDelegators({
             ...requestOptions,
             id: this.$route.params.id,
-            sender: this.$route.params.id,
-            receiver: this.$route.params.id,
           });
           break;
         case 'addescrow/reclaimescrow':
           data = await this.$api.getTransactions({
             ...requestOptions,
             operation_kind: ['addescrow', 'reclaimescrow'],
-            sender: this.$route.params.id,
-            receiver: this.$route.params.id,
+            account_id: this.$route.params.id,
           });
           break;
         case 'other':
           data = await this.$api.getTransactions({
             ...requestOptions,
             operation_kind: ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
-            sender: this.$route.params.id,
-            receiver: this.$route.params.id,
+            account_id: this.$route.params.id,
           });
           break;
         default:
           data = await this.$api.getTransactions({
             ...requestOptions,
             operation_kind: 'transfers',
-            sender: this.$route.params.id,
-            receiver: this.$route.params.id,
+            account_id: this.$route.params.id,
           });
       }
 

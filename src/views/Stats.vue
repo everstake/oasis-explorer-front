@@ -31,6 +31,7 @@
                       :chart-data="getEscrowRatioData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
+                      :tooltipsLabelCallback="tooltipsLabelCallback"
                     />
                   </div>
                 </b-card-text>
@@ -129,8 +130,16 @@ export default {
       this.transactionVolumeData = transactionVolume.data;
       this.loading = false;
     },
-    tooltipsLabelCallback(tooltipItem, data) {
-      return `Transfer volume: ${data.datasets[0].data[tooltipItem.index]}`;
+    // eslint-disable-next-line consistent-return
+    tooltipsLabelCallback(t, d) {
+      const xLabel = d.datasets[t.datasetIndex].label;
+      const { yLabel } = t;
+
+      for (let i = 0; i <= 10; i += 1) {
+        if (t.datasetIndex === i) {
+          return `${xLabel}: ${yLabel * 100}%`;
+        }
+      }
     },
     tooltipsLabelCallbackFormatAmount(tooltipItem, data) {
       if (data.datasets[0].data[tooltipItem.index] > 0) {

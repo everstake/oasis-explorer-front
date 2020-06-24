@@ -25,7 +25,11 @@
             >
               <b-card-text class="block__content">
                 <div class="block__header">Block height</div>
-                {{ items[0].level }}
+                <router-link
+                  :to="{ name: 'block', params: { id: items[0].level } }"
+                >
+                  {{ items[0].level }}
+                </router-link>
               </b-card-text>
               <b-card-text class="block__content">
                 <div class="block__header">Operation hash</div>

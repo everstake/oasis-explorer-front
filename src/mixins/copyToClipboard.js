@@ -28,7 +28,7 @@ export default {
         setTimeout(() => {
           selection.removeAllRanges();
           this.latestCopiedHash = null;
-        }, 1000);
+        }, 500);
       } catch (err) {
         selection.removeAllRanges();
         this.latestCopiedHash = null;

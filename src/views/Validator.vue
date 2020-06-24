@@ -91,33 +91,33 @@
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Website</div>
-                  <a href="https://everstake.one/" target="_blank">everstake.one</a>
+                  <a href="#" target="_blank">website</a>
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Email</div>
-                  <a href="mailto:inbox@everstake.one" target="_blank">inbox@everstake.one</a>
+                  <a href="#" target="_blank">email</a>
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Social</div>
-                  <a href="https://t.me/everstake" target="_blank">
+                  <a href="#" target="_blank">
                     <font-awesome-icon
                       class="validator__icon"
                       :icon="{ prefix: 'fab', iconName: 'telegram' }"
                     />
                   </a>
-                  <a href="https://twitter.com/everstake_pool" target="_blank">
+                  <a href="#" target="_blank">
                     <font-awesome-icon
                       class="validator__icon"
                       :icon="{ prefix: 'fab', iconName: 'twitter' }"
                     />
                   </a>
-                  <a href="https://www.facebook.com/everstake.one/" target="_blank">
+                  <a href="#" target="_blank">
                     <font-awesome-icon
                       class="validator__icon"
                       :icon="{ prefix: 'fab', iconName: 'facebook' }"
                     />
                   </a>
-                  <a href="https://medium.com/everstake" target="_blank">
+                  <a href="#" target="_blank">
                     <font-awesome-icon
                       class="validator__icon"
                       :icon="{ prefix: 'fab', iconName: 'medium' }"

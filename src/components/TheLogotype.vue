@@ -3,6 +3,14 @@
     <router-link class="logo__link" :to="{ name: 'home' }">
      <img class="logo__img" src="../assets/images/logo.svg" alt="Oasis logotype">
     </router-link>
+    <a href="https://everstake.one/" class="logo__special" target="_blank">
+      <span class="logo__note">by</span>
+      <img
+        class="logo__everstake"
+        src="../assets/images/logo-everstake.svg"
+        alt="Everstake logotype"
+      >
+    </a>
   </div>
 </template>
 
@@ -15,8 +23,9 @@ export default {
 <style lang="scss">
   .logo {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
 
     &__link {
       &:hover {
@@ -43,6 +52,25 @@ export default {
           color: #fff;
         }
       }
+    }
+
+    &__special {
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    &__note {
+      margin-right: 3px;
+      font-family: $nunito;
+      font-size: 17px;
+      color: #111;
+      font-weight: bold;
+    }
+
+    &__everstake {
+      width: 130px;
+      color: #111;
     }
   }
 </style>

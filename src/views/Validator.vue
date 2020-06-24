@@ -179,7 +179,7 @@
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header" v-if="items.available_score">Availability score</div>
-                  {{ items.available_score | formatAmount }}
+                  {{ items.available_score }}
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Fee</div>

@@ -393,7 +393,8 @@
                                     :chart-data="getUptimeChartData"
                                     :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                                     :y-axes-begin-at-zero="false"
-                                    :yTicksCallback="chartsTicksCallback"
+                                    :yTicksCallback="uptimeTicksCallback"
+                                    :tooltipsLabelCallback="uptimeTooltipsCallback"
                                   />
                                 </div>
                               </b-card-text>
@@ -522,6 +523,20 @@ export default {
       }
 
       return label.toFixed();
+    },
+    uptimeTicksCallback(label) {
+      return label;
+    },
+    // eslint-disable-next-line consistent-return
+    uptimeTooltipsCallback(t, d) {
+      const xLabel = d.datasets[t.datasetIndex].label;
+      const { yLabel } = t;
+
+      for (let i = 0; i <= 10; i += 1) {
+        if (t.datasetIndex === i) {
+          return `${xLabel}: ${yLabel}`;
+        }
+      }
     },
     handleScroll() {
       if (this.$refs.table) {

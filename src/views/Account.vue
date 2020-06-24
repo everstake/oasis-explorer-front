@@ -113,7 +113,7 @@
                       <p class="account__value">{{ items.validator.consensus_address }}</p>
                     </div>
                     <div class="account__item">
-                      Depositors count:
+                      Delegators count:
                       <p class="account__value">{{ items.validator.depositors_count }}</p>
                     </div>
                     <div class="account__item">

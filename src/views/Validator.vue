@@ -817,19 +817,48 @@ export default {
   }
 
   &__btn {
-    margin-right: 15px;
-    background-color: #4cd4a9 !important;
+    width: 20%;
+    border-left: none;
+    border-radius: 0;
+    background-color: #fff !important;
     border-color: #4cd4a9 !important;
+    color: #4cd4a9 !important;
+    font-weight: bold;
 
-    &--active {
-      box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;
+    &:first-child {
+      border-left: 1px solid #4cd4a9;
+    }
+
+    &:last-child {
+      border-right: 1px solid #4cd4a9;
     }
 
     &:focus,
-    &:active,
-    &:hover,
-    &:active:focus {
-      box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;
+    &:active {
+      box-shadow: none !important;
+    }
+
+    &:hover {
+      background-color: rgb(76, 212, 169) !important;
+      color: #fff !important;
+      /*box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;*/
+    }
+
+    /*&:hover,*/
+    /*&:active:focus {*/
+    /*  box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;*/
+    /*}*/
+
+    &--active {
+      background-color: #4cd4a9 !important;
+      color: #fff !important;
+      pointer-events: none;
+      /*box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;*/
+
+      &:focus,
+      &:hover {
+        box-shadow: none !important;
+      }
     }
   }
 

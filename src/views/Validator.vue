@@ -144,46 +144,43 @@
                     />
                   </div>
                 </b-card-text>
-                <b-card-text v-if="items.general_balance" class="block__content">
-                  <div class="block__header">General balance</div>
-                  {{ items.general_balance | formatAmount }}
-                </b-card-text>
-                <b-card-text v-if="items.escrow_balance" class="block__content">
-                  <div class="block__header">Escrow balance</div>
-                  {{ items.escrow_balance | formatAmount }}
-                </b-card-text>
-                <b-card-text v-if="items.escrow_shares" class="block__content">
-                  <div class="block__header">Escrow shares</div>
-                  {{ items.escrow_shares | formatAmount }}
-                </b-card-text>
-                <b-card-text v-if="items.debonding_balance" class="block__content">
-                  <div class="block__header">Debonding balance</div>
-                  {{ items.debonding_balance | formatAmount }}
-                </b-card-text>
-                <b-card-text v-if="items.signatures_count" class="block__content">
+                <b-card-text class="block__content">
                   <div class="block__header">Signatures</div>
                   {{ items.signatures_count }}
                 </b-card-text>
-                <b-card-text v-if="items.blocks_count" class="block__content">
+                <b-card-text class="block__content">
                   <div class="block__header">Proposals</div>
                   {{ items.blocks_count }}
                 </b-card-text>
                 <b-card-text class="block__content">
+                  <div class="block__header">Availability score</div>
+                  {{ items.available_score }}
+                </b-card-text>
+                <b-card-text
+                  class="block__content"
+                >
+                  <div class="block__header">Total balance</div>
+                  {{ items.general_balance + items.escrow_balance | formatAmount }}
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">Escrow balance</div>
+                  {{ items.escrow_balance | formatAmount }}
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">Escrow shares</div>
+                  {{ items.escrow_shares | formatAmount }}
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">Unbonding balance</div>
+                  {{ items.debonding_balance | formatAmount }}
+                </b-card-text>
+                <b-card-text class="block__content">
                   <div
-                    v-if="items.depositors_count"
                     class="block__header"
                   >
                     Delegators
                   </div>
                   {{ items.depositors_count }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header" v-if="items.available_score">Availability score</div>
-                  {{ items.available_score }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Fee</div>
-                  {{ items.fee }}
                 </b-card-text>
                 <b-card-text class="block__content">
                     <div

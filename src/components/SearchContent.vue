@@ -3,7 +3,7 @@
     <b-container>
       <b-row class="search__row">
         <p class="search__title">Oasis Monitor</p>
-        <p class="search__subtitle">Search by block height, block hash or an account</p>
+        <p class="search__subtitle">Search by block height, account or operation</p>
         <div class="search__controls">
           <label class="search__label" for="input">
             <font-awesome-icon class="icon search__icon" :icon="['fas', 'search']" />
@@ -15,7 +15,7 @@
             @keypress.enter.prevent="$emit('handleSubmit', query)"
             class="search__input"
             type="text"
-            placeholder="Enter block height, block hash or an account"
+            placeholder="Enter block height, account or operation"
             aria-label="Search"
             v-autofocus
           >
@@ -26,7 +26,7 @@
             @keypress.enter.prevent="$emit('handleSubmit', query)"
             class="search__input"
             type="text"
-            placeholder="Enter block height, block hash or an account"
+            placeholder="Enter block height, account or operation"
             aria-label="Search"
           >
           <button

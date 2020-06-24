@@ -74,7 +74,7 @@ export default {
         data = await this.$api.getBlocks({ block_level: Number(queryString) });
         options.id = Number(queryString);
       } else {
-        data = await this.$api.getBlocks({ block_id: queryString });
+        data = await this.$api.getTransactions({ operation_id: queryString });
         options.id = queryString;
       }
 
@@ -84,15 +84,17 @@ export default {
         this.$notify({
           type: 'error',
           title: 'Oasis Monitor',
-          text: `${isQueryAnAccount ? 'Account' : 'Block'} not found`,
+          text: 'Oops, wrong input',
         });
         return;
       }
 
       if (isQueryAnAccount) {
         this.$router.push({ name: 'account', params: { ...options } }).catch(() => {});
-      } else {
+      } else if (isQueryNumber) {
         this.$router.push({ name: 'block', params: { ...options } }).catch(() => {});
+      } else {
+        this.$router.push({ name: 'operation', params: { ...options } }).catch(() => {});
       }
     },
     validateForm(query) {

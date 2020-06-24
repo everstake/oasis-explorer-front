@@ -46,7 +46,7 @@
                   </div>
                   <line-chart
                     v-else
-                    :height="100"
+                    :height="60"
                     :options="options"
                     :chart-data="getEscrowData()"
                     class="home__chart"
@@ -66,7 +66,7 @@
                   </div>
                   <line-chart
                     v-else
-                    :height="100"
+                    :height="60"
                     :options="options"
                     :chart-data="getTransactionVolumeData()"
                     class="home__chart"

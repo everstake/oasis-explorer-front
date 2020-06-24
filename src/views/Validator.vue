@@ -363,7 +363,7 @@
                   </div>
                 </div>
                 <div v-else class="validator-chart">
-                  <div class="stats__container">
+                  <div>
                     <b-row v-if="loading && items === null">
                       <b-col cols="12">
                         <div class="text-center account__loading">
@@ -387,15 +387,13 @@
                               header="Uptime"
                             >
                               <b-card-text class="stats__content">
-                                <div class="stats__container">
-                                  <LineChart
-                                    :chart-data="getUptimeChartData"
-                                    :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
-                                    :y-axes-begin-at-zero="false"
-                                    :yTicksCallback="uptimeTicksCallback"
-                                    :tooltipsLabelCallback="uptimeTooltipsCallback"
-                                  />
-                                </div>
+                                <LineChart
+                                  :chart-data="getUptimeChartData"
+                                  :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                                  :y-axes-begin-at-zero="false"
+                                  :yTicksCallback="uptimeTicksCallback"
+                                  :tooltipsLabelCallback="uptimeTooltipsCallback"
+                                />
                               </b-card-text>
                             </b-card>
                           </div>
@@ -409,14 +407,12 @@
                               header="Stake change"
                             >
                               <b-card-text class="stats__content">
-                                <div class="stats__container">
-                                  <LineChart
-                                    :chart-data="getStakeChartData"
-                                    :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
-                                    :y-axes-begin-at-zero="false"
-                                    :yTicksCallback="chartsTicksCallback"
-                                  />
-                                </div>
+                                <LineChart
+                                  :chart-data="getStakeChartData"
+                                  :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                                  :y-axes-begin-at-zero="false"
+                                  :yTicksCallback="chartsTicksCallback"
+                                />
                               </b-card-text>
                             </b-card>
                           </div>

@@ -1,10 +1,13 @@
 export default {
   data() {
     return {
-      isHashCopied: false,
+      latestCopiedHash: null,
     };
   },
   methods: {
+    isHashCopied(hash) {
+      return this.latestCopiedHash === hash;
+    },
     copyToClipboard(key) {
       const selection = window.getSelection();
       const range = window.document.createRange();
@@ -13,7 +16,7 @@ export default {
       selection.addRange(range);
 
       try {
-        this.isHashCopied = true;
+        this.latestCopiedHash = key;
         this.$notify({
           type: 'success',
           title: 'Oasis Monitor',
@@ -24,11 +27,11 @@ export default {
 
         setTimeout(() => {
           selection.removeAllRanges();
-          this.isHashCopied = false;
-        }, 1000);
+          this.latestCopiedHash = null;
+        }, 500);
       } catch (err) {
         selection.removeAllRanges();
-        this.isHashCopied = false;
+        this.latestCopiedHash = null;
       }
     },
   },

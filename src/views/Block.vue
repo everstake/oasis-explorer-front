@@ -59,7 +59,7 @@
                 <font-awesome-icon
                   :icon="['fas', 'copy']"
                   :class="{
-                      'icon--success': isHashCopied
+                      'icon--success': isHashCopied(items[0].hash)
                     }"
                   class="icon icon-copy delegator-card__icon"
                 />
@@ -70,8 +70,28 @@
                {{ items[0].epoch }}
              </b-card-text>
             <b-card-text class="block__content">
-              <div class="block__header">Proposer</div>
-              {{ items[0].proposer }}
+              <div
+                class="block__header"
+              >
+                Proposer
+              </div>
+              <div
+                class="block__copy"
+                @click="copyToClipboard(items[0].proposer)"
+              >
+                <span
+                  :ref="items[0].proposer"
+                >
+                {{ items[0].proposer }}
+              </span>
+                <font-awesome-icon
+                  :icon="['fas', 'copy']"
+                  :class="{
+                      'icon--success': isHashCopied(items[0].proposer)
+                    }"
+                  class="icon icon-copy delegator-card__icon"
+                />
+              </div>
             </b-card-text>
             <b-card-text class="block__content" v-if="items[0].number_of_signatures">
               <div class="block__header">Signatures</div>

@@ -25,7 +25,7 @@
       </b-row>
       <div v-else>
         <b-row>
-          <b-col cols="12">
+          <b-col offset="3" cols="9">
             <div class="validator__actions">
               <b-btn
                 class="validator__btn"
@@ -80,7 +80,7 @@
             <div class="validator__section transaction__section">
               <b-card
                 class="validator__info"
-                header="Operation information"
+                header="Validator information"
               >
                 <b-card-text
                   v-if="items.account_name"
@@ -144,16 +144,28 @@
                     />
                   </div>
                 </b-card-text>
+                <b-card-text v-if="items.general_balance" class="block__content">
+                  <div class="block__header">General balance</div>
+                  {{ items.general_balance | formatAmount }}
+                </b-card-text>
                 <b-card-text v-if="items.escrow_balance" class="block__content">
                   <div class="block__header">Escrow balance</div>
                   {{ items.escrow_balance | formatAmount }}
+                </b-card-text>
+                <b-card-text v-if="items.escrow_shares" class="block__content">
+                  <div class="block__header">Escrow shares</div>
+                  {{ items.escrow_shares | formatAmount }}
+                </b-card-text>
+                <b-card-text v-if="items.debonding_balance" class="block__content">
+                  <div class="block__header">Debonding balance</div>
+                  {{ items.debonding_balance | formatAmount }}
                 </b-card-text>
                 <b-card-text v-if="items.signatures_count" class="block__content">
                   <div class="block__header">Signatures</div>
                   {{ items.signatures_count }}
                 </b-card-text>
                 <b-card-text v-if="items.blocks_count" class="block__content">
-                  <div class="block__header">Proposals (blocks_count)</div>
+                  <div class="block__header">Proposals</div>
                   {{ items.blocks_count }}
                 </b-card-text>
                 <b-card-text class="block__content">
@@ -161,12 +173,12 @@
                     v-if="items.depositors_count"
                     class="block__header"
                   >
-                    Depositors (depositors_count)
+                    Delegators
                   </div>
                   {{ items.depositors_count }}
                 </b-card-text>
                 <b-card-text class="block__content">
-                  <div class="block__header" v-if="items.available_score">Available score</div>
+                  <div class="block__header" v-if="items.available_score">Availability score</div>
                   {{ items.available_score | formatAmount }}
                 </b-card-text>
                 <b-card-text class="block__content">
@@ -193,7 +205,7 @@
                     </div>
                 </b-card-text>
                 <b-card-text class="block__content">
-                  <div class="block__header" v-if="items.validate_since">Validate since</div>
+                  <div class="block__header" v-if="items.validate_since">Registered</div>
                   {{ items.validate_since | formatDate }}
                   <div class="date-from-now">
                     ({{ items.validate_since | formatDaysAgo }})

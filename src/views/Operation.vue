@@ -41,7 +41,7 @@
                   <font-awesome-icon
                     :icon="['fas', 'copy']"
                     :class="{
-                      'icon--success': isHashCopied
+                      'icon--success': isHashCopied(items[0].hash)
                     }"
                     class="icon icon-copy delegator-card__icon"
                   />

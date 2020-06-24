@@ -89,41 +89,43 @@
                   <div class="block__header">Name</div>
                   {{ items.account_name }}
                 </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Website</div>
-                  <a href="#" target="_blank">website</a>
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Email</div>
-                  <a href="#" target="_blank">email</a>
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Social</div>
-                  <a href="#" target="_blank">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'telegram' }"
-                    />
-                  </a>
-                  <a href="#" target="_blank">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'twitter' }"
-                    />
-                  </a>
-                  <a href="#" target="_blank">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'facebook' }"
-                    />
-                  </a>
-                  <a href="#" target="_blank">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'medium' }"
-                    />
-                  </a>
-                </b-card-text>
+                <div v-if="isSocialsVisible">
+                  <b-card-text class="block__content">
+                    <div class="block__header">Website</div>
+                    <a href="#" target="_blank">website</a>
+                  </b-card-text>
+                  <b-card-text class="block__content">
+                    <div class="block__header">Email</div>
+                    <a href="#" target="_blank">email</a>
+                  </b-card-text>
+                  <b-card-text class="block__content">
+                    <div class="block__header">Social</div>
+                    <a href="#" target="_blank">
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fab', iconName: 'telegram' }"
+                      />
+                    </a>
+                    <a href="#" target="_blank">
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fab', iconName: 'twitter' }"
+                      />
+                    </a>
+                    <a href="#" target="_blank">
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fab', iconName: 'facebook' }"
+                      />
+                    </a>
+                    <a href="#" target="_blank">
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fab', iconName: 'medium' }"
+                      />
+                    </a>
+                  </b-card-text>
+                </div>
                 <b-card-text class="block__content">
                   <div class="block__header">Address</div>
                   <div
@@ -491,14 +493,15 @@ export default {
       isShowMoreDisabled: false,
       handleDebouncedScroll: null,
       palette: [
-        '#4CD4A9',
-        '#1BB8A8',
-        '#009B9F',
-        '#187E8D',
-        '#2A6275',
-        '#2F4858',
+        'rgba(76, 212, 169, .4)',
+        'rgba(27, 184, 168, .4)',
+        'rgba(0, 155, 159, .4)',
+        'rgba(24, 126, 141, .4)',
+        'rgba(42, 98, 117, .4)',
+        'rgba(47, 72, 88, .4)',
       ],
       xAxesMaxTicksLimit: 28,
+      isSocialsVisible: false,
     };
   },
   watch: {
@@ -661,18 +664,21 @@ export default {
             // eslint-disable-next-line camelcase
             data: this.charts.uptime.map(({ availability_score }) => availability_score),
             borderWidth: 1,
+            backgroundColor: this.palette[0],
           },
           {
             label: 'Proposals count',
             // eslint-disable-next-line camelcase
             data: this.charts.uptime.map(({ blocks_count }) => blocks_count),
             borderWidth: 1,
+            backgroundColor: this.palette[1],
           },
           {
             label: 'Signatures count',
             // eslint-disable-next-line camelcase
             data: this.charts.uptime.map(({ signatures_count }) => signatures_count),
             borderWidth: 1,
+            backgroundColor: this.palette[2],
           },
         ],
         // eslint-disable-next-line max-len
@@ -693,24 +699,28 @@ export default {
             // eslint-disable-next-line camelcase
             data: this.charts.stake.map(({ total_balance }) => total_balance),
             borderWidth: 1,
+            backgroundColor: this.palette[0],
           },
           {
             label: 'Escrow balance',
             // eslint-disable-next-line camelcase
             data: this.charts.stake.map(({ escrow_balance }) => escrow_balance),
             borderWidth: 1,
+            backgroundColor: this.palette[1],
           },
           {
             label: 'Debonding balance',
             // eslint-disable-next-line camelcase
             data: this.charts.stake.map(({ debonding_balance }) => debonding_balance),
             borderWidth: 1,
+            backgroundColor: this.palette[2],
           },
           {
             label: 'Self stake balance',
             // eslint-disable-next-line camelcase
             data: this.charts.stake.map(({ self_stake_balance }) => self_stake_balance),
             borderWidth: 1,
+            backgroundColor: this.palette[3],
           },
         ],
         // eslint-disable-next-line max-len

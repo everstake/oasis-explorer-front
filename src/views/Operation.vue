@@ -25,7 +25,11 @@
             >
               <b-card-text class="block__content">
                 <div class="block__header">Block height</div>
-                {{ items[0].level }}
+                <router-link
+                  :to="{ name: 'block', params: { id: items[0].level } }"
+                >
+                  {{ items[0].level }}
+                </router-link>
               </b-card-text>
               <b-card-text class="block__content">
                 <div class="block__header">Operation hash</div>
@@ -41,7 +45,7 @@
                   <font-awesome-icon
                     :icon="['fas', 'copy']"
                     :class="{
-                      'icon--success': isHashCopied
+                      'icon--success': isHashCopied(items[0].hash)
                     }"
                     class="icon icon-copy delegator-card__icon"
                   />
@@ -207,7 +211,7 @@ export default {
           active: true,
         },
       ],
-      currentPage: 0,
+      currentPage: 1,
       perPage: 5,
     };
   },

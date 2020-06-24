@@ -12,6 +12,8 @@
       no-border-collapse
       @row-selected="handleRowClick"
       @sort-changed="handleSortChange"
+      :no-local-sorting="true"
+      :no-sort-reset="true"
     >
       <template #table-busy>
         <TableLoader />
@@ -67,7 +69,7 @@
         :class="{
           'blocks-list__button--loading': loading
         }"
-        :disabled="loading"
+        :disabled="loading || isShowMoreDisabled"
       >
         <span v-if="error">
           Something went wrong, click to retry
@@ -127,15 +129,31 @@ export default {
       limit: 50,
       offset: 0,
       error: false,
+      isShowMoreDisabled: false,
+      handleDebouncedScroll: null,
     };
+  },
+  watch: {
+    isShowMoreDisabled: {
+      immediate: false,
+      handler(val) {
+        if (val && this.handleDebouncedScroll !== null) {
+          this.removeEventListenerOnScroll();
+        } else if (this.handleDebouncedScroll === null) {
+          this.setEventListenerOnScroll();
+        }
+      },
+    },
   },
   methods: {
     scrollToTop() {
       window.scrollTo(0, 0);
     },
     handleScroll() {
-      if (window.scrollY > this.$refs.table.$el.getBoundingClientRect().height) {
-        this.onShowMore();
+      if (this.$refs.table) {
+        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
+          this.onShowMore();
+        }
       }
     },
     handleRowClick(item) {
@@ -157,10 +175,7 @@ export default {
         this.error = true;
       } else {
         this.error = false;
-        this.data = [
-          ...this.data,
-          ...data.data,
-        ];
+        this.data = data.data;
       }
 
       this.loading = false;
@@ -179,7 +194,10 @@ export default {
 
       if (data.status !== 200) {
         this.error = true;
+      } else if (Array.isArray(data.data) && data.data.length === 0) {
+        this.isShowMoreDisabled = true;
       } else {
+        this.isShowMoreDisabled = false;
         this.error = false;
         this.data = [
           ...this.data,
@@ -194,7 +212,11 @@ export default {
       window.addEventListener('scroll', this.handleDebouncedScroll);
     },
     removeEventListenerOnScroll() {
+      if (this.handleDebouncedScroll !== null) {
+        this.handleDebouncedScroll.cancel();
+      }
       window.removeEventListener('scroll', this.handleDebouncedScroll);
+      this.handleDebouncedScroll = null;
     },
   },
   computed: {

@@ -65,7 +65,7 @@ export default {
     &-nav {
       & .router-link-active {
         color: $color-primary-hover;
-        text-decoration: underline;
+        text-decoration: none;
       }
 
       & .router-link-active.dropdown-item {
@@ -85,6 +85,10 @@ export default {
       font-size: 15px;
       font-weight: 700;
       text-transform: uppercase;
+
+      &:hover {
+        text-decoration: none;
+      }
 
       & .dropdown-item {
         font-size: 15px;

@@ -186,7 +186,7 @@
         :class="{
           'blocks-list__button--loading': loading
         }"
-        :disabled="loading"
+        :disabled="loading || isShowMoreDisabled"
       >
         <span v-if="error">
           Something went wrong, click to retry
@@ -263,12 +263,15 @@ export default {
       },
       operations: ['transfer', 'addescrow', 'reclaimescrow', 'other'],
       dropdownIsBusy: false,
+      isShowMoreDisabled: false,
+      handleDebouncedScroll: null,
     };
   },
   watch: {
     operations: {
       deep: true,
       async handler() {
+        this.offset = 0;
         this.dropdownIsBusy = true;
         const isDateRangeReady = this.dateRange.startDate && this.dateRange.endDate;
         let data;
@@ -289,12 +292,25 @@ export default {
 
         if (data.status !== 200) {
           this.error = true;
+        } else if (Array.isArray(data.data) && data.data.length === 0) {
+          this.isShowMoreDisabled = true;
         } else {
+          this.isShowMoreDisabled = false;
           this.error = false;
           this.data = data.data;
         }
 
         this.dropdownIsBusy = false;
+      },
+    },
+    isShowMoreDisabled: {
+      immediate: false,
+      handler(val) {
+        if (val && this.handleDebouncedScroll !== null) {
+          this.removeEventListenerOnScroll();
+        } else if (this.handleDebouncedScroll === null) {
+          this.setEventListenerOnScroll();
+        }
       },
     },
   },
@@ -325,7 +341,11 @@ export default {
 
       if (data.status !== 200) {
         this.error = true;
+      } else if (Array.isArray(data.data) && data.data.length === 0) {
+        this.data = [];
+        this.isShowMoreDisabled = true;
       } else {
+        this.isShowMoreDisabled = false;
         this.error = false;
         this.offset = 0;
         this.data = data.data;
@@ -336,8 +356,10 @@ export default {
       window.scrollTo(0, 0);
     },
     handleScroll() {
-      if (window.scrollY > this.$refs.table.$el.getBoundingClientRect().height) {
-        this.onShowMore();
+      if (this.$refs.table) {
+        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
+          this.onShowMore();
+        }
       }
     },
     handleRowClick(item) {
@@ -389,7 +411,10 @@ export default {
 
       if (data.status !== 200) {
         this.error = true;
+      } else if (Array.isArray(data.data) && data.data.length === 0) {
+        this.isShowMoreDisabled = true;
       } else {
+        this.isShowMoreDisabled = false;
         this.error = false;
         this.data = [
           ...this.data,
@@ -400,11 +425,17 @@ export default {
       this.loading = false;
     },
     setEventListenerOnScroll() {
+      console.log('setEventListenerOnScroll');
       this.handleDebouncedScroll = debounce(this.handleScroll, 100);
       window.addEventListener('scroll', this.handleDebouncedScroll);
     },
     removeEventListenerOnScroll() {
+      console.log('removeEventListenerOnScroll');
+      if (this.handleDebouncedScroll !== null) {
+        this.handleDebouncedScroll.cancel();
+      }
       window.removeEventListener('scroll', this.handleDebouncedScroll);
+      this.handleDebouncedScroll = null;
     },
   },
   computed: {

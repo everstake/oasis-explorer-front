@@ -1,6 +1,7 @@
 .block,
 .transaction,
-.account {
+.account,
+.validator {
   margin-bottom: 50px;
 
   &__loading {
@@ -16,7 +17,7 @@
   &__header {
     color: $color-gray-999;
     font-weight: 700;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 
   &__time-ago {

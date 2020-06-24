@@ -12,7 +12,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import ValidatorsList from '@/components/ValidatorsList.vue';
 
 export default {
-  name: 'Accounts',
+  name: 'Validators',
   components: {
     Breadcrumbs,
     ValidatorsList,

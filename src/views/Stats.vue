@@ -27,9 +27,11 @@
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
+                      @on-receive="handleChartClick"
                       :chart-data="getEscrowRatioData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
+                      :tooltipsLabelCallback="tooltipsLabelCallback"
                     />
                   </div>
                 </b-card-text>
@@ -67,6 +69,7 @@ import LineChart from '@/components/charts/LineChart.vue';
 import store from '@/store';
 import dayjs from 'dayjs';
 import numeral from 'numeral';
+import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 
 export default {
   name: 'Stats',
@@ -74,6 +77,9 @@ export default {
     LineChart,
     Breadcrumbs,
   },
+  mixins: [
+    getDatesInSeconds,
+  ],
   data() {
     return {
       loading: null,
@@ -102,24 +108,21 @@ export default {
     };
   },
   methods: {
+    handleChartClick(item) {
+      console.log('Stats click handling', item);
+    },
     async fetchData() {
       this.loading = true;
 
-      const todayMs = new Date().getTime();
-      const thirtyDaysMs = new Date(new Date().setDate(new Date().getDate() - 30)).getTime();
-
-      const todaySec = Math.round(todayMs / 1000);
-      const thirtyDaysSec = Math.round(thirtyDaysMs / 1000);
-
       const escrowRatio = await this.$api.getEscrowRatio({
-        from: thirtyDaysSec,
-        to: todaySec,
+        from: this.thirtyDaysAgoInSeconds,
+        to: this.todayInSeconds,
         frame: 'D',
       });
 
       const transactionVolume = await this.$api.getTransactionVolume({
-        from: thirtyDaysSec,
-        to: todaySec,
+        from: this.thirtyDaysAgoInSeconds,
+        to: this.todayInSeconds,
         frame: 'D',
       });
 
@@ -127,8 +130,16 @@ export default {
       this.transactionVolumeData = transactionVolume.data;
       this.loading = false;
     },
-    tooltipsLabelCallback(tooltipItem, data) {
-      return `Transfer volume: ${data.datasets[0].data[tooltipItem.index]}`;
+    // eslint-disable-next-line consistent-return
+    tooltipsLabelCallback(t, d) {
+      const xLabel = d.datasets[t.datasetIndex].label;
+      const { yLabel } = t;
+
+      for (let i = 0; i <= 10; i += 1) {
+        if (t.datasetIndex === i) {
+          return `${xLabel}: ${yLabel * 100}%`;
+        }
+      }
     },
     tooltipsLabelCallbackFormatAmount(tooltipItem, data) {
       if (data.datasets[0].data[tooltipItem.index] > 0) {
@@ -142,7 +153,7 @@ export default {
         return numeral(label / 1000000000).format('0,0.[000000000]');
       }
 
-      return label;
+      return label.toFixed();
     },
   },
   computed: {

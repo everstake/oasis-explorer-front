@@ -803,6 +803,7 @@ export default {
   }
 
   &__container {
+    max-height: 95vh;
     overflow-y: scroll;
   }
 

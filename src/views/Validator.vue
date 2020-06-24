@@ -804,7 +804,7 @@ export default {
 
   &__container {
     max-height: 95vh;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   &__shadow {
@@ -818,6 +818,7 @@ export default {
 
   &__btn {
     width: 20%;
+    padding: 7px 0;
     border-left: none;
     border-radius: 0;
     background-color: #fff !important;
@@ -826,10 +827,14 @@ export default {
     font-weight: bold;
 
     &:first-child {
+      border-top-left-radius: 6px;
+      border-bottom-left-radius: 6px;
       border-left: 1px solid #4cd4a9;
     }
 
     &:last-child {
+      border-top-right-radius: 6px;
+      border-bottom-right-radius: 6px;
       border-right: 1px solid #4cd4a9;
     }
 

@@ -1,5 +1,6 @@
 <script>
 import { Line, mixins } from 'vue-chartjs';
+import numeral from 'numeral';
 
 const { reactiveProp } = mixins;
 
@@ -50,6 +51,20 @@ export default {
       type: Object,
       default() {
         return {};
+      },
+    },
+    tooltipsLabelCallback: {
+      type: Function,
+      // eslint-disable-next-line consistent-return
+      default(t, d) {
+        const xLabel = d.datasets[t.datasetIndex].label;
+        const { yLabel } = t;
+
+        for (let i = 0; i <= 10; i += 1) {
+          if (t.datasetIndex === i) {
+            return `${xLabel}: ${numeral(yLabel / 1000000000).format('0,0.[000000000]')}`;
+          }
+        }
       },
     },
   },
@@ -108,6 +123,9 @@ export default {
           bodyAlign: 'center',
           titleAlign: 'center',
           cornerRadius: 4,
+          callbacks: {
+            label: this.tooltipsLabelCallback,
+          },
         },
         elements: {
           line: {

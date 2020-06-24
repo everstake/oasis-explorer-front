@@ -381,6 +381,7 @@
                                     :chart-data="getUptimeChartData"
                                     :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                                     :y-axes-begin-at-zero="false"
+                                    :yTicksCallback="chartsTicksCallback"
                                   />
                                 </div>
                               </b-card-text>
@@ -401,7 +402,7 @@
                                     :chart-data="getStakeChartData"
                                     :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                                     :y-axes-begin-at-zero="false"
-                                    :yTicksCallback="transactionVolumeTicksCallback"
+                                    :yTicksCallback="chartsTicksCallback"
                                   />
                                 </div>
                               </b-card-text>
@@ -503,7 +504,7 @@ export default {
     },
   },
   methods: {
-    transactionVolumeTicksCallback(label) {
+    chartsTicksCallback(label) {
       if (label > 1) {
         return numeral(label / 1000000000).format('0,0.[000000000]');
       }

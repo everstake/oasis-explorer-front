@@ -27,7 +27,7 @@
         {{ data.item.escrow_balance | formatAmount }}
       </template>
       <template #cell(available_score)="data">
-        {{ data.item.available_score | formatAmount }}
+        {{ data.item.available_score }}
       </template>
       <template #cell(status)="data">
         <div

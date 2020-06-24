@@ -3,14 +3,14 @@
     <router-link class="logo__link" :to="{ name: 'home' }">
      <img class="logo__img" src="../assets/images/logo.svg" alt="Oasis logotype">
     </router-link>
-    <a href="https://everstake.one/" class="logo__special" target="_blank">
-      <span class="logo__note">by</span>
+    <span class="logo__note">
+      by
       <img
         class="logo__everstake"
         src="../assets/images/logo-everstake.svg"
         alt="Everstake logotype"
       >
-    </a>
+    </span>
   </div>
 </template>
 
@@ -66,6 +66,7 @@ export default {
       font-size: 17px;
       color: #111;
       font-weight: bold;
+      user-select: none;
     }
 
     &__everstake {

@@ -90,6 +90,41 @@
                   {{ items.account_name }}
                 </b-card-text>
                 <b-card-text class="block__content">
+                  <div class="block__header">Website</div>
+                  <a href="#" target="_blank">website</a>
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">Email</div>
+                  <a href="#" target="_blank">email</a>
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">Social</div>
+                  <a href="#" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'telegram' }"
+                    />
+                  </a>
+                  <a href="#" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'twitter' }"
+                    />
+                  </a>
+                  <a href="#" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'facebook' }"
+                    />
+                  </a>
+                  <a href="#" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'medium' }"
+                    />
+                  </a>
+                </b-card-text>
+                <b-card-text class="block__content">
                   <div class="block__header">Address</div>
                   <div
                     @click="copyToClipboard(items.account_id)"
@@ -747,7 +782,6 @@ export default {
   }
 
   &__shadow {
-    max-height: 90vh;
     height: 100%;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
   }

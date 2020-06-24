@@ -885,5 +885,11 @@ export default {
       margin-bottom: 20px;
     }
   }
+
+  &-chart {
+    .card-header {
+      padding: 14px 20px;
+    }
+  }
 }
 </style>

@@ -73,7 +73,7 @@
             </b-card>
           </div>
         </b-col>
-        <b-col class="transaction__col" cols="12" md="9">
+        <b-col class="transaction__col" cols="12" md="8">
           <div class="block__section">
             <div class="block__section block__section--table">
               <b-card>

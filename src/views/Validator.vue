@@ -511,6 +511,26 @@ export default {
         }
       },
     },
+    $route: {
+      immediate: true,
+      async handler() {
+        this.loading = true;
+
+        const data = await this.$api.getValidator({
+          limit: this.limit,
+          id: this.$route.params.id,
+        });
+
+        if (data.status !== 200) {
+          this.$router.push({ name: '404' });
+        }
+        this.items = data.data;
+
+        this.updateTableData('transfers');
+
+        this.loading = false;
+      },
+    },
   },
   methods: {
     chartsTicksCallback(label) {
@@ -768,23 +788,6 @@ export default {
 
       return [];
     },
-  },
-  async created() {
-    this.loading = true;
-
-    const data = await this.$api.getValidator({
-      limit: this.limit,
-      id: this.$route.params.id,
-    });
-
-    if (data.status !== 200) {
-      this.$router.push({ name: '404' });
-    }
-    this.items = data.data;
-
-    this.updateTableData('transfers');
-
-    this.loading = false;
   },
 };
 </script>

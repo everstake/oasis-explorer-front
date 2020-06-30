@@ -41,6 +41,7 @@ export default {
       error: null,
       isSearchActive: false,
       loading: null,
+      validators: null,
     };
   },
   methods: {
@@ -54,10 +55,19 @@ export default {
       document.body.className = '';
     },
     async handleSubmit(query) {
+      /* eslint-disable */
       this.loading = true;
       const queryString = query.trim();
       const isQueryNumber = !Number.isNaN(Number(queryString));
       const isQueryAnAccount = queryString.slice(0, 5) === 'oasis';
+      const isQueryValidator = this.validators.find(({ account_id, account_name }) => {
+        const isMatchComplete = queryString === account_id || queryString === account_name;
+        const isMatchPartically = account_name.toLowerCase().indexOf(queryString.toLowerCase());
+
+        if (isMatchComplete || isMatchPartically >= 0) {
+          return account_id;
+        }
+      });
       const options = {};
       let data;
 
@@ -73,13 +83,16 @@ export default {
       } else if (isQueryNumber) {
         data = await this.$api.getBlocks({ block_level: Number(queryString) });
         options.id = Number(queryString);
+      } else if (isQueryValidator) {
+        data = await this.$api.getValidator({ id: isQueryValidator.account_id });
+        options.id = isQueryValidator.account_id;
       } else {
         data = await this.$api.getTransactions({ operation_id: queryString });
         options.id = queryString;
       }
 
       this.loading = false;
-
+      
       if (data.status !== 200 || data.data.length === 0) {
         this.$notify({
           type: 'error',
@@ -93,6 +106,8 @@ export default {
         this.$router.push({ name: 'account', params: { ...options } }).catch(() => {});
       } else if (isQueryNumber) {
         this.$router.push({ name: 'block', params: { ...options } }).catch(() => {});
+      } else if (isQueryValidator) {
+        this.$router.push({ name: 'validator', params: { ...options } }).catch(() => {});
       } else {
         this.$router.push({ name: 'operation', params: { ...options } }).catch(() => {});
       }
@@ -107,6 +122,11 @@ export default {
 
       return true;
     },
+    async fetchValidatorsList() {
+      const validators = await this.$api.getValidatorsList();
+
+      this.validators = validators.data;
+    },
   },
   watch: {
     $route() {
@@ -114,11 +134,17 @@ export default {
     },
   },
   updated() {
+    if (this.validators === null) {
+      this.fetchValidatorsList();
+    }
     if (this.isSearchActive) {
       document.title = 'Search | Oasis Monitor';
     } else {
       document.title = this.$route.meta.title;
     }
+  },
+  async created() {
+    this.fetchValidatorsList();
   },
 };
 </script>

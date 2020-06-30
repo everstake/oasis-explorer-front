@@ -162,7 +162,6 @@ export default {
     handleChartClick(point, event) {
       /* eslint-disable */
       const item = event[0];
-      console.log(111, event);
       this.$emit('on-receive', {
         index: item._index,
         backgroundColor: item._view.backgroundColor,

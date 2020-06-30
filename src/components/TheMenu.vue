@@ -80,6 +80,11 @@ export default {
           text-decoration: none;
         }
       }
+
+      @include from-992-down {
+        flex-wrap: nowrap !important;
+        overflow: auto;
+      }
     }
     &__link {
       font-size: 15px;

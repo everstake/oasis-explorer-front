@@ -49,7 +49,6 @@
                       :chart-data="getTransactionVolumeData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
-                      :tooltips-label-callback="tooltipsLabelCallbackFormatAmount"
                       :yTicksCallback="transactionVolumeTicksCallback"
                     />
                   </div>
@@ -60,33 +59,38 @@
         </b-row>
         <b-row class="stats__information">
           <b-col cols="6">
-            <div class="stats__section">
+            <div class="stats__section stats__section--filter">
               <b-card
                 header="# of operations"
               >
-                <b-form-group class="stats__switcher">
-                  <b-form-radio
-                    v-model="operationDateFormat"
-                    name="some-radios"
-                    value="D"
+                <b-button-group class="stats__actions">
+                  <b-button
+                    @click="operationDateFormat = 'D'"
+                    class="stats__switcher"
+                    :class="{
+                      'stats__switcher--active': operationDateFormat === 'D'
+                    }"
                   >
-                    Filter by day
-                  </b-form-radio>
-                  <b-form-radio
-                    v-model="operationDateFormat"
-                    name="some-radios"
-                    value="H"
+                    day
+                  </b-button>
+                  <b-button
+                    @click="operationDateFormat = 'H'"
+                    class="stats__switcher"
+                    :class="{
+                      'stats__switcher--active': operationDateFormat === 'H'
+                    }"
                   >
-                    Filter by hour
-                  </b-form-radio>
-                </b-form-group>
+                    hour
+                  </b-button>
+                </b-button-group>
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
                       :chart-data="getOperationsData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
-                      :tooltips-label-callback="tooltipsDefaultLabelCallback"
+                      :tooltips-label-callback="tooltipsFeesLabelCallback"
+                      :yTicksCallback="formattedTicksCallback"
                     />
                   </div>
                 </b-card-text>
@@ -104,8 +108,8 @@
                       :chart-data="getAccountsData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
-                      :tooltips-label-callback="tooltipsDefaultLabelCallback"
-                      :yTicksCallback="defaultTicksCallback"
+                      :tooltips-label-callback="tooltipsFeesLabelCallback"
+                      :yTicksCallback="formattedTicksCallback"
                     />
                   </div>
                 </b-card-text>
@@ -115,33 +119,37 @@
         </b-row>
         <b-row class="stats__information">
           <b-col cols="6">
-            <div class="stats__section">
+            <div class="stats__section stats__section--filter">
               <b-card
                 header="Fee volume"
               >
-                <b-form-group class="stats__switcher">
-                  <b-form-radio
-                    v-model="feesDateFormat"
-                    name="feesDateSwitcher"
-                    value="D"
+                <b-button-group class="stats__actions">
+                  <b-button
+                    @click="feesDateFormat = 'D'"
+                    class="stats__switcher"
+                    :class="{
+                      'stats__switcher--active': feesDateFormat === 'D'
+                    }"
                   >
-                    Filter by day
-                  </b-form-radio>
-                  <b-form-radio
-                    v-model="feesDateFormat"
-                    name="feesDateSwitcher"
-                    value="H"
+                    day
+                  </b-button>
+                  <b-button
+                    @click="feesDateFormat = 'H'"
+                    class="stats__switcher"
+                    :class="{
+                      'stats__switcher--active': feesDateFormat === 'H'
+                    }"
                   >
-                    Filter by hour
-                  </b-form-radio>
-                </b-form-group>
+                    hour
+                  </b-button>
+                </b-button-group>
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
                       :chart-data="getFeesData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
-                      :tooltips-label-callback="tooltipsDefaultLabelCallback"
+                      :tooltips-label-callback="tooltipsFeesLabelCallback"
                     />
                   </div>
                 </b-card-text>
@@ -215,7 +223,7 @@ export default {
         '#2A6275',
         '#2F4858',
       ],
-      xAxesMaxTicksLimit: 5,
+      xAxesMaxTicksLimit: 10,
       operationsData: null,
       accountsData: null,
       feesData: null,
@@ -242,12 +250,12 @@ export default {
           frame: val,
         });
 
-        this.feesData = fees.data.map((fee) => {
-          if (fee === 0 || !fee) {
-            return 0;
+        this.feesData = fees.data.map((item) => {
+          if (item.fees === 0 || !item.fees) {
+            return { ...item, fees: 0 };
           }
 
-          return fee;
+          return item;
         });
       },
     },
@@ -297,12 +305,12 @@ export default {
         frame: 'D',
       });
 
-      this.feesData = fees.data.map((fee) => {
-        if (fee === 0 || !fee) {
-          return 0;
+      this.feesData = fees.data.map((item) => {
+        if (item.fees === 0 || !item.fees) {
+          return { ...item, fees: 0 };
         }
 
-        return fee;
+        return item;
       });
 
       const topEscrow = await this.$api.getChartTopEscrow({
@@ -343,6 +351,17 @@ export default {
       }
     },
     // eslint-disable-next-line consistent-return
+    tooltipsFeesLabelCallback(t, d) {
+      const xLabel = d.datasets[t.datasetIndex].label;
+      const { yLabel } = t;
+
+      for (let i = 0; i <= 10; i += 1) {
+        if (t.datasetIndex === i) {
+          return `${xLabel}: ${numeral(yLabel).format('0,0')}`;
+        }
+      }
+    },
+    // eslint-disable-next-line consistent-return
     tooltipsDefaultToFixedLabelCallback(t, d) {
       const xLabel = d.datasets[t.datasetIndex].label;
       const { yLabel } = t;
@@ -369,6 +388,9 @@ export default {
     },
     defaultTicksCallback(label) {
       return label.toFixed();
+    },
+    formattedTicksCallback(label) {
+      return numeral(label).format('0,0');
     },
   },
   computed: {
@@ -402,13 +424,23 @@ export default {
             borderWidth: 1,
           },
         ],
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line max-len,array-callback-return,consistent-return
         labels: this.operationsData.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
-            return dayjs.unix(timestamp).format('DD.MM.YYYY');
+          if (this.operationDateFormat === 'D') {
+            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+              return dayjs.unix(timestamp).format('DD.MM.YYYY');
+            }
+
+            return dayjs.unix(timestamp).format('MM.DD.YYYY');
           }
 
-          return dayjs.unix(timestamp).format('MM.DD.YYYY');
+          if (this.operationDateFormat === 'H') {
+            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+              return dayjs.unix(timestamp).format('HH:mm DD.MM.YYYY');
+            }
+
+            return dayjs.unix(timestamp).format('hh:mm A MM.DD.YYYY');
+          }
         }),
       };
     },
@@ -462,13 +494,23 @@ export default {
             borderWidth: 1,
           },
         ],
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line max-len,array-callback-return,consistent-return
         labels: this.feesData.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
-            return dayjs.unix(timestamp).format('DD.MM.YYYY');
+          if (this.feesDateFormat === 'D') {
+            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+              return dayjs.unix(timestamp).format('DD.MM.YYYY');
+            }
+
+            return dayjs.unix(timestamp).format('MM.DD.YYYY');
           }
 
-          return dayjs.unix(timestamp).format('MM.DD.YYYY');
+          if (this.feesDateFormat === 'H') {
+            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+              return dayjs.unix(timestamp).format('HH:mm DD.MM.YYYY');
+            }
+
+            return dayjs.unix(timestamp).format('hh:mm A MM.DD.YYYY');
+          }
         }),
       };
     },
@@ -524,10 +566,39 @@ export default {
     &__information {
       margin-bottom: 50px;
     }
+    &__section,
+    &__section .card,
+    &__section .card-body {
+      height: 100%;
+    }
+    &__section--filter .card-body {
+      padding-top: 10px;
+    }
     &__switcher {
       display: flex;
       flex-direction: row;
       align-items: center;
+      padding: 5px 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: $color-gray-333;
+      background-color: #fff;
+      border-color: #eee;
+
+      &--active {
+        background-color: #eee;
+        border-color: #eee;
+        color: $color-gray-333;
+      }
+
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: #eee !important;
+        border-color: #eee !important;
+        color: $color-gray-333 !important;
+        box-shadow: none !important;
+      }
     }
   }
 </style>

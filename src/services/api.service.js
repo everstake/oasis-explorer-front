@@ -5,6 +5,7 @@ export default {
   getAccounts: (params) => http.get('data/accounts', { params }),
   getAccount: (params) => http.get(`data/accounts/${encodeURIComponent(params.id)}`),
   getValidators: (params) => http.get('data/validators', { params }),
+  getValidatorsList: (params) => http.get('/data/validators/search', { params }),
   getValidator: (params) => http.get(`data/validator/${encodeURIComponent(params.id)}`, { params }),
   getValidatorDelegators: (params) => http.get(`data/validator/${encodeURIComponent(params.id)}/delegators`, { params }),
   getValidatorUptime: (params) => http.get(`chart/validator_stat/${encodeURIComponent(params.id)}`, { params }),

@@ -18,7 +18,7 @@
         </b-col>
       </b-row>
       <b-row v-else>
-        <b-col cols="3">
+        <b-col class="transaction__col" cols="12" md="4">
           <div class="transaction__section">
             <b-card
               header="Operation information"
@@ -73,7 +73,7 @@
             </b-card>
           </div>
         </b-col>
-        <b-col cols="9">
+        <b-col class="transaction__col" cols="12" md="9">
           <div class="block__section">
             <div class="block__section block__section--table">
               <b-card>

@@ -496,7 +496,7 @@ export default {
         'rgba(42, 98, 117, .4)',
         'rgba(47, 72, 88, .4)',
       ],
-      xAxesMaxTicksLimit: 28,
+      xAxesMaxTicksLimit: 10,
       isSocialsVisible: false,
     };
   },
@@ -599,7 +599,7 @@ export default {
       };
 
       if (type === 'charts') {
-        uptimeChart = await this.$api.getValidatorUptime({
+        uptimeChart = await this.$api.getChartUptime({
           limit: this.limit,
           from: this.thirtyDaysAgoInSeconds,
           to: this.todayInSeconds,
@@ -607,7 +607,7 @@ export default {
           id: this.$route.params.id,
         });
 
-        stakeChart = await this.$api.getValidatorStake({
+        stakeChart = await this.$api.getChartStake({
           limit: this.limit,
           from: this.thirtyDaysAgoInSeconds,
           to: this.todayInSeconds,
@@ -706,8 +706,10 @@ export default {
         datasets: [
           {
             label: 'Total balance',
-            // eslint-disable-next-line camelcase
-            data: this.charts.stake.map(({ total_balance }) => total_balance),
+            /* eslint-disable */
+            data: this.charts.stake.map(({ total_balance, escrow_balance }) => {
+              return total_balance + escrow_balance;
+            }),
             borderWidth: 1,
             backgroundColor: this.palette[0],
           },

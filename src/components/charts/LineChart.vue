@@ -37,6 +37,10 @@ export default {
     yTicksCallback: {
       type: Function,
       default(label) {
+        if (label === 0) {
+          return 0;
+        }
+
         if (label > 999999) {
           return `${label / 1000 / 1000}M`;
         }
@@ -130,7 +134,7 @@ export default {
         elements: {
           line: {
             borderColor: 'rgba(76, 212, 169, 1)',
-            borderWidth: 3,
+            borderWidth: 1,
             fill: true,
             backgroundColor: 'rgba(76, 212, 169, 0.6)',
             cubicInterpolationMode: 'monotone',
@@ -138,13 +142,11 @@ export default {
           point: {
             borderColor: 'rgba(76, 212, 169, 1)',
             backgroundColor: '#fff',
-            radius: 4,
-            borderWidth: 4,
+            borderWidth: 1,
           },
         },
         onClick(evt, array) {
           /* eslint-disable */
-          console.log('array', array);
           if (array.length != 0) {
             var position = array[0]._index;
             var activeElement = this.tooltip._data.datasets[0].data[position]

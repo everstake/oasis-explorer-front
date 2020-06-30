@@ -54,10 +54,15 @@ export default {
       this.isSearchActive = false;
       document.body.className = '';
     },
-    async handleSubmit(query) {
+    async handleSubmit(input) {
       /* eslint-disable */
+      if (input === '') {
+        return;
+      }
+
       this.loading = true;
-      const queryString = query.trim();
+      const queryString = input.trim();
+
       const isQueryNumber = !Number.isNaN(Number(queryString));
       const isQueryAnAccount = queryString.slice(0, 5) === 'oasis';
       const isQueryValidator = this.validators.find(({ account_id, account_name }) => {
@@ -77,7 +82,10 @@ export default {
         return;
       }
 
-      if (isQueryValidator) {
+      if (isQueryNumber) {
+        data = await this.$api.getBlocks({ block_level: Number(queryString) });
+        options.id = Number(queryString);
+      } else if (isQueryValidator) {
         data = await this.$api.getValidator({ id: isQueryValidator.account_id });
         options.id = isQueryValidator.account_id;
       } else if (isQueryAnAccount) {
@@ -89,10 +97,7 @@ export default {
           data = await this.$api.getAccount({ id: queryString });
           options.id = queryString;
         }
-      } else if (isQueryNumber) {
-        data = await this.$api.getBlocks({ block_level: Number(queryString) });
-        options.id = Number(queryString);
-      } else {
+      } else if (queryString.length === 64) {
         data = await this.$api.getTransactions({ operation_id: queryString });
         options.id = queryString;
       }
@@ -108,13 +113,13 @@ export default {
         return;
       }
 
-      if (isQueryValidator) {
+      if (isQueryNumber) {
+        this.$router.push({ name: 'block', params: { ...options } }).catch(() => {});
+      } else if (isQueryValidator) {
         this.$router.push({ name: 'validator', params: { ...options } }).catch(() => {});
       } else if (isQueryAnAccount) {
         this.$router.push({ name: 'account', params: { ...options } }).catch(() => {});
-      } else if (isQueryNumber) {
-        this.$router.push({ name: 'block', params: { ...options } }).catch(() => {});
-      } else {
+      } else if (queryString.length === 64) {
         this.$router.push({ name: 'operation', params: { ...options } }).catch(() => {});
       }
     },

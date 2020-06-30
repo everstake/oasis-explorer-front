@@ -37,6 +37,10 @@ export default {
     yTicksCallback: {
       type: Function,
       default(label) {
+        if (label === 0) {
+          return 0;
+        }
+
         if (label > 999999) {
           return `${label / 1000 / 1000}M`;
         }

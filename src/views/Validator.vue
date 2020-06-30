@@ -579,7 +579,7 @@ export default {
       };
 
       if (type === 'charts') {
-        uptimeChart = await this.$api.getValidatorUptime({
+        uptimeChart = await this.$api.getChartUptime({
           limit: this.limit,
           from: this.thirtyDaysAgoInSeconds,
           to: this.todayInSeconds,
@@ -587,7 +587,7 @@ export default {
           id: this.$route.params.id,
         });
 
-        stakeChart = await this.$api.getValidatorStake({
+        stakeChart = await this.$api.getChartStake({
           limit: this.limit,
           from: this.thirtyDaysAgoInSeconds,
           to: this.todayInSeconds,

@@ -428,12 +428,10 @@ export default {
       this.loading = false;
     },
     setEventListenerOnScroll() {
-      console.log('setEventListenerOnScroll');
       this.handleDebouncedScroll = debounce(this.handleScroll, 100);
       window.addEventListener('scroll', this.handleDebouncedScroll);
     },
     removeEventListenerOnScroll() {
-      console.log('removeEventListenerOnScroll');
       if (this.handleDebouncedScroll !== null) {
         this.handleDebouncedScroll.cancel();
       }

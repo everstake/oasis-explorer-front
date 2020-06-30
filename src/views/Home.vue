@@ -276,8 +276,6 @@ export default {
       const vm = this;
       setTimeout(function() {
         vm.answer = 1;
-        console.log('vm', vm);
-        console.log('this', this);
       });
     },
     ...mapMutations(['setInfo']),

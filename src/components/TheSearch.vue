@@ -77,15 +77,21 @@ export default {
         return;
       }
 
-      if (isQueryAnAccount) {
-        data = await this.$api.getAccount({ id: queryString });
-        options.id = queryString;
+      if (isQueryValidator) {
+        data = await this.$api.getValidator({ id: isQueryValidator.account_id });
+        options.id = isQueryValidator.account_id;
+      } else if (isQueryAnAccount) {
+        try {
+          data = await this.$api.getValidator({ id: isQueryValidator.account_id });
+          options.id = isQueryValidator.account_id;
+          return;
+        } catch {
+          data = await this.$api.getAccount({ id: queryString });
+          options.id = queryString;
+        }
       } else if (isQueryNumber) {
         data = await this.$api.getBlocks({ block_level: Number(queryString) });
         options.id = Number(queryString);
-      } else if (isQueryValidator) {
-        data = await this.$api.getValidator({ id: isQueryValidator.account_id });
-        options.id = isQueryValidator.account_id;
       } else {
         data = await this.$api.getTransactions({ operation_id: queryString });
         options.id = queryString;
@@ -102,12 +108,12 @@ export default {
         return;
       }
 
-      if (isQueryAnAccount) {
+      if (isQueryValidator) {
+        this.$router.push({ name: 'validator', params: { ...options } }).catch(() => {});
+      } else if (isQueryAnAccount) {
         this.$router.push({ name: 'account', params: { ...options } }).catch(() => {});
       } else if (isQueryNumber) {
         this.$router.push({ name: 'block', params: { ...options } }).catch(() => {});
-      } else if (isQueryValidator) {
-        this.$router.push({ name: 'validator', params: { ...options } }).catch(() => {});
       } else {
         this.$router.push({ name: 'operation', params: { ...options } }).catch(() => {});
       }

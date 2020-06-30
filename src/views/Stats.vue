@@ -64,6 +64,22 @@
               <b-card
                 header="# of operations"
               >
+                <b-form-group class="stats__switcher">
+                  <b-form-radio
+                    v-model="operationDateFormat"
+                    name="some-radios"
+                    value="D"
+                  >
+                    Filter by day
+                  </b-form-radio>
+                  <b-form-radio
+                    v-model="operationDateFormat"
+                    name="some-radios"
+                    value="H"
+                  >
+                    Filter by hour
+                  </b-form-radio>
+                </b-form-group>
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
@@ -103,6 +119,22 @@
               <b-card
                 header="Fee volume"
               >
+                <b-form-group class="stats__switcher">
+                  <b-form-radio
+                    v-model="feesDateFormat"
+                    name="feesDateSwitcher"
+                    value="D"
+                  >
+                    Filter by day
+                  </b-form-radio>
+                  <b-form-radio
+                    v-model="feesDateFormat"
+                    name="feesDateSwitcher"
+                    value="H"
+                  >
+                    Filter by hour
+                  </b-form-radio>
+                </b-form-group>
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
@@ -159,6 +191,8 @@ export default {
   ],
   data() {
     return {
+      operationDateFormat: 'D',
+      feesDateFormat: 'D',
       loading: null,
       items: null,
       breadcrumbs: [
@@ -187,6 +221,36 @@ export default {
       feesData: null,
       topEscrowData: null,
     };
+  },
+  watch: {
+    operationDateFormat: {
+      async handler(val) {
+        const operations = await this.$api.getChartOperations({
+          from: this.thirtyDaysAgoInSeconds,
+          to: this.todayInSeconds,
+          frame: val,
+        });
+
+        this.operationsData = operations.data;
+      },
+    },
+    feesDateFormat: {
+      async handler(val) {
+        const fees = await this.$api.getChartFees({
+          from: this.thirtyDaysAgoInSeconds,
+          to: this.todayInSeconds,
+          frame: val,
+        });
+
+        this.feesData = fees.data.map((fee) => {
+          if (fee === 0 || !fee) {
+            return 0;
+          }
+
+          return fee;
+        });
+      },
+    },
   },
   methods: {
     handleChartClick(item) {
@@ -248,7 +312,6 @@ export default {
       });
 
       this.topEscrowData = topEscrow.data;
-      console.log(this.topEscrowData);
 
       this.loading = false;
     },
@@ -460,6 +523,11 @@ export default {
     }
     &__information {
       margin-bottom: 50px;
+    }
+    &__switcher {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
   }
 </style>

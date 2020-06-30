@@ -7,7 +7,7 @@
       <b-container>
         <div class="home__cards">
           <b-row class="mb-5">
-            <b-col cols="3">
+            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
               <b-card
                 @click="handleCardClick"
                 class="card--link card--home"
@@ -21,7 +21,7 @@
                 </b-card-text>
               </b-card>
             </b-col>
-            <b-col cols="3">
+            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
               <b-card title="Top-20 stake weight" class="card--home">
                 <b-card-text>
                   <font-awesome-icon
@@ -34,7 +34,7 @@
                 </b-card-text>
               </b-card>
             </b-col>
-            <b-col cols="3">
+            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
               <b-card
                 @click="handleChartClick()"
                 class="home-card__chart"
@@ -54,7 +54,7 @@
                 </b-card-text>
               </b-card>
             </b-col>
-            <b-col cols="3">
+            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
               <b-card
                 @click="handleChartClick()"
                 class="home-card__chart"
@@ -76,7 +76,7 @@
             </b-col>
           </b-row>
           <b-row>
-          <b-col cols="3">
+          <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
             <b-card
               class="card--home"
               title="Price"
@@ -86,14 +86,14 @@
               </b-card-text>
             </b-card>
           </b-col>
-          <b-col cols="3">
+          <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
             <b-card title="Market cap" class="card--home">
               <b-card-text>
                 No data
               </b-card-text>
             </b-card>
           </b-col>
-          <b-col cols="3">
+          <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
             <b-card
               class="card--home"
               title="Trading volume"
@@ -103,7 +103,7 @@
               </b-card-text>
             </b-card>
           </b-col>
-          <b-col cols="3">
+          <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
             <b-card
               class="card--home"
               title="Circulating supply"
@@ -149,7 +149,7 @@
           </b-col>
         </b-row>
         <b-row class="home__section">
-          <b-col cols="6">
+          <b-col class="home__col" cols="12" xs="12" sm="12" md="12" lg="6">
             <p class="home__title">Blocks list</p>
             <BlocksList
               :rows="10"
@@ -171,7 +171,7 @@
               Show more
             </b-button>
           </b-col>
-          <b-col cols="6">
+          <b-col class="home__col" cols="12" xs="12" sm="12" md="12" lg="6">
             <p class="home__title">Operations list</p>
             <OperationsList
               :rows="10"
@@ -392,6 +392,12 @@ export default {
       &__chart {
         height: 100%;
         cursor: pointer;
+      }
+    }
+
+    &__col {
+      @include from-992-down {
+        margin-bottom: 50px;
       }
     }
   }

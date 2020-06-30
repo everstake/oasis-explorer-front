@@ -220,6 +220,7 @@ export default {
   ],
   data() {
     return {
+      answer: null,
       loading: null,
       price: null,
       marketCup: null,
@@ -270,6 +271,15 @@ export default {
     };
   },
   methods: {
+    setAnswer() {
+      /* eslint-disable */
+      const vm = this;
+      setTimeout(function() {
+        vm.answer = 1;
+        console.log('vm', vm);
+        console.log('this', this);
+      });
+    },
     ...mapMutations(['setInfo']),
     getEscrowData() {
       /* eslint-disable */
@@ -305,6 +315,7 @@ export default {
     },
   },
   async created() {
+    this.setAnswer();
     const data = await this.$api.getInfo();
 
     this.height = data.data.height;

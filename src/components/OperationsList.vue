@@ -29,7 +29,10 @@
           <template v-slot:input="picker" style="min-width: 350px;">
             <div class="transactions-list__label" slot="input">
               Select date
-              <font-awesome-icon class="transactions-list__icon" icon="calendar-check" />
+              <font-awesome-icon
+                class="transactions-list__icon"
+                icon="calendar-check"
+              />
             </div>
             <span class="transactions-list__date" v-if="dateRange.startDate && dateRange.endDate">
               {{ formatDate(picker.startDate) }} - {{ formatDate(picker.endDate) }}
@@ -514,6 +517,10 @@ export default {
 
     &__icon {
       margin-left: 10px;
+
+      @include from-480-down {
+        display: none;
+      }
     }
 
     &__date {

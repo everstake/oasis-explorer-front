@@ -25,7 +25,7 @@
       </b-row>
       <div v-else>
         <b-row>
-          <b-col offset="3" cols="9">
+          <b-col order="3" order-sm="1" offset-md="3" cols="12" md="9">
             <div class="validator__actions">
               <b-btn
                 class="validator__btn"
@@ -76,7 +76,7 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col cols="3">
+          <b-col order="2" order-sm="2" cols="12" md="4">
             <div class="validator__section transaction__section">
               <b-card
                 class="validator__info"
@@ -213,7 +213,7 @@
               </b-card>
             </div>
           </b-col>
-          <b-col cols="9">
+          <b-col order="1" order-sm="3" cols="12" md="8">
           <div class="block__section">
             <div class="block__section block__section--table">
               <b-card class="validator__card">
@@ -707,8 +707,8 @@ export default {
           {
             label: 'Total balance',
             /* eslint-disable */
-            data: this.charts.stake.map(({ total_balance, escrow_balance }) => {
-              return total_balance + escrow_balance;
+              data: this.charts.stake.map(({ general_balance, escrow_balance }) => {
+              return general_balance + escrow_balance;
             }),
             borderWidth: 1,
             backgroundColor: this.palette[0],

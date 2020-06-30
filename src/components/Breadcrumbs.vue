@@ -31,6 +31,19 @@ export default {
   .breadcrumbs {
     &__container {
       display: flex;
+
+      @include from-768-down {
+        flex-wrap: wrap;
+      }
+    }
+
+    &__item.active {
+      @include from-768-down {
+        max-width: 200px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: flex;
+      }
     }
   }
 </style>

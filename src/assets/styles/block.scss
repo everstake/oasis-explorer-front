@@ -75,4 +75,10 @@
     font-size: 24px;
     color: $color-primary;
   }
+
+  &__col {
+    @include from-768-down {
+      margin-bottom: 50px;
+    }
+  }
 }

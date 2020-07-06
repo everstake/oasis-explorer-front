@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <b-container v-if="loading">
+    <b-container fluid="lg" v-if="loading">
       <font-awesome-icon v-if="loading" class="icon home__icon" icon="spinner" spin />
     </b-container>
     <div class="home__content" v-else>
-      <b-container>
+      <b-container fluid="lg">
         <div class="home__cards">
           <b-row class="mb-5">
             <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">

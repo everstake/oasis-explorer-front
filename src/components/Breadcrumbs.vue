@@ -37,12 +37,20 @@ export default {
       }
     }
 
-    &__item.active {
-      @include from-768-down {
-        max-width: 200px;
+    &__item {
+      &.active {
+        @include from-768-down {
+          max-width: 200px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+
+      &.active span {
+        white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        display: flex;
       }
     }
   }

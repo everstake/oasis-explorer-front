@@ -2,7 +2,7 @@
   <div class="block" :key="$route.params.id">
     <Breadcrumbs class="breadcrumbs" :crumbs="getBreadcrumbs" />
 
-    <b-container>
+    <b-container fluid="lg">
       <b-row v-if="loading && items === null">
         <b-col cols="12">
           <div class="text-center block__loading">

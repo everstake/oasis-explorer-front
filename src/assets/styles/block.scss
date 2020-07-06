@@ -4,6 +4,10 @@
 .validator {
   margin-bottom: 50px;
 
+  @include from-768-down {
+    margin-bottom: 100px;
+  }
+
   &__loading {
     margin: 50px 0;
   }

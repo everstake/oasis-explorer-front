@@ -87,14 +87,20 @@
                   class="block__content"
                 >
                   <div class="block__header">Name</div>
-                  {{ items.account_name }}
-                </b-card-text>
-                <div>
-                  <b-card-text class="block__content">
-                    <div class="block__header">Social</div>
-                    <div class="validator__contacts">
-                      <a href="#">website</a> / <a href="#">email</a>
-                    </div>
+                    <span class="validator__name">{{ items.account_name }}</span>
+                   <div class="validator__contacts">
+                     <a href="#">
+                       <font-awesome-icon
+                         class="validator__icon"
+                         :icon="{ prefix: 'fa', iconName: 'globe' }"
+                       />
+                     </a>
+                    <a href="#">
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fa', iconName: 'envelope' }"
+                      />
+                    </a>
                     <a href="#">
                       <font-awesome-icon
                         class="validator__icon"
@@ -119,8 +125,8 @@
                         :icon="{ prefix: 'fab', iconName: 'medium' }"
                       />
                     </a>
-                  </b-card-text>
-                </div>
+                   </div>
+                </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Address</div>
                   <div
@@ -530,6 +536,12 @@ export default {
       },
       isShowMoreDisabled: false,
       handleDebouncedScroll: null,
+      oldPalette: [
+        'rgba(0, 0, 0, .4)',
+        'rgba(76, 212, 169, .4)',
+        'rgba(47, 72, 88, .4)',
+
+      ],
       palette: [
         'rgba(76, 212, 169, .4)',
         'rgba(27, 184, 168, .4)',
@@ -539,7 +551,6 @@ export default {
         'rgba(47, 72, 88, .4)',
       ],
       xAxesMaxTicksLimit: 10,
-      isSocialsVisible: false,
     };
   },
   watch: {
@@ -970,7 +981,11 @@ export default {
   }
   
   &__contacts {
-    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  
+  &__name {
+    font-size: 18px;
   }
 }
 </style>

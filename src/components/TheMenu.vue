@@ -52,7 +52,7 @@
       </router-link>
     </b-nav-item>
     <li class="nav-item page-nav__item page-nav__link">
-      <a class="page__link page-nav__link" href="https://oasismonitor.com/docs" target="_blank">API Documentation</a>
+      <a class="page__link page-nav__link" href="https://oasismonitor.com/docs" target="_blank">API</a>
     </li>
   </b-nav>
 </template>

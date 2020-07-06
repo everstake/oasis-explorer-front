@@ -1,7 +1,7 @@
 <template>
   <div class="transactions">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
-    <b-container>
+    <b-container fluid="lg">
       <OperationsList ref="operationsList" :filters="true" />
     </b-container>
   </div>

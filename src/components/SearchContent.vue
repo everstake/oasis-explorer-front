@@ -1,6 +1,6 @@
 <template>
   <div class="search__content">
-    <b-container>
+    <b-container fluid="lg">
       <b-row class="search__row">
         <p class="search__title">Oasis Monitor</p>
         <p class="search__subtitle">Search by block height, account or operation</p>

@@ -47,10 +47,13 @@
     </b-nav-item>
 
     <b-nav-item to="/resources" class="page-nav__item">
-      <router-link class="page__link page-nav__link" :to="{ name: '404' }">
+      <router-link class="page__link page-nav__link" :to="{ name: 'resources' }">
         Resources
       </router-link>
     </b-nav-item>
+    <li class="nav-item page-nav__item page-nav__link">
+      <a class="page__link page-nav__link" href="https://oasismonitor.com/docs" target="_blank">API Documentation</a>
+    </li>
   </b-nav>
 </template>
 
@@ -84,6 +87,11 @@ export default {
       @include from-992-down {
         flex-wrap: nowrap !important;
         overflow: auto;
+      }
+
+      &__link {
+        display: flex;
+        align-items: center;
       }
     }
     &__link {

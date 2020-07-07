@@ -1,8 +1,8 @@
 <template>
-  <div class="transaction">
+  <div class="validator">
     <Breadcrumbs class="breadcrumbs validator__breadcrumbs" :crumbs="breadcrumbs" />
 
-    <b-container>
+    <b-container fluid="lg">
       <b-row v-if="loading && items === null">
         <b-col cols="12">
           <div class="text-center block__loading">
@@ -25,8 +25,8 @@
       </b-row>
       <div v-else>
         <b-row>
-          <b-col offset="3" cols="9">
-            <div class="validator__actions">
+          <b-col offset="4" cols="12" md="8">
+            <div class="validator__actions validator__actions--desktop">
               <b-btn
                 class="validator__btn"
                 :class="{
@@ -76,7 +76,7 @@
           </b-col>
         </b-row>
         <b-row>
-          <b-col cols="3">
+          <b-col cols="12" md="4">
             <div class="validator__section transaction__section">
               <b-card
                 class="validator__info"
@@ -87,45 +87,46 @@
                   class="block__content"
                 >
                   <div class="block__header">Name</div>
-                  {{ items.account_name }}
-                </b-card-text>
-                <div v-if="isSocialsVisible">
-                  <b-card-text class="block__content">
-                    <div class="block__header">Website</div>
-                    <a href="#" target="_blank">website</a>
-                  </b-card-text>
-                  <b-card-text class="block__content">
-                    <div class="block__header">Email</div>
-                    <a href="#" target="_blank">email</a>
-                  </b-card-text>
-                  <b-card-text class="block__content">
-                    <div class="block__header">Social</div>
-                    <a href="#" target="_blank">
+                    <span class="validator__name">{{ items.account_name }}</span>
+                   <div class="validator__contacts">
+                     <a href="#">
+                       <font-awesome-icon
+                         class="validator__icon"
+                         :icon="{ prefix: 'fa', iconName: 'globe' }"
+                       />
+                     </a>
+                    <a href="#">
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fa', iconName: 'envelope' }"
+                      />
+                    </a>
+                    <a href="#">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'telegram' }"
                       />
                     </a>
-                    <a href="#" target="_blank">
+                    <a href="#">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'twitter' }"
                       />
                     </a>
-                    <a href="#" target="_blank">
+                    <a href="#">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'facebook' }"
                       />
                     </a>
-                    <a href="#" target="_blank">
+                    <a href="#">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'medium' }"
                       />
                     </a>
-                  </b-card-text>
-                </div>
+                   </div>
+                </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Address</div>
                   <div
@@ -147,12 +148,8 @@
                   </div>
                 </b-card-text>
                 <b-card-text class="block__content">
-                  <div class="block__header">Signatures</div>
-                  {{ items.signatures_count }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Proposals</div>
-                  {{ items.blocks_count }}
+                  <div class="block__header">Signatures / Proposals</div>
+                  {{ items.signatures_count }} / {{ items.blocks_count }}
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Availability score</div>
@@ -185,23 +182,23 @@
                   {{ items.depositors_count }}
                 </b-card-text>
                 <b-card-text class="block__content">
-                    <div
-                      v-if="items.status"
-                      :class="{
+                  <div
+                    v-if="items.status"
+                    :class="{
                         'validator__status--active': items.status === 'active',
                         'validator__status--inactive': items.status === 'inactive'
                       }"
-                    >
-                      <div class="block__header">Status</div>
-                      <font-awesome-icon
-                        v-if="items.status === 'active'"
-                        icon="check-circle"
-                      />
-                      <font-awesome-icon
-                        v-else-if="items.status === 'inactive'"
-                        icon="times-circle"
-                      />
-                    </div>
+                  >
+                    <div class="block__header">Status</div>
+                    <font-awesome-icon
+                      v-if="items.status === 'active'"
+                      icon="check-circle"
+                    />
+                    <font-awesome-icon
+                      v-else-if="items.status === 'inactive'"
+                      icon="times-circle"
+                    />
+                  </div>
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header" v-if="items.validate_since">Registered</div>
@@ -213,7 +210,55 @@
               </b-card>
             </div>
           </b-col>
-          <b-col cols="9">
+          <b-col cols="12" md="8">
+          <div
+               class="validator__actions validator__actions--mobile">
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'transfers'
+                    }"
+                @click="updateTableData('transfers')"
+              >
+                Transfers
+              </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'addescrow/reclaimescrow'
+                    }"
+                @click="updateTableData('addescrow/reclaimescrow')"
+              >
+                Escrow events
+              </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'other'
+                    }"
+                @click="updateTableData('other')"
+              >
+                Other ops
+              </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'delegators'
+                    }"
+                @click="updateTableData('delegators')"
+              >
+                Delegators
+              </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                      'validator__btn--active': activeTab === 'charts'
+                    }"
+                @click="updateTableData('charts')"
+              >
+                Charts
+              </b-btn>
+            </div>
           <div class="block__section">
             <div class="block__section block__section--table">
               <b-card class="validator__card">
@@ -440,6 +485,7 @@ import numeral from 'numeral';
 import store from '@/store';
 import dayjs from 'dayjs';
 import LineChart from '@/components/charts/LineChart.vue';
+import getDeviceType from '@/mixins/getDeviceType';
 
 export default {
   name: 'Validator',
@@ -451,6 +497,7 @@ export default {
   mixins: [
     copyToClipboard,
     getDatesInSeconds,
+    getDeviceType,
   ],
   props: {
     scrollToLoadMore: {
@@ -460,6 +507,7 @@ export default {
   },
   data() {
     return {
+      windowWidth: window.innerWidth,
       loading: null,
       limit: 10,
       offset: 0,
@@ -488,6 +536,12 @@ export default {
       },
       isShowMoreDisabled: false,
       handleDebouncedScroll: null,
+      oldPalette: [
+        'rgba(0, 0, 0, .4)',
+        'rgba(76, 212, 169, .4)',
+        'rgba(47, 72, 88, .4)',
+
+      ],
       palette: [
         'rgba(76, 212, 169, .4)',
         'rgba(27, 184, 168, .4)',
@@ -497,7 +551,6 @@ export default {
         'rgba(47, 72, 88, .4)',
       ],
       xAxesMaxTicksLimit: 10,
-      isSocialsVisible: false,
     };
   },
   watch: {
@@ -666,6 +719,9 @@ export default {
     },
   },
   computed: {
+    getDeviceWidth() {
+      return window.innerWidth;
+    },
     getUptimeChartData() {
       return {
         datasets: [
@@ -707,8 +763,8 @@ export default {
           {
             label: 'Total balance',
             /* eslint-disable */
-            data: this.charts.stake.map(({ total_balance, escrow_balance }) => {
-              return total_balance + escrow_balance;
+              data: this.charts.stake.map(({ general_balance, escrow_balance }) => {
+              return general_balance + escrow_balance;
             }),
             borderWidth: 1,
             backgroundColor: this.palette[0],
@@ -791,6 +847,11 @@ export default {
       return [];
     },
   },
+  mounted() {
+    window.onresize = () => {
+      this.windowWidth = window.innerWidth
+    };
+  },
 };
 </script>
 
@@ -819,6 +880,25 @@ export default {
 
   &__actions {
     margin-bottom: 15px;
+
+    &--desktop {
+      @include from-768-down {
+        display: none;
+      }
+
+      @media (min-width: 769px) {
+        display: block;
+      }
+    }
+    
+    &--mobile {
+      display: none;
+      margin-top: 15px;
+
+      @include from-768-down {
+        display: block;
+      }
+    }
   }
 
   &__btn {
@@ -830,6 +910,9 @@ export default {
     border-color: #4cd4a9 !important;
     color: #4cd4a9 !important;
     font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 
     &:first-child {
       border-top-left-radius: 6px;
@@ -895,6 +978,14 @@ export default {
     .card-header {
       padding: 14px 20px;
     }
+  }
+  
+  &__contacts {
+    margin-top: 10px;
+  }
+  
+  &__name {
+    font-size: 18px;
   }
 }
 </style>

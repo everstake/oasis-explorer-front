@@ -4,6 +4,10 @@
 .validator {
   margin-bottom: 50px;
 
+  @include from-768-down {
+    margin-bottom: 100px;
+  }
+
   &__loading {
     margin: 50px 0;
   }
@@ -18,6 +22,10 @@
     color: $color-gray-999;
     font-weight: 700;
     margin-bottom: 5px;
+
+    &--accent {
+      font-size: 18px;
+    }
   }
 
   &__time-ago {
@@ -74,5 +82,11 @@
     padding: 50px 0;
     font-size: 24px;
     color: $color-primary;
+  }
+
+  &__col {
+    @include from-768-down {
+      margin-bottom: 50px;
+    }
   }
 }

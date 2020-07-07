@@ -116,6 +116,13 @@ td a {
 // breadcrumbs
 .breadcrumbs {
   margin-bottom: 50px;
+
+  &__container {
+    @include from-768-down {
+      padding-left: 0;
+      margin-left: 0;
+    }
+  }
 }
 
 // buttons

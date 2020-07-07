@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <b-container>
+    <b-container fluid="lg">
       <div class="footer__container">
         <div class="footer__nav">
           <ul class="footer__list">
@@ -29,9 +29,6 @@
           </ul>
           <ul class="footer__list">
             <li class="footer__item">
-              <a class="footer__link" href="https://oasismonitor.com/docs" target="_blank">API Documentation</a>
-            </li>
-            <li class="footer__item">
               <a class="footer__link" href="https://github.com/everstake/oasis-explorer-front" target="_blank">Github Frontend</a>
             </li>
             <li class="footer__item">
@@ -51,7 +48,7 @@
         </div>
       </div>
     </b-container>
-    <b-container>
+    <b-container fluid="lg">
       <b-row>
         <b-col cols="12">
           <div class="footer-line">
@@ -197,6 +194,12 @@ export default {
       @include from-768-down {
         margin-bottom: 15px;
         font-size: 24px;
+      }
+
+      & .logo__img {
+        @include from-480-down {
+          width: 250px;
+        }
       }
     }
 

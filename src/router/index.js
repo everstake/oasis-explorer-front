@@ -130,6 +130,18 @@ const routes = [
     },
   },
   {
+    path: '/resources',
+    name: 'resources',
+    component: () => import(/* webpackChunkName: "stats" */ '../views/Resources.vue'),
+    meta: {
+      title: 'Resources | Oasis Monitor',
+    },
+    beforeEnter(from, to, next) {
+      document.title = 'Resources | Oasis Monitor';
+      next();
+    },
+  },
+  {
     path: '/404',
     name: '404',
     component: () => import(/* webpackChunkName: "404" */ '../views/NotFound.vue'),

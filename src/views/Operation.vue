@@ -2,7 +2,7 @@
   <div class="transaction">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
-    <b-container>
+    <b-container fluid="lg">
       <b-row v-if="loading && items === null">
         <b-col cols="12">
           <div class="text-center block__loading">
@@ -18,7 +18,7 @@
         </b-col>
       </b-row>
       <b-row v-else>
-        <b-col cols="3">
+        <b-col class="transaction__col" cols="12" md="4">
           <div class="transaction__section">
             <b-card
               header="Operation information"
@@ -73,7 +73,7 @@
             </b-card>
           </div>
         </b-col>
-        <b-col cols="9">
+        <b-col class="transaction__col" cols="12" md="8">
           <div class="block__section">
             <div class="block__section block__section--table">
               <b-card>

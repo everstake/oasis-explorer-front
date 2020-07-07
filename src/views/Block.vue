@@ -2,7 +2,7 @@
   <div class="block" :key="$route.params.id">
     <Breadcrumbs class="breadcrumbs" :crumbs="getBreadcrumbs" />
 
-    <b-container>
+    <b-container fluid="lg">
       <b-row v-if="loading && items === null">
         <b-col cols="12">
           <div class="text-center block__loading">
@@ -18,7 +18,7 @@
         </b-col>
       </b-row>
       <b-row v-else>
-        <b-col cols="4">
+        <b-col class="block__col" cols="12" md="4">
           <div class="block__section">
            <b-card
             header="General information"
@@ -111,7 +111,7 @@
           </b-card>
           </div>
         </b-col>
-        <b-col cols="8">
+        <b-col cols="12" md="8">
           <div class="block__section block__section--table">
             <b-card>
               <b-table

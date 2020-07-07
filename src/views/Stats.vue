@@ -18,8 +18,8 @@
         </b-col>
       </b-row>
       <div class="stats__charts" v-else>
-        <b-row class="stats__information">
-          <b-col cols="6">
+        <b-row>
+          <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
               <b-card
                 header="Escrow ratio"
@@ -38,7 +38,7 @@
               </b-card>
             </div>
           </b-col>
-          <b-col cols="6">
+          <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
               <b-card
                 header="Transfer volume"
@@ -58,7 +58,7 @@
           </b-col>
         </b-row>
         <b-row class="stats__information">
-          <b-col cols="6">
+          <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section stats__section--filter">
               <b-card
                 header="# of operations"
@@ -97,7 +97,7 @@
               </b-card>
             </div>
           </b-col>
-          <b-col cols="6">
+          <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
               <b-card
                 header="# of accounts"
@@ -118,7 +118,7 @@
           </b-col>
         </b-row>
         <b-row class="stats__information">
-          <b-col cols="6">
+          <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section stats__section--filter">
               <b-card
                 header="Fee volume"
@@ -156,7 +156,7 @@
               </b-card>
             </div>
           </b-col>
-          <b-col cols="6">
+          <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
               <b-card
                 header="Top-10 voting power"

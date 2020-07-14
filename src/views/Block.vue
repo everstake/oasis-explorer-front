@@ -1,6 +1,6 @@
 <template>
   <div class="block" :key="$route.params.id">
-    <Breadcrumbs class="breadcrumbs" :crumbs="getBreadcrumbs" />
+    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
     <b-container fluid="lg">
       <b-row v-if="loading && items === null">
@@ -205,21 +205,6 @@ export default {
       level: null,
       id: null,
       transactions: null,
-      data: {
-        blockHeight: 0,
-        blockHash: 'tx12345',
-        epoch: 0,
-        timestamp: 0,
-        blockTime: 0,
-        proposer: 0,
-        numOfSignatures: 0,
-        gas: 0,
-        fees: 0,
-        from: 0,
-        to: 0,
-        type: null,
-        amount: 0,
-      },
       response: {
         epoch: 0,
         fees: 0,
@@ -244,6 +229,20 @@ export default {
       ],
       currentPage: 1,
       perPage: 5,
+      breadcrumbs: [
+        {
+          toRouteName: 'home',
+          text: 'Home',
+        },
+        {
+          toRouteName: 'blocks',
+          text: 'Blocks',
+        },
+        {
+          text: this.$route.params.id,
+          active: true,
+        },
+      ],
     };
   },
   methods: {
@@ -252,7 +251,7 @@ export default {
       if (disabled) {
         return false;
       }
-  
+
       const { id } = this.$route.params;
 
       if (position === 'prev') {
@@ -267,22 +266,6 @@ export default {
   },
   computed: {
     ...mapState(['height']),
-    getBreadcrumbs() {
-      return [
-        {
-          toRouteName: 'home',
-          text: 'Home',
-        },
-        {
-          toRouteName: 'blocks',
-          text: 'Blocks',
-        },
-        {
-          text: this.$route.params.id,
-          active: true,
-        },
-      ];
-    },
   },
   watch: {
     $route: {

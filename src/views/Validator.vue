@@ -380,13 +380,13 @@
                     class="blocks-list__actions"
                   >
                     <b-button
-                      @click="onShowMore"
+                      @click="handleShowMore"
                       variant="outline-primary"
                       class="blocks-list__button font-weight-bold"
                       :class="{
                         'blocks-list__button--loading': loading
                       }"
-                        :disabled="loading || isShowMoreDisabled"
+                        :disabled="loading || isShowMoreButtonDisabled"
                       >
                       <span v-if="loading" disabled>
                         Loading
@@ -485,7 +485,6 @@ import numeral from 'numeral';
 import store from '@/store';
 import dayjs from 'dayjs';
 import LineChart from '@/components/charts/LineChart.vue';
-import getDeviceType from '@/mixins/getDeviceType';
 
 export default {
   name: 'Validator',
@@ -497,7 +496,6 @@ export default {
   mixins: [
     copyToClipboard,
     getDatesInSeconds,
-    getDeviceType,
   ],
   props: {
     scrollToLoadMore: {
@@ -534,8 +532,8 @@ export default {
         uptime: null,
         stake: null,
       },
-      isShowMoreDisabled: false,
-      handleDebouncedScroll: null,
+      disableShowMoreButton: false,
+      timeout: null,
       oldPalette: [
         'rgba(0, 0, 0, .4)',
         'rgba(76, 212, 169, .4)',
@@ -554,12 +552,12 @@ export default {
     };
   },
   watch: {
-    isShowMoreDisabled: {
+    isShowMoreButtonDisabled: {
       immediate: false,
       handler(val) {
-        if (val && this.handleDebouncedScroll !== null) {
+        if (val && this.timeout !== null) {
           this.removeEventListenerOnScroll();
-        } else if (this.handleDebouncedScroll === null) {
+        } else if (this.timeout === null) {
           this.setEventListenerOnScroll();
         }
       },
@@ -623,15 +621,15 @@ export default {
       this.offset += 50;
     },
     setEventListenerOnScroll() {
-      this.handleDebouncedScroll = debounce(this.handleScroll, 100);
-      window.addEventListener('scroll', this.handleDebouncedScroll);
+      this.timeout = debounce(this.handleScroll, 100);
+      window.addEventListener('scroll', this.timeout);
     },
     removeEventListenerOnScroll() {
-      if (this.handleDebouncedScroll !== null) {
-        this.handleDebouncedScroll.cancel();
+      if (this.timeout !== null) {
+        this.timeout.cancel();
       }
-      window.removeEventListener('scroll', this.handleDebouncedScroll);
-      this.handleDebouncedScroll = null;
+      window.removeEventListener('scroll', this.timeout);
+      this.timeout = null;
     },
     setActiveTab(tabName) {
       this.activeTab = tabName;
@@ -654,16 +652,16 @@ export default {
       if (type === 'charts') {
         uptimeChart = await this.$api.getChartUptime({
           limit: this.limit,
-          from: this.thirtyDaysAgoInSeconds,
-          to: this.todayInSeconds,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
           frame: 'D',
           id: this.$route.params.id,
         });
 
         stakeChart = await this.$api.getChartStake({
           limit: this.limit,
-          from: this.thirtyDaysAgoInSeconds,
-          to: this.todayInSeconds,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
           frame: 'D',
           id: this.$route.params.id,
         });
@@ -709,9 +707,9 @@ export default {
       }
 
       if (Array.isArray(data.data) && (data.data.length === 0 || data.data.length < this.limit)) {
-        this.isShowMoreDisabled = true;
+        this.isShowMoreButtonDisabled = true;
       } else if (Array.isArray(data.data) && data.data.length > 0) {
-        this.isShowMoreDisabled = false;
+        this.isShowMoreButtonDisabled = false;
       }
 
       this.loading = false;
@@ -719,9 +717,6 @@ export default {
     },
   },
   computed: {
-    getDeviceWidth() {
-      return window.innerWidth;
-    },
     getUptimeChartData() {
       return {
         datasets: [

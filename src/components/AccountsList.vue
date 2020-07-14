@@ -2,15 +2,14 @@
   <div class="accounts-list">
     <b-table
       ref="table"
-      :busy="loading && data === null"
+      :busy="loading && items === null"
       :responsive="true"
       show-empty
       :fields="fields"
-      :items="data"
+      :items="items"
       class="table table--border table-list"
       borderless
       no-border-collapse
-      @row-selected="handleRowClick"
       @sort-changed="handleSortChange"
       :no-local-sorting="true"
       :no-sort-reset="true"
@@ -18,58 +17,58 @@
       <template #table-busy>
         <TableLoader />
       </template>
-      <template #cell(#)="data">{{ data.index + 1 }}</template>
-      <template #cell(delegate)="data">
+      <template #cell(#)="items">{{ items.index + 1 }}</template>
+      <template #cell(delegate)="items">
         <router-link
-          v-if="data.item.delegate"
-          :to="{ name: 'account', params: { id: data.item.delegate } }"
+          v-if="items.item.delegate"
+          :to="{ name: 'account', params: { id: items.item.delegate } }"
           class="table__hash"
         >
-          {{ data.item.delegate }}
+          {{ items.item.delegate }}
         </router-link>
         <span v-else>-</span>
       </template>
-      <template #cell(general_balance)="data">
-        {{ data.item.general_balance | formatAmount }}
+      <template #cell(general_balance)="items">
+        {{ items.item.general_balance | formatAmount }}
       </template>
-      <template #cell(escrow_balance)="data">
-        {{ data.item.escrow_balance | formatAmount }}
+      <template #cell(escrow_balance)="items">
+        {{ items.item.escrow_balance | formatAmount }}
       </template>
-      <template #cell(escrow_balance_share)="data">
-        {{ data.item.escrow_balance_share | formatAmount }}
+      <template #cell(escrow_balance_share)="items">
+        {{ items.item.escrow_balance_share | formatAmount }}
       </template>
-      <template #cell(operations_amount)="data">
-        {{ data.item.operations_amount | formatAmount }}
+      <template #cell(operations_amount)="items">
+        {{ items.item.operations_amount | formatAmount }}
       </template>
-      <template #cell(account_id)="data">
+      <template #cell(account_id)="items">
         <router-link
-          v-if="data.item.account_id"
-          :to="{ name: 'account', params: { id: data.item.account_id } }"
+          v-if="items.item.account_id"
+          :to="{ name: 'account', params: { id: items.item.account_id } }"
           class="table__hash"
         >
-          {{ data.item.account_id }}
+          {{ items.item.account_id }}
         </router-link>
         <span v-else>-</span>
       </template>
-      <template #cell(created_at)="data">
-        {{ data.item.created_at | formatDate }}
+      <template #cell(created_at)="items">
+        {{ items.item.created_at | formatDate }}
         <div class="date-from-now">
-          {{ data.item.created_at | formatDaysAgo }}
+          {{ items.item.created_at | formatDaysAgo }}
         </div>
       </template>
     </b-table>
     <div
-      v-if="scrollToLoadMore && data !== null"
+      v-if="scrollToLoadMore && items !== null"
       class="blocks-list__actions"
     >
       <b-button
-        @click="onShowMore"
+        @click="handleShowMore"
         variant="outline-primary"
         class="blocks-list__button font-weight-bold"
         :class="{
           'blocks-list__button--loading': loading
         }"
-        :disabled="loading || isShowMoreDisabled"
+        :disabled="loading || isShowMoreButtonDisabled"
       >
         <span v-if="error">
           Something went wrong, click to retry
@@ -89,81 +88,34 @@
 
 <script>
 import TableLoader from '@/components/TableLoader.vue';
-import debounce from 'lodash/debounce';
+import fetchList from '@/mixins/fetchList';
+import fetchOnScroll from '@/mixins/fetchOnScroll';
 
 export default {
   name: 'AccountsList',
   components: {
     TableLoader,
   },
-  props: {
-    rows: {
-      type: Number,
-      default: null,
-    },
-    scrollToLoadMore: {
-      type: Boolean,
-      default: true,
-    },
-    fields: {
-      type: Array,
-      default() {
-        return [
-          { key: '#', label: '#' },
-          { key: 'account_id', label: 'Account' },
-          { key: 'delegate', label: 'Delegate' },
-          { key: 'general_balance', label: 'General balance', sortable: true },
-          { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
-          { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
-          { key: 'operations_amount', label: 'Ops amount', sortable: true },
-          { key: 'type', label: 'Type' },
-          { key: 'created_at', label: 'Created at', sortable: true },
-        ];
-      },
-    },
-  },
+  mixins: [
+    fetchList,
+    fetchOnScroll,
+  ],
   data() {
     return {
-      data: null,
-      loading: null,
-      limit: 50,
-      offset: 0,
-      error: false,
-      isShowMoreDisabled: false,
-      handleDebouncedScroll: null,
+      fields: [
+        { key: '#', label: '#' },
+        { key: 'account_id', label: 'Account' },
+        { key: 'delegate', label: 'Delegate' },
+        { key: 'general_balance', label: 'General balance', sortable: true },
+        { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
+        { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
+        { key: 'operations_amount', label: 'Ops amount', sortable: true },
+        { key: 'type', label: 'Type' },
+        { key: 'created_at', label: 'Created at', sortable: true },
+      ],
     };
   },
-  watch: {
-    isShowMoreDisabled: {
-      immediate: false,
-      handler(val) {
-        if (val && this.handleDebouncedScroll !== null) {
-          this.removeEventListenerOnScroll();
-        } else if (this.handleDebouncedScroll === null) {
-          this.setEventListenerOnScroll();
-        }
-      },
-    },
-  },
   methods: {
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
-    handleScroll() {
-      if (this.$refs.table) {
-        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
-          this.onShowMore();
-        }
-      }
-    },
-    handleRowClick(item) {
-      const { hash } = item[0];
-
-      this.$router.push({
-        name: 'account',
-        params: { hash },
-      });
-    },
     async handleSortChange(item) {
       this.loading = true;
       const data = await this.fetchData({
@@ -175,69 +127,17 @@ export default {
         this.error = true;
       } else {
         this.error = false;
-        this.data = data.data;
+        this.items = data.data;
       }
 
       this.loading = false;
     },
     fetchData(params = {}) {
-      return this.$api.getAccounts({
-        ...params,
-        limit: this.getTransactionsLimit,
-        offset: this.offset,
-      });
-    },
-    async onShowMore() {
-      this.loading = true;
-      this.offset += 50;
-      const data = await this.fetchData();
-
-      if (data.status !== 200) {
-        this.error = true;
-      } else if (Array.isArray(data.data) && data.data.length === 0) {
-        this.isShowMoreDisabled = true;
-      } else {
-        this.isShowMoreDisabled = false;
-        this.error = false;
-        this.data = [
-          ...this.data,
-          ...data.data,
-        ];
-      }
-
-      this.loading = false;
-    },
-    setEventListenerOnScroll() {
-      this.handleDebouncedScroll = debounce(this.handleScroll, 100);
-      window.addEventListener('scroll', this.handleDebouncedScroll);
-    },
-    removeEventListenerOnScroll() {
-      if (this.handleDebouncedScroll !== null) {
-        this.handleDebouncedScroll.cancel();
-      }
-      window.removeEventListener('scroll', this.handleDebouncedScroll);
-      this.handleDebouncedScroll = null;
-    },
-  },
-  computed: {
-    getTransactionsLimit() {
-      return this.rows || this.limit;
+      return this.$api.getAccounts({ ...params, limit: this.getRequestLimit });
     },
   },
   async created() {
-    this.loading = true;
-    const data = await this.fetchData();
-    this.data = data.data;
-    this.loading = false;
-
-    if (this.scrollToLoadMore) {
-      this.setEventListenerOnScroll();
-    }
-  },
-  beforeDestroy() {
-    if (this.scrollToLoadMore) {
-      this.removeEventListenerOnScroll();
-    }
+    this.fetchList('getAccounts', { limit: this.getRequestLimit });
   },
 };
 </script>

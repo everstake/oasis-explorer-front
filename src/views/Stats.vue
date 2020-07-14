@@ -27,7 +27,6 @@
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
-                      @on-receive="handleChartClick"
                       :chart-data="getEscrowRatioData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
@@ -234,8 +233,8 @@ export default {
     operationDateFormat: {
       async handler(val) {
         const operations = await this.$api.getChartOperations({
-          from: this.thirtyDaysAgoInSeconds,
-          to: this.todayInSeconds,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
           frame: val,
         });
 
@@ -245,8 +244,8 @@ export default {
     feesDateFormat: {
       async handler(val) {
         const fees = await this.$api.getChartFees({
-          from: this.thirtyDaysAgoInSeconds,
-          to: this.todayInSeconds,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
           frame: val,
         });
 
@@ -261,47 +260,44 @@ export default {
     },
   },
   methods: {
-    handleChartClick(item) {
-      console.log('Stats click handling', item);
-    },
     async fetchData() {
       this.loading = true;
 
       const escrowRatio = await this.$api.getEscrowRatio({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
       this.escrowRatioData = escrowRatio.data;
 
       const transactionVolume = await this.$api.getTransactionVolume({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
       this.transactionVolumeData = transactionVolume.data;
 
       const operations = await this.$api.getChartOperations({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
       this.operationsData = operations.data;
 
       const accounts = await this.$api.getChartAccounts({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
       this.accountsData = accounts.data;
 
       const fees = await this.$api.getChartFees({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
@@ -314,8 +310,8 @@ export default {
       });
 
       const topEscrow = await this.$api.getChartTopEscrow({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 

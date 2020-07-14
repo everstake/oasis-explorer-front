@@ -154,8 +154,5 @@ export default {
       document.title = this.$route.meta.title;
     }
   },
-  async created() {
-    this.fetchValidatorsList();
-  },
 };
 </script>

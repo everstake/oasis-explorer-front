@@ -2,71 +2,70 @@
   <div class="validators-list">
     <b-table
       ref="table"
-      :busy="loading && data === null"
+      :busy="loading && items === null"
       :responsive="true"
       show-empty
       :fields="fields"
-      :items="data"
+      :items="items"
       class="table table--border table-list"
       borderless
       no-border-collapse
-      @row-selected="handleRowClick"
     >
       <template #table-busy>
         <TableLoader />
       </template>
-      <template #cell(#)="data">{{ data.index + 1 }}</template>
-      <template #cell(account_id)="data">
+      <template #cell(#)="items">{{ items.index + 1 }}</template>
+      <template #cell(account_id)="items">
         <router-link
-          :to="{ name: 'validator', params: { id: data.item.account_id } }"
+          :to="{ name: 'validator', params: { id: items.item.account_id } }"
         >
-          {{ data.item.account_name || data.item.account_id }}
+          {{ items.item.account_name || items.item.account_id }}
         </router-link>
       </template>
-      <template #cell(escrow_balance)="data">
-        {{ data.item.escrow_balance | formatAmount }}
+      <template #cell(escrow_balance)="items">
+        {{ items.item.escrow_balance | formatAmount }}
       </template>
-      <template #cell(available_score)="data">
-        {{ data.item.available_score }}
+      <template #cell(available_score)="items">
+        {{ items.item.available_score }}
       </template>
-      <template #cell(status)="data">
+      <template #cell(status)="items">
         <div
           class="validators-list__status text-center"
           :class="{
-            'validators-list__status--active': data.item.status === 'active',
-            'validators-list__status--inactive': data.item.status === 'inactive'
+            'validators-list__status--active': items.item.status === 'active',
+            'validators-list__status--inactive': items.item.status === 'inactive'
           }"
         >
-          <font-awesome-icon v-if="data.item.status === 'active'" icon="check-circle" />
-          <font-awesome-icon v-else-if="data.item.status === 'inactive'" icon="times-circle" />
+          <font-awesome-icon v-if="items.item.status === 'active'" icon="check-circle" />
+          <font-awesome-icon v-else-if="items.item.status === 'inactive'" icon="times-circle" />
         </div>
       </template>
-      <template #cell(node_address)="data">
+      <template #cell(node_address)="items">
         <router-link
-          :to="{ name: 'account', params: { id: data.item.node_address } }"
+          :to="{ name: 'account', params: { id: items.item.node_address } }"
         >
-          {{ data.item.node_address }}
+          {{ items.item.node_address }}
         </router-link>
       </template>
-      <template #cell(validate_since)="data">
-        {{ data.item.validate_since | formatYear }}
+      <template #cell(validate_since)="items">
+        {{ items.item.validate_since | formatYear }}
         <div class="date-from-now">
-          {{ data.item.validate_since | formatDaysAgo }}
+          {{ items.item.validate_since | formatDaysAgo }}
         </div>
       </template>
     </b-table>
     <div
-      v-if="scrollToLoadMore && data !== null"
+      v-if="scrollToLoadMore && items !== null"
       class="blocks-list__actions"
     >
       <b-button
-        @click="onShowMore"
+        @click="handleShowMore"
         variant="outline-primary"
         class="blocks-list__button font-weight-bold"
         :class="{
           'blocks-list__button--loading': loading
         }"
-        :disabled="loading || isShowMoreDisabled"
+        :disabled="loading || isShowMoreButtonDisabled"
       >
         <span v-if="error">
           Something went wrong, click to retry
@@ -86,136 +85,47 @@
 
 <script>
 import TableLoader from '@/components/TableLoader.vue';
-import debounce from 'lodash/debounce';
+import fetchList from '@/mixins/fetchList';
+import fetchOnScroll from '@/mixins/fetchOnScroll';
 
 export default {
   name: 'ValidatorsList',
   components: {
     TableLoader,
   },
+  mixins: [
+    fetchList,
+    fetchOnScroll,
+  ],
   props: {
-    rows: {
-      type: Number,
-      default: null,
-    },
     scrollToLoadMore: {
       type: Boolean,
       default: true,
     },
-    fields: {
-      type: Array,
-      default() {
-        return [
-          { key: '#', label: '#' },
-          { key: 'account_id', label: 'Account' },
-          { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
-          { key: 'available_score', label: 'Availability', sortable: true },
-          { key: 'depositors_count', label: 'Delegators' },
-          { key: 'blocks_count', label: 'Proposals', sortable: true },
-          { key: 'signatures_count', label: 'Signatures', sortable: true },
-          { key: 'fee', label: 'Fee', sortable: true },
-          { key: 'status', label: 'Status' },
-          { key: 'validate_since', label: 'Registered', sortable: true },
-        ];
-      },
-    },
   },
   data() {
     return {
-      data: null,
-      loading: null,
-      limit: 50,
-      offset: 0,
-      error: false,
-      isShowMoreDisabled: false,
-      handleDebouncedScroll: null,
+      fields: [
+        { key: '#', label: '#' },
+        { key: 'account_id', label: 'Account' },
+        { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
+        { key: 'available_score', label: 'Availability', sortable: true },
+        { key: 'depositors_count', label: 'Delegators' },
+        { key: 'blocks_count', label: 'Proposals', sortable: true },
+        { key: 'signatures_count', label: 'Signatures', sortable: true },
+        { key: 'fee', label: 'Fee', sortable: true },
+        { key: 'status', label: 'Status' },
+        { key: 'validate_since', label: 'Registered', sortable: true },
+      ],
     };
   },
-  watch: {
-    isShowMoreDisabled: {
-      immediate: false,
-      handler(val) {
-        if (val && this.handleDebouncedScroll !== null) {
-          this.removeEventListenerOnScroll();
-        } else if (this.handleDebouncedScroll === null) {
-          this.setEventListenerOnScroll();
-        }
-      },
-    },
-  },
   methods: {
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
-    handleScroll() {
-      if (this.$refs.table) {
-        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
-          this.onShowMore();
-        }
-      }
-    },
-    handleRowClick(item) {
-      const { hash } = item[0];
-
-      this.$router.push({
-        name: 'account',
-        params: { hash },
-      });
-    },
     fetchData(params = {}) {
-      return this.$api.getValidators({ ...params, limit: this.getValidatorsLimit });
-    },
-    async onShowMore() {
-      this.loading = true;
-      this.offset += 50;
-      const data = await this.fetchData({ offset: this.offset });
-
-      if (data.status !== 200) {
-        this.error = true;
-      } else if (Array.isArray(data.data) && data.data.length === 0) {
-        this.isShowMoreDisabled = true;
-      } else {
-        this.isShowMoreDisabled = false;
-        this.error = false;
-        this.data = [
-          ...this.data,
-          ...data.data,
-        ];
-      }
-
-      this.loading = false;
-    },
-    setEventListenerOnScroll() {
-      this.handleDebouncedScroll = debounce(this.handleScroll, 100);
-      window.addEventListener('scroll', this.handleDebouncedScroll);
-    },
-    removeEventListenerOnScroll() {
-      if (this.handleDebouncedScroll !== null) {
-        this.handleDebouncedScroll.cancel();
-      }
-      window.removeEventListener('scroll', this.handleDebouncedScroll);
-      this.handleDebouncedScroll = null;
-    },
-  },
-  computed: {
-    getValidatorsLimit() {
-      return this.rows || this.limit;
+      return this.$api.getValidators({ ...params, limit: this.getRequestLimit });
     },
   },
   async created() {
-    this.loading = true;
-    const data = await this.fetchData();
-    this.data = data.data;
-    this.loading = false;
-
-    if (this.scrollToLoadMore) {
-      this.setEventListenerOnScroll();
-    }
-  },
-  beforeDestroy() {
-    if (this.scrollToLoadMore) {
-      this.removeEventListenerOnScroll();
-    }
+    this.fetchList('getValidators', { limit: this.getRequestLimit });
   },
 };
 </script>

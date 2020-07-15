@@ -260,16 +260,9 @@ export default {
       async handler() {
         this.offset = 0;
         this.dropdownIsBusy = true;
-        const isDateRangeReady = this.dateRange.startDate && this.dateRange.endDate;
         let data;
 
-        if (isDateRangeReady) {
-          const isDatesEqual = this.dateRange.startDate.getTime()
-            === this.dateRange.endDate.getTime();
-          if (isDatesEqual) {
-            this.dateRange.endDate.setTime(this.dateRange.endDate.getTime()
-              + (12 * 60 * 60 * 1000));
-          }
+        if (this.isDatePickerSelected) {
           const from = +this.dateRange.startDate / 1000;
           const to = +this.dateRange.endDate / 1000;
           data = await this.fetchData({ from, to });
@@ -312,7 +305,12 @@ export default {
     async handleCalendarUpdate(val) {
       this.dropdownIsBusy = true;
       const from = +val.startDate / 1000;
-      const to = +val.endDate / 1000;
+      let to = +val.endDate / 1000;
+
+      if (this.isSelectedDatesEqual) {
+        this.dateRange.endDate.setTime(this.dateRange.endDate.getTime() + (12 * 60 * 60 * 1000));
+        to = +this.dateRange.endDate / 1000;
+      }
 
       const data = await this.fetchData({ from, to });
       const isRequestSuccessful = data.status === 200;
@@ -340,7 +338,7 @@ export default {
         operation_kind: this.operations,
       };
 
-      const otherOperations = ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'];
+      const otherOperationsList = ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'];
       const isOperationOtherSelected = this.operations.includes((operation) => operation === 'other');
 
       if (isOperationOtherSelected) {
@@ -349,22 +347,13 @@ export default {
         if (otherOperationIndex >= 0) {
           options.operation_kind = [
             ...this.operations.slice(0, otherOperationIndex),
-            ...otherOperations,
+            ...otherOperationsList,
             ...this.operations.slice(otherOperationIndex + 1),
           ];
         }
       }
 
-      const isDateFilterSelected = this.dateRange.startDate && this.dateRange.endDate;
-
-      if (isDateFilterSelected) {
-        const isDatesEqual = this.dateRange.startDate.getTime()
-                             === this.dateRange.endDate.getTime();
-
-        if (isDatesEqual) {
-          this.dateRange.endDate.setTime(this.dateRange.endDate.getTime() + (12 * 60 * 60 * 1000));
-        }
-
+      if (this.isDatePickerSelected) {
         const from = +this.dateRange.startDate / 1000;
         const to = +this.dateRange.endDate / 1000;
 
@@ -392,6 +381,12 @@ export default {
       return {
         format: 'dd/mm/yyyy',
       };
+    },
+    isDatePickerSelected() {
+      return this.dateRange.startDate && this.dateRange.endDate;
+    },
+    isSelectedDatesEqual() {
+      return this.dateRange.startDate.getTime() === this.dateRange.endDate.getTime();
     },
   },
   created() {

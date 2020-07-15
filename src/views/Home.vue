@@ -153,7 +153,7 @@
             <p class="home__title">Blocks list</p>
             <BlocksList
               :rows="10"
-              :scrollToLoadMore="false"
+              :fetchOnScrollEnabled="false"
               :fields="[
                 { key: 'level', label: 'Height' },
                 { key: 'hash', label: 'Hash' },
@@ -175,7 +175,7 @@
             <p class="home__title">Operations list</p>
             <OperationsList
               :rows="10"
-              :scrollToLoadMore="false"
+              :fetchOnScrollEnabled="false"
               :fields="[
                 { key: 'level', label: 'Height' },
                 { key: 'hash', label: 'Hash' },

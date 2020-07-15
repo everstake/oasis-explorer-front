@@ -7,9 +7,4 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 
 library.add(fas, fab, far);
 
-// library.add(
-//   faTwitter, faFacebookSquare,
-//   faMediumM, faSearch,
-//   faExclamationCircle,
-// );
 Vue.component('font-awesome-icon', FontAwesomeIcon);

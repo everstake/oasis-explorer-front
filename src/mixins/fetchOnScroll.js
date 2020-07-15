@@ -2,7 +2,7 @@ import debounce from 'lodash/debounce';
 
 export default {
   props: {
-    scrollToLoadMore: {
+    fetchOnScrollEnabled: {
       type: Boolean,
       default: true,
     },
@@ -72,12 +72,12 @@ export default {
     },
   },
   created() {
-    if (this.scrollToLoadMore) {
+    if (this.fetchOnScrollEnabled) {
       this.setEventListenerOnScroll();
     }
   },
   beforeDestroy() {
-    if (this.scrollToLoadMore) {
+    if (this.fetchOnScrollEnabled) {
       this.removeEventListenerOnScroll();
     }
   },

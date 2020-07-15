@@ -376,7 +376,7 @@
                     </template>
                   </b-table>
                   <div
-                    v-if="scrollToLoadMore"
+                    v-if="fetchOnScrollEnabled"
                     class="blocks-list__actions"
                   >
                     <b-button
@@ -475,16 +475,17 @@
     </b-container>
   </div>
 </template>
+
 <script>
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
-import debounce from 'lodash/debounce';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 import numeral from 'numeral';
 import store from '@/store';
 import dayjs from 'dayjs';
 import LineChart from '@/components/charts/LineChart.vue';
+import fetchOnScroll from '@/mixins/fetchOnScroll';
 
 export default {
   name: 'Validator',
@@ -496,16 +497,10 @@ export default {
   mixins: [
     copyToClipboard,
     getDatesInSeconds,
+    fetchOnScroll,
   ],
-  props: {
-    scrollToLoadMore: {
-      type: Boolean,
-      default: true,
-    },
-  },
   data() {
     return {
-      windowWidth: window.innerWidth,
       loading: null,
       limit: 10,
       offset: 0,
@@ -532,8 +527,6 @@ export default {
         uptime: null,
         stake: null,
       },
-      disableShowMoreButton: false,
-      timeout: null,
       oldPalette: [
         'rgba(0, 0, 0, .4)',
         'rgba(76, 212, 169, .4)',
@@ -552,16 +545,6 @@ export default {
     };
   },
   watch: {
-    isShowMoreButtonDisabled: {
-      immediate: false,
-      handler(val) {
-        if (val && this.timeout !== null) {
-          this.removeEventListenerOnScroll();
-        } else if (this.timeout === null) {
-          this.setEventListenerOnScroll();
-        }
-      },
-    },
     $route: {
       immediate: true,
       async handler() {
@@ -605,31 +588,13 @@ export default {
         }
       }
     },
-    handleScroll() {
-      if (this.$refs.table) {
-        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
-          this.onShowMore();
-        }
-      }
-    },
-    async onShowMore() {
+    async handleShowMore() {
+      this.offset += 10;
       const { activeTab } = this;
       this.tableItems = [
         ...this.tableItems,
         ...await this.fetchData(activeTab),
       ];
-      this.offset += 50;
-    },
-    setEventListenerOnScroll() {
-      this.timeout = debounce(this.handleScroll, 100);
-      window.addEventListener('scroll', this.timeout);
-    },
-    removeEventListenerOnScroll() {
-      if (this.timeout !== null) {
-        this.timeout.cancel();
-      }
-      window.removeEventListener('scroll', this.timeout);
-      this.timeout = null;
     },
     setActiveTab(tabName) {
       this.activeTab = tabName;
@@ -842,11 +807,6 @@ export default {
       return [];
     },
   },
-  mounted() {
-    window.onresize = () => {
-      this.windowWidth = window.innerWidth
-    };
-  },
 };
 </script>
 
@@ -929,19 +889,12 @@ export default {
     &:hover {
       background-color: rgb(76, 212, 169) !important;
       color: #fff !important;
-      /*box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;*/
     }
-
-    /*&:hover,*/
-    /*&:active:focus {*/
-    /*  box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;*/
-    /*}*/
 
     &--active {
       background-color: #4cd4a9 !important;
       color: #fff !important;
       pointer-events: none;
-      /*box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;*/
 
       &:focus,
       &:hover {

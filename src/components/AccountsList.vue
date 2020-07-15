@@ -58,7 +58,7 @@
       </template>
     </b-table>
     <div
-      v-if="scrollToLoadMore && items !== null"
+      v-if="fetchOnScrollEnabled && items !== null"
       class="blocks-list__actions"
     >
       <b-button

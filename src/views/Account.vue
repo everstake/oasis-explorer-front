@@ -3,14 +3,17 @@
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
     <b-container fluid="lg">
-      <b-row v-if="loading && items === null">
+      <b-row class="account__empty" v-if="loading && items === null">
         <b-col cols="12">
           <div class="text-center account__loading">
             <font-awesome-icon class="icon account__icon" icon="spinner" spin />
           </div>
         </b-col>
       </b-row>
-      <b-row v-else-if="!loading && (Array.isArray(items) && items.length === 0)">
+      <b-row
+        class="account__content"
+        v-else-if="!loading && (Array.isArray(items) && items.length === 0)"
+      >
         <b-col cols="12">
           <div class="text-center block__empty">
             No data
@@ -222,6 +225,9 @@ export default {
       if (to.params.id !== from.params.id) {
         this.fetchData(to.params.id);
       }
+    },
+    testFn(arg) {
+      return arg;
     },
   },
   async created() {

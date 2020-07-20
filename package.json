@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "test": "vue-cli-service test:unit",
+    "coverage": "jest --collect-coverage",
     "lint": "vue-cli-service lint",
     "staging": "vue-cli-service build --mode staging"
   },
@@ -21,6 +22,7 @@
     "chart.js": "^2.9.3",
     "core-js": "^3.6.4",
     "dayjs": "^1.8.28",
+    "flush-promises": "^1.0.2",
     "lodash": "^4.17.15",
     "nprogress": "^0.2.0",
     "numeral": "^2.0.6",

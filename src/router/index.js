@@ -146,8 +146,10 @@ const routes = [
     name: '404',
     component: () => import(/* webpackChunkName: "404" */ '../views/Error.vue'),
     meta: {
-      errorStatus: 404,
       title: '404 | Oasis Monitor',
+    },
+    props: {
+      status: 404,
     },
   },
   {
@@ -155,8 +157,10 @@ const routes = [
     name: '503',
     component: () => import(/* webpackChunkName: "503" */ '../views/Error.vue'),
     meta: {
-      errorStatus: 503,
       title: '503 | Oasis Monitor',
+    },
+    props: {
+      status: 503,
     },
   },
   {

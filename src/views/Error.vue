@@ -15,6 +15,12 @@ export default {
   components: {
     Breadcrumbs,
   },
+  props: {
+    status: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       errorMessage: '',
@@ -35,13 +41,13 @@ export default {
     },
   },
   created() {
-    const { errorStatus } = this.$route.meta;
+    const { status } = this;
 
-    if (errorStatus === 404) {
+    if (status === 404) {
       this.errorMessage = 'Page not found';
     }
 
-    if (errorStatus === 503) {
+    if (status === 503) {
       this.errorMessage = 'Something went wrong';
     }
   },

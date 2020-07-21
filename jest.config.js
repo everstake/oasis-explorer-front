@@ -15,8 +15,9 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   collectCoverage: true,
-  collectCoverageFrom: ['**/*.{js,vue}', '!**/node_modules/**'],
+  collectCoverageFrom: ['src/**/*.{js,vue}', '!**/node_modules/**'],
   coveragePathIgnorePatterns: [
     'src/main.js',
   ],
+  coverageReporters: ['html', 'text-summary'],
 };

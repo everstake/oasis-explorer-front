@@ -82,50 +82,177 @@
                 class="validator__info"
                 header="Validator information"
               >
+                <b-card-text class="block__content block__logotype">
+                  <img
+                    v-if="items.media_info && items.media_info.logotype"
+                    class="block__logo"
+                    :class="{
+                      'block__logotype--white': items.account_name.toLowerCase() === 'everstake'
+                    }"
+                    :src='items.media_info.logotype'
+                    :alt='`${items.account_name} logotype`'
+                  >
+                  <img
+                    v-else
+                    class="block__logo"
+                    src="../assets/images/logo-oasis.svg"
+                    alt="Oasis logotype"
+                  >
+                </b-card-text>
                 <b-card-text
                   v-if="items.account_name"
                   class="block__content"
                 >
-                  <div class="block__header">Name</div>
                     <span class="validator__name">{{ items.account_name }}</span>
-                   <div class="validator__contacts">
-                     <a href="#">
-                       <font-awesome-icon
-                         class="validator__icon"
-                         :icon="{ prefix: 'fa', iconName: 'globe' }"
-                       />
-                     </a>
-                    <a href="#">
+
+                  <div
+                    v-if="items.media_info"
+                    class="validator__contacts"
+                  >
+                    <a
+                      class="validator__contact"
+                      :class="{
+                        'validator__contact--active':
+                         items.media_info.website_link
+                      }"
+                      :href="items.media_info.website_link ? items.media_info.website_link : '#'"
+                      target="_blank"
+                    >
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fa', iconName: 'globe' }"
+                      />
+                    </a>
+                    <a
+                      class="validator__contact"
+                      :class="{
+                        'validator__contact--active': items.media_info.email_address
+                      }"
+                      :href="items.media_info.email_address ?
+                       `mailto:${items.media_info.email_address}` : '#'"
+                    >
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fa', iconName: 'envelope' }"
                       />
                     </a>
-                    <a href="#">
+                    <a
+                      class="validator__contact"
+                      :class="{
+                        'validator__contact--active': items.media_info.tg_chat
+                      }"
+                      :href="items.media_info.tg_chat ? items.media_info.tg_chat : '#'"
+                      target="_blank"
+                    >
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'telegram' }"
                       />
                     </a>
-                    <a href="#">
+                    <a
+                      class="validator__contact"
+                      :class="{
+                        'validator__contact--active': items.media_info.twitter_acc
+                      }"
+                      :href="items.media_info.twitter_acc ? items.media_info.twitter_acc : '#'"
+                      target="_blank"
+                    >
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'twitter' }"
                       />
                     </a>
-                    <a href="#">
+                    <a
+                      class="validator__contact"
+                      :class="{
+                        'validator__contact--active': items.media_info.facebook_acc
+                      }"
+                      :href="items.media_info.facebook_acc ? items.media_info.facebook_acc : '#'"
+                      target="_blank"
+                    >
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'facebook' }"
                       />
                     </a>
-                    <a href="#">
+                    <a
+                      class="validator__contact"
+                      :class="{
+                        'validator__contact--active': items.media_info.medium_link
+                      }"
+                      :href="items.media_info.medium_link ? items.media_info.medium_link : '#'"
+                      target="_blank"
+                    >
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'medium' }"
                       />
                     </a>
-                   </div>
+                  </div>
+                  <div
+                    v-else
+                    class="validator__contacts"
+                  >
+                    <a
+                      class="validator__contact"
+                      href="#"
+                      target="_blank"
+                    >
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fa', iconName: 'globe' }"
+                      />
+                    </a>
+                    <a
+                      class="validator__contact"
+                      href="#"
+                    >
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fa', iconName: 'envelope' }"
+                      />
+                    </a>
+                    <a
+                      class="validator__contact"
+                      href="#"
+                      target="_blank"
+                    >
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fab', iconName: 'telegram' }"
+                      />
+                    </a>
+                    <a
+                      class="validator__contact"
+                      href="#"
+                      target="_blank"
+                    >
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fab', iconName: 'twitter' }"
+                      />
+                    </a>
+                    <a
+                      class="validator__contact"
+                      href="#"
+                      target="_blank"
+                    >
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fab', iconName: 'facebook' }"
+                      />
+                    </a>
+                    <a
+                      class="validator__contact"
+                      href="#"
+                      target="_blank"
+                    >
+                      <font-awesome-icon
+                        class="validator__icon"
+                        :icon="{ prefix: 'fab', iconName: 'medium' }"
+                      />
+                    </a>
+                  </div>
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Address</div>
@@ -479,6 +606,7 @@
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
+import uuid from '@/mixins/uuid';
 import debounce from 'lodash/debounce';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 import numeral from 'numeral';
@@ -498,6 +626,7 @@ export default {
     copyToClipboard,
     getDatesInSeconds,
     getDeviceType,
+    uuid,
   ],
   props: {
     scrollToLoadMore: {
@@ -981,11 +1110,34 @@ export default {
   }
   
   &__contacts {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     margin-top: 10px;
   }
   
   &__name {
-    font-size: 18px;
+    font-size: 21px;
+  }
+
+  &__contact .validator__icon {
+    color: #999;
+  }
+
+  &__contact {
+    pointer-events: none;
+
+    & svg {
+      margin: 0;
+    }
+
+    &--active {
+      pointer-events: auto;
+
+      & .validator__icon {
+        color: $color-primary;
+      }
+    }
   }
 }
 </style>

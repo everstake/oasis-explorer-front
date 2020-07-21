@@ -87,8 +87,7 @@
                     v-if="items.media_info && items.media_info.logotype"
                     class="block__logo"
                     :class="{
-                      'block__logotype--white': items.account_name.toLowerCase() === 'everstake' ||
-                      items.account_name.toLowerCase() === 'witval'
+                      'block__logotype--white': filterWhiteColorLogotypes
                     }"
                     :src='items.media_info.logotype'
                     :alt='`${items.account_name} logotype`'
@@ -849,6 +848,12 @@ export default {
     },
   },
   computed: {
+    filterWhiteColorLogotypes() {
+      const { account_name: accountName } = this.items;
+      const whiteLogotypes = ['everstake', 'witval', 'forbole'];
+
+      return whiteLogotypes.find((logoName) => accountName.toLowerCase() === logoName);
+    },
     getDeviceWidth() {
       return window.innerWidth;
     },

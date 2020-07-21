@@ -7,7 +7,7 @@
       show-empty
       :fields="fields"
       :items="data"
-      class="table table--border table-list"
+      class="table table--border table-list table__validators"
       borderless
       no-border-collapse
       @row-selected="handleRowClick"
@@ -20,6 +20,23 @@
         <router-link
           :to="{ name: 'validator', params: { id: data.item.account_id } }"
         >
+          <span v-if="data.item.media_info">
+            <img
+              class="validators-list__logo"
+              v-if="data.item.media_info.logotype"
+              :src="data.item.media_info.logotype"
+              :alt="`${data.item.account_name} logotype`"
+              :class="{
+                'block__logotype--white': filterWhiteColorLogotypes(data.item.account_name)
+              }"
+            >
+          </span>
+          <img
+            v-else
+            class="validators-list__logo"
+            src="../assets/images/logo-oasis.svg"
+            alt="Oasis logotype"
+          >
           {{ data.item.account_name || data.item.account_id }}
         </router-link>
       </template>
@@ -196,6 +213,11 @@ export default {
       window.removeEventListener('scroll', this.handleDebouncedScroll);
       this.handleDebouncedScroll = null;
     },
+    filterWhiteColorLogotypes(accountName) {
+      const whiteLogotypes = ['everstake', 'witval', 'forbole'];
+
+      return whiteLogotypes.find((logoName) => accountName.toLowerCase() === logoName);
+    },
   },
   computed: {
     getValidatorsLimit() {
@@ -272,6 +294,22 @@ export default {
 
       &--inactive {
         color: #dc3545;
+      }
+    }
+
+    &__logo {
+      display: inline-block;
+      max-height: 30px;
+      max-width: 30px;
+      margin-right: 5px;
+    }
+  }
+
+  .table {
+    &__validators {
+      & td:nth-child(2),
+      & td:nth-child(3) {
+        max-width: 200px;
       }
     }
   }

@@ -22,13 +22,19 @@
         >
           <span v-if="data.item.media_info">
             <img
+              v-if="data.item.account_name.toLowerCase() === 'everstake'"
+              src="../assets/images/icon-everstake.png"
+              alt="Everstake logotype"
               class="validators-list__logo"
-              v-if="data.item.media_info.logotype"
+            >
+            <img
+              v-else-if="data.item.media_info.logotype"
               :src="data.item.media_info.logotype"
               :alt="`${data.item.account_name} logotype`"
               :class="{
                 'block__logotype--white': filterWhiteColorLogotypes(data.item.account_name)
               }"
+              class="validators-list__logo"
             >
           </span>
           <img
@@ -214,7 +220,7 @@ export default {
       this.handleDebouncedScroll = null;
     },
     filterWhiteColorLogotypes(accountName) {
-      const whiteLogotypes = ['everstake', 'witval', 'forbole'];
+      const whiteLogotypes = ['witval', 'forbole'];
 
       return whiteLogotypes.find((logoName) => accountName.toLowerCase() === logoName);
     },

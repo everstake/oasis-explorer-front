@@ -87,7 +87,8 @@
                     v-if="items.media_info && items.media_info.logotype"
                     class="block__logo"
                     :class="{
-                      'block__logotype--white': items.account_name.toLowerCase() === 'everstake'
+                      'block__logotype--white': items.account_name.toLowerCase() === 'everstake' ||
+                      items.account_name.toLowerCase() === 'witval'
                     }"
                     :src='items.media_info.logotype'
                     :alt='`${items.account_name} logotype`'

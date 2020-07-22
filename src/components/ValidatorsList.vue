@@ -22,14 +22,9 @@
         >
           <span v-if="data.item.media_info">
             <img
-              v-if="data.item.account_name.toLowerCase() === 'everstake'"
-              src="../assets/images/icon-everstake.png"
-              alt="Everstake logotype"
-              class="validators-list__logo"
-            >
-            <img
-              v-else-if="data.item.media_info.logotype"
-              :src="data.item.media_info.logotype"
+              v-if="data.item.media_info.logotype"
+              :src="data.item.account_name.toLowerCase() === 'everstake'
+               ? everstakeIcon : data.item.media_info.logotype"
               :alt="`${data.item.account_name} logotype`"
               :class="{
                 'block__logotype--white': filterWhiteColorLogotypes(data.item.account_name)
@@ -110,6 +105,7 @@
 <script>
 import TableLoader from '@/components/TableLoader.vue';
 import debounce from 'lodash/debounce';
+import everstakeIcon from '@/assets/images/icon-everstake.png';
 
 export default {
   name: 'ValidatorsList',
@@ -152,6 +148,7 @@ export default {
       error: false,
       isShowMoreDisabled: false,
       handleDebouncedScroll: null,
+      everstakeIcon,
     };
   },
   watch: {

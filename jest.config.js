@@ -7,6 +7,7 @@ module.exports = {
     'js',
     'json',
     'vue',
+    'scss',
   ],
   transform: {
     '.*\\.(vue)$': 'vue-jest',

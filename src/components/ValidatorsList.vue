@@ -7,7 +7,7 @@
       show-empty
       :fields="fields"
       :items="items"
-      class="table table--border table-list"
+      class="table table--border table-list table__validators"
       borderless
       no-border-collapse
     >

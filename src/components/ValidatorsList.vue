@@ -305,6 +305,7 @@ export default {
       max-height: 30px;
       max-width: 30px;
       margin-right: 5px;
+      border-radius: 4px;
     }
   }
 

@@ -2,26 +2,20 @@ import { shallowMount } from '@vue/test-utils';
 import Account from '@/views/Account.vue';
 import flushPromises from 'flush-promises';
 
+const $api = {
+  getAccount: () => Promise.resolve({ data: { address: 'oasis1account' }, status: 200 }),
+};
+
+const $router = { push: jest.fn() };
+
 const $route = {
   params: {
     id: 'oasis1account',
   },
 };
 
-const $router = { push: jest.fn() };
-
 describe('Account.vue', () => {
-  test('Should test positive API call and render an account', async () => {
-    const $api = {
-      getAccount: () => new Promise((resolve) => {
-        const response = {
-          address: 'oasis1account',
-        };
-        const data = { data: { ...response }, status: 200 };
-        resolve(data);
-      }),
-    };
-
+  test('Should test 200 response and render an account', async () => {
     const wrapper = shallowMount(Account, {
       mocks: {
         $route,
@@ -34,20 +28,14 @@ describe('Account.vue', () => {
     expect(wrapper.find('.account__information').isVisible()).toBe(true);
   });
 
-  test('Should test negative API call and render empty account', async () => {
-    const $api = {
-      getAccount: () => new Promise((resolve) => {
-        const response = {};
-        const data = { data: { ...response }, status: 404 };
-        resolve(data);
-      }),
-    };
-
+  test('Should test 404 response and push to not found page', async () => {
     const wrapper = shallowMount(Account, {
       mocks: {
         $router,
         $route,
-        $api,
+        $api: {
+          getAccount: () => Promise.resolve({ data: {}, status: 404 }),
+        },
       },
     });
 
@@ -57,16 +45,6 @@ describe('Account.vue', () => {
   });
 
   test('Should change current router path', async () => {
-    const $api = {
-      getAccount: () => new Promise((resolve) => {
-        const response = {
-          address: 'oasis1account',
-        };
-        const data = { data: { ...response }, status: 200 };
-        resolve(data);
-      }),
-    };
-
     const wrapper = shallowMount(Account, {
       mocks: {
         $route,
@@ -77,13 +55,6 @@ describe('Account.vue', () => {
 
     await flushPromises();
 
-    // console.log(wrapper.vm.$options.testFn);
-    //
-    // console.log(wrapper.vm.$options.testFn.call(wrapper.vm, 123));
-    //
-    // wrapper.vm.$options.watch.$route.apply(wrapper.vm, [{ id: 'oasis2account' }, { id: 'oasis1account' }]);
-    //
-    // expect(wrapper.vm.$route.params.id).toBe('oasis2account');
     expect(wrapper.vm.$route.params.id).toBe('oasis1account');
   });
 });

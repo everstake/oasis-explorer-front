@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import copyToClipboard from '@/mixins/copyToClipboard';
 
-const Template = {
+const Component = {
   template: '<div><span ref="qwerty">copied content</span></div>',
 };
 
@@ -19,7 +19,7 @@ describe('copyToClipboard.js', () => {
   });
 
   test('Should copy to clipboard', async () => {
-    const wrapper = mount(Template, {
+    const wrapper = mount(Component, {
       mixins: [copyToClipboard],
     });
 

@@ -12,8 +12,19 @@ import '@/filters/amount.filter';
 
 import '@/plugins/initialization/notifications.plugin';
 
+import { config } from '@vue/test-utils';
+
 Vue.use(BootstrapVue);
 
 library.add(fas, fab, far);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
+
+config.mocks.$api = {
+  getAccounts: () => Promise.resolve({ data: ['mock'], status: 200 }),
+  getAccount: () => Promise.resolve({ data: ['mock'], status: 200 }),
+  getValidators: () => Promise.resolve({ data: ['mock'], status: 200 }),
+  getTransactions: () => Promise.resolve({ data: ['mock'], status: 200 }),
+  getBlocks: () => Promise.resolve({ data: ['mock'], status: 200 }),
+  getValidatorsList: () => Promise.resolve({ data: ['mock'], status: 200 }),
+};

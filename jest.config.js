@@ -1,7 +1,7 @@
 module.exports = {
   preset: '@vue/cli-plugin-unit-jest',
   setupFiles: [
-    './tests/config/setupTests.js',
+    './tests/config/jest.init.js',
   ],
   moduleFileExtensions: [
     'js',

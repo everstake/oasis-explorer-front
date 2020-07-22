@@ -9,7 +9,6 @@ const Component = {
 
 describe('fetchList.js', () => {
   test('Should set limit of requested items from props', () => {
-
     const wrapper = shallowMount(Component, {
       propsData: {
         rows: 10,
@@ -26,16 +25,8 @@ describe('fetchList.js', () => {
   });
 
   test('Should test positive case of fetching a list', async () => {
-    const $api = {
-      getAccount: () => Promise.resolve({
-        data: 'mock',
-        status: 200,
-      }),
-    };
-
     const wrapper = shallowMount(Component, {
       mocks: {
-        $api,
         fetchList: jest.fn(),
       },
       mixins: [fetchList],
@@ -48,13 +39,11 @@ describe('fetchList.js', () => {
   });
 
   test('Should test a negative case of fetching a list', async () => {
-    const $api = {
-      getAccount: () => Promise.resolve({ status: 404 }),
-    };
-
     const wrapper = shallowMount(Component, {
       mocks: {
-        $api,
+        $api: {
+          getAccount: () => Promise.resolve({ status: 404 }),
+        },
       },
     });
 

@@ -15,11 +15,29 @@
         <TableLoader />
       </template>
       <template #cell(#)="items">{{ items.index + 1 }}</template>
-      <template #cell(account_id)="items">
+      <template #cell(account_id)="data">
         <router-link
-          :to="{ name: 'validator', params: { id: items.item.account_id } }"
+          :to="{ name: 'validator', params: { id: data.item.account_id } }"
         >
-          {{ items.item.account_name || items.item.account_id }}
+          <span v-if="data.item.media_info">
+            <img
+              v-if="data.item.media_info.logotype"
+              :src="data.item.account_name.toLowerCase() === 'everstake'
+               ? everstakeIcon : data.item.media_info.logotype"
+              :alt="`${data.item.account_name} logotype`"
+              :class="{
+                'block__logotype--white': filterWhiteColorLogotypes(data.item.account_name)
+              }"
+              class="validators-list__logo"
+            >
+          </span>
+          <img
+            v-else
+            class="validators-list__logo"
+            src="../assets/images/logo-oasis.svg"
+            alt="Oasis logotype"
+          >
+          {{ data.item.account_name || data.item.account_id }}
         </router-link>
       </template>
       <template #cell(escrow_balance)="items">
@@ -87,6 +105,7 @@
 import TableLoader from '@/components/TableLoader.vue';
 import fetchList from '@/mixins/fetchList';
 import fetchOnScroll from '@/mixins/fetchOnScroll';
+import everstakeIcon from '@/assets/images/icon-everstake.png';
 
 export default {
   name: 'ValidatorsList',
@@ -117,11 +136,17 @@ export default {
         { key: 'status', label: 'Status' },
         { key: 'validate_since', label: 'Registered', sortable: true },
       ],
+      everstakeIcon,
     };
   },
   methods: {
     fetchData(params = {}) {
       return this.$api.getValidators({ ...params, limit: this.getRequestLimit });
+    },
+    filterWhiteColorLogotypes(accountName) {
+      const whiteLogotypes = ['witval', 'forbole'];
+
+      return whiteLogotypes.find((logoName) => accountName.toLowerCase() === logoName);
     },
   },
   async created() {
@@ -182,6 +207,23 @@ export default {
 
       &--inactive {
         color: #dc3545;
+      }
+    }
+
+    &__logo {
+      display: inline-block;
+      max-height: 30px;
+      max-width: 30px;
+      margin-right: 5px;
+      border-radius: 4px;
+    }
+  }
+
+  .table {
+    &__validators {
+      & td:nth-child(2),
+      & td:nth-child(3) {
+        max-width: 200px;
       }
     }
   }

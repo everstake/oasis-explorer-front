@@ -103,8 +103,9 @@
                   v-if="items.account_name"
                   class="block__content"
                 >
-                    <span class="validator__name">{{ items.account_name }}</span>
-
+                  <span class="validator__name">{{ items.account_name }}</span>
+                </b-card-text>
+                <b-card-text class="block__content">
                   <div
                     v-if="items.media_info"
                     class="validator__contacts"
@@ -252,6 +253,9 @@
                         :icon="{ prefix: 'fab', iconName: 'medium' }"
                       />
                     </a>
+                  </div>
+                  <div class="validator-note">
+                    If you wish to add your validator info, contact us at inbox@everstake.one
                   </div>
                 </b-card-text>
                 <b-card-text class="block__content">
@@ -1144,6 +1148,18 @@ export default {
         color: $color-primary;
       }
     }
+  }
+  
+  &-note {
+    margin-top: 5px;
+    padding: 5px 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4dd4a9;
+    /*color: #fff;*/
+    border-radius: 4px;
+    /*background: #4dd4a9;*/
   }
 }
 </style>

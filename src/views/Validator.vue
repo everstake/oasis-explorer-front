@@ -609,7 +609,7 @@ import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 import numeral from 'numeral';
-import store from '@/store';
+import { state } from '@/store';
 import dayjs from 'dayjs';
 import LineChart from '@/components/charts/LineChart.vue';
 import fetchOnScroll from '@/mixins/fetchOnScroll';
@@ -844,7 +844,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.charts.uptime.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 
@@ -888,7 +888,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.charts.stake.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 

@@ -45,6 +45,7 @@ export default {
     };
   },
   methods: {
+    /* eslint-disable */
     showSearch() {
       this.isSearchVisible = true;
       document.body.className = 'scroll-disabled';
@@ -71,7 +72,6 @@ export default {
       document.body.className = '';
     },
     async handleSubmit(input) {
-      /* eslint-disable */
       if (input === '') {
         return false;
       }

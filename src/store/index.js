@@ -5,7 +5,7 @@ Vue.use(Vuex);
 
 const defaultDateFormat = localStorage.getItem('dateFormat') || Vue.prototype.$constants.DATE_FORMAT;
 
-const state = {
+const defaultState = {
   height: null,
   dateFormat: defaultDateFormat,
 };
@@ -24,15 +24,15 @@ const actions = {};
 const modules = {};
 
 export default new Vuex.Store({
-  state,
+  state: defaultState,
   mutations,
   actions,
   modules,
 });
 
 export {
-  state,
+  defaultState as state,
   mutations,
   actions,
   modules,
-}
+};

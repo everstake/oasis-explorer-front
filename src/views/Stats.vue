@@ -180,7 +180,7 @@
 <script>
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import LineChart from '@/components/charts/LineChart.vue';
-import store from '@/store';
+import { state } from '@/store';
 import dayjs from 'dayjs';
 import numeral from 'numeral';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
@@ -402,7 +402,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.escrowRatioData.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 
@@ -423,7 +423,7 @@ export default {
         // eslint-disable-next-line max-len,array-callback-return,consistent-return
         labels: this.operationsData.map(({ timestamp }) => {
           if (this.operationDateFormat === 'D') {
-            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            if (state.dateFormat === this.$constants.DATE_FORMAT) {
               return dayjs.unix(timestamp).format('DD.MM.YYYY');
             }
 
@@ -431,7 +431,7 @@ export default {
           }
 
           if (this.operationDateFormat === 'H') {
-            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            if (state.dateFormat === this.$constants.DATE_FORMAT) {
               return dayjs.unix(timestamp).format('HH:mm DD.MM.YYYY');
             }
 
@@ -452,7 +452,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.accountsData.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 
@@ -472,7 +472,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.transactionVolumeData.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 
@@ -493,7 +493,7 @@ export default {
         // eslint-disable-next-line max-len,array-callback-return,consistent-return
         labels: this.feesData.map(({ timestamp }) => {
           if (this.feesDateFormat === 'D') {
-            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            if (state.dateFormat === this.$constants.DATE_FORMAT) {
               return dayjs.unix(timestamp).format('DD.MM.YYYY');
             }
 
@@ -501,7 +501,7 @@ export default {
           }
 
           if (this.feesDateFormat === 'H') {
-            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            if (state.dateFormat === this.$constants.DATE_FORMAT) {
               return dayjs.unix(timestamp).format('HH:mm DD.MM.YYYY');
             }
 

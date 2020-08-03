@@ -208,7 +208,7 @@
 
 <script>
 import TableLoader from '@/components/TableLoader.vue';
-import DateRangePicker from 'vue2-daterange-picker';
+import DateRangePicker from 'vue-daterange-picker-light';
 import { mapState } from 'vuex';
 import dayjs from 'dayjs';
 import fetchOnScroll from '@/mixins/fetchOnScroll';

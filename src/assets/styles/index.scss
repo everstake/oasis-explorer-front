@@ -1,10 +1,11 @@
 @import './variables';
 @import './oasis-theme';
 @import '~bootstrap/scss/bootstrap';
-@import '~vue2-daterange-picker/dist/vue2-daterange-picker.css';
+@import '~vue-daterange-picker-light/dist/vue-daterange-picker-light.css';
 @import './datepicker';
 @import '~bootstrap-vue/src/index';
 @import './card';
+@import './calendar';
 @import './notifications';
 @import './search';
 @import './block';

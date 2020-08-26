@@ -46,8 +46,8 @@
         {{ items.item.escrow_balance | formatAmount }}
       </template>
       <template #cell(day_uptime)="items">
-        {{ String(items.item.day_uptime).slice(0, 3) }} /
-        {{ String(items.item.total_uptime).slice(0, 3) }}
+        {{ String(items.item.day_uptime * 100).slice(0, 4) }}% /
+        {{ String(items.item.total_uptime * 100).slice(0, 4) }}%
       </template>
       <template #cell(status)="items">
         <div

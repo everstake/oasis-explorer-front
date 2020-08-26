@@ -103,7 +103,7 @@
                   v-if="items.account_name"
                   class="block__content"
                 >
-                    <span class="validator__name">{{ items.account_name }}</span>
+                  <span class="validator__name">{{ items.account_name }}</span>
 
                   <div
                     v-if="items.media_info"
@@ -503,17 +503,17 @@
                     </template>
                   </b-table>
                   <div
-                    v-if="scrollToLoadMore"
+                    v-if="fetchOnScrollEnabled"
                     class="blocks-list__actions"
                   >
                     <b-button
-                      @click="onShowMore"
+                      @click="handleShowMore"
                       variant="outline-primary"
                       class="blocks-list__button font-weight-bold"
                       :class="{
                         'blocks-list__button--loading': loading
                       }"
-                        :disabled="loading || isShowMoreDisabled"
+                        :disabled="loading || isShowMoreButtonDisabled"
                       >
                       <span v-if="loading" disabled>
                         Loading
@@ -602,18 +602,18 @@
     </b-container>
   </div>
 </template>
+
 <script>
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
-import uuid from '@/mixins/uuid';
-import debounce from 'lodash/debounce';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 import numeral from 'numeral';
-import store from '@/store';
+import { state } from '@/store';
 import dayjs from 'dayjs';
 import LineChart from '@/components/charts/LineChart.vue';
-import getDeviceType from '@/mixins/getDeviceType';
+import fetchOnScroll from '@/mixins/fetchOnScroll';
+import uuid from '@/mixins/uuid';
 
 export default {
   name: 'Validator',
@@ -625,18 +625,11 @@ export default {
   mixins: [
     copyToClipboard,
     getDatesInSeconds,
-    getDeviceType,
+    fetchOnScroll,
     uuid,
   ],
-  props: {
-    scrollToLoadMore: {
-      type: Boolean,
-      default: true,
-    },
-  },
   data() {
     return {
-      windowWidth: window.innerWidth,
       loading: null,
       limit: 10,
       offset: 0,
@@ -663,8 +656,6 @@ export default {
         uptime: null,
         stake: null,
       },
-      isShowMoreDisabled: false,
-      handleDebouncedScroll: null,
       oldPalette: [
         'rgba(0, 0, 0, .4)',
         'rgba(76, 212, 169, .4)',
@@ -683,16 +674,6 @@ export default {
     };
   },
   watch: {
-    isShowMoreDisabled: {
-      immediate: false,
-      handler(val) {
-        if (val && this.handleDebouncedScroll !== null) {
-          this.removeEventListenerOnScroll();
-        } else if (this.handleDebouncedScroll === null) {
-          this.setEventListenerOnScroll();
-        }
-      },
-    },
     $route: {
       immediate: true,
       async handler() {
@@ -736,31 +717,13 @@ export default {
         }
       }
     },
-    handleScroll() {
-      if (this.$refs.table) {
-        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
-          this.onShowMore();
-        }
-      }
-    },
-    async onShowMore() {
+    async handleShowMore() {
+      this.offset += 10;
       const { activeTab } = this;
       this.tableItems = [
         ...this.tableItems,
         ...await this.fetchData(activeTab),
       ];
-      this.offset += 50;
-    },
-    setEventListenerOnScroll() {
-      this.handleDebouncedScroll = debounce(this.handleScroll, 100);
-      window.addEventListener('scroll', this.handleDebouncedScroll);
-    },
-    removeEventListenerOnScroll() {
-      if (this.handleDebouncedScroll !== null) {
-        this.handleDebouncedScroll.cancel();
-      }
-      window.removeEventListener('scroll', this.handleDebouncedScroll);
-      this.handleDebouncedScroll = null;
     },
     setActiveTab(tabName) {
       this.activeTab = tabName;
@@ -783,16 +746,16 @@ export default {
       if (type === 'charts') {
         uptimeChart = await this.$api.getChartUptime({
           limit: this.limit,
-          from: this.thirtyDaysAgoInSeconds,
-          to: this.todayInSeconds,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
           frame: 'D',
           id: this.$route.params.id,
         });
 
         stakeChart = await this.$api.getChartStake({
           limit: this.limit,
-          from: this.thirtyDaysAgoInSeconds,
-          to: this.todayInSeconds,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
           frame: 'D',
           id: this.$route.params.id,
         });
@@ -838,9 +801,9 @@ export default {
       }
 
       if (Array.isArray(data.data) && (data.data.length === 0 || data.data.length < this.limit)) {
-        this.isShowMoreDisabled = true;
+        this.isShowMoreButtonDisabled = true;
       } else if (Array.isArray(data.data) && data.data.length > 0) {
-        this.isShowMoreDisabled = false;
+        this.isShowMoreButtonDisabled = false;
       }
 
       this.loading = false;
@@ -853,9 +816,6 @@ export default {
       const whiteLogotypes = ['everstake', 'witval', 'forbole'];
 
       return whiteLogotypes.find((logoName) => accountName.toLowerCase() === logoName);
-    },
-    getDeviceWidth() {
-      return window.innerWidth;
     },
     getUptimeChartData() {
       return {
@@ -884,7 +844,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.charts.uptime.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 
@@ -928,7 +888,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.charts.stake.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 
@@ -981,11 +941,6 @@ export default {
 
       return [];
     },
-  },
-  mounted() {
-    window.onresize = () => {
-      this.windowWidth = window.innerWidth
-    };
   },
 };
 </script>
@@ -1069,19 +1024,12 @@ export default {
     &:hover {
       background-color: rgb(76, 212, 169) !important;
       color: #fff !important;
-      /*box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;*/
     }
-
-    /*&:hover,*/
-    /*&:active:focus {*/
-    /*  box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;*/
-    /*}*/
 
     &--active {
       background-color: #4cd4a9 !important;
       color: #fff !important;
       pointer-events: none;
-      /*box-shadow: 0 0 0 0.2rem rgba(76, 212, 169, .5) !important;*/
 
       &:focus,
       &:hover {

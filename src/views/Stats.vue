@@ -27,7 +27,6 @@
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
-                      @on-receive="handleChartClick"
                       :chart-data="getEscrowRatioData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
@@ -181,7 +180,7 @@
 <script>
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import LineChart from '@/components/charts/LineChart.vue';
-import store from '@/store';
+import { state } from '@/store';
 import dayjs from 'dayjs';
 import numeral from 'numeral';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
@@ -234,8 +233,8 @@ export default {
     operationDateFormat: {
       async handler(val) {
         const operations = await this.$api.getChartOperations({
-          from: this.thirtyDaysAgoInSeconds,
-          to: this.todayInSeconds,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
           frame: val,
         });
 
@@ -245,8 +244,8 @@ export default {
     feesDateFormat: {
       async handler(val) {
         const fees = await this.$api.getChartFees({
-          from: this.thirtyDaysAgoInSeconds,
-          to: this.todayInSeconds,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
           frame: val,
         });
 
@@ -261,47 +260,44 @@ export default {
     },
   },
   methods: {
-    handleChartClick(item) {
-      console.log('Stats click handling', item);
-    },
     async fetchData() {
       this.loading = true;
 
       const escrowRatio = await this.$api.getEscrowRatio({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
       this.escrowRatioData = escrowRatio.data;
 
       const transactionVolume = await this.$api.getTransactionVolume({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
       this.transactionVolumeData = transactionVolume.data;
 
       const operations = await this.$api.getChartOperations({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
       this.operationsData = operations.data;
 
       const accounts = await this.$api.getChartAccounts({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
       this.accountsData = accounts.data;
 
       const fees = await this.$api.getChartFees({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
@@ -314,8 +310,8 @@ export default {
       });
 
       const topEscrow = await this.$api.getChartTopEscrow({
-        from: this.thirtyDaysAgoInSeconds,
-        to: this.todayInSeconds,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
         frame: 'D',
       });
 
@@ -406,7 +402,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.escrowRatioData.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 
@@ -427,7 +423,7 @@ export default {
         // eslint-disable-next-line max-len,array-callback-return,consistent-return
         labels: this.operationsData.map(({ timestamp }) => {
           if (this.operationDateFormat === 'D') {
-            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            if (state.dateFormat === this.$constants.DATE_FORMAT) {
               return dayjs.unix(timestamp).format('DD.MM.YYYY');
             }
 
@@ -435,7 +431,7 @@ export default {
           }
 
           if (this.operationDateFormat === 'H') {
-            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            if (state.dateFormat === this.$constants.DATE_FORMAT) {
               return dayjs.unix(timestamp).format('HH:mm DD.MM.YYYY');
             }
 
@@ -456,7 +452,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.accountsData.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 
@@ -476,7 +472,7 @@ export default {
         ],
         // eslint-disable-next-line max-len
         labels: this.transactionVolumeData.map(({ timestamp }) => {
-          if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+          if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
           }
 
@@ -497,7 +493,7 @@ export default {
         // eslint-disable-next-line max-len,array-callback-return,consistent-return
         labels: this.feesData.map(({ timestamp }) => {
           if (this.feesDateFormat === 'D') {
-            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            if (state.dateFormat === this.$constants.DATE_FORMAT) {
               return dayjs.unix(timestamp).format('DD.MM.YYYY');
             }
 
@@ -505,7 +501,7 @@ export default {
           }
 
           if (this.feesDateFormat === 'H') {
-            if (store.state.dateFormat === this.$constants.DATE_FORMAT) {
+            if (state.dateFormat === this.$constants.DATE_FORMAT) {
               return dayjs.unix(timestamp).format('HH:mm DD.MM.YYYY');
             }
 

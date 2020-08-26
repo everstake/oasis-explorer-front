@@ -24,14 +24,8 @@ export default {
         });
 
         document.execCommand('copy');
-
-        setTimeout(() => {
-          selection.removeAllRanges();
-          this.latestCopiedHash = null;
-        }, 500);
       } catch (err) {
         selection.removeAllRanges();
-        this.latestCopiedHash = null;
       }
     },
   },

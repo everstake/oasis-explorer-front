@@ -1,14 +1,27 @@
 export default {
   data() {
     return {
-      todayInSeconds: null,
-      thirtyDaysAgoInSeconds: null,
+      datesInSeconds: {
+        today: null,
+        monthAgo: null,
+      },
     };
   },
+  methods: {
+    getPreviousDate(offset) {
+      const findedDateMs = new Date(new Date().setDate(new Date().getDate() - offset)).getTime();
+      return Math.round(findedDateMs / 1000);
+    },
+    getToday() {
+      return Math.round(new Date().getTime() / 1000);
+    },
+    getFutureDate(offset) {
+      const findedDateMs = new Date(new Date().setDate(new Date().getDate() + offset)).getTime();
+      return Math.round(findedDateMs / 1000);
+    },
+  },
   created() {
-    const todayInMs = new Date().getTime() / 1000;
-    const thirtyDaysInMs = new Date(new Date().setDate(new Date().getDate() - 30)).getTime() / 1000;
-    this.todayInSeconds = Math.round(todayInMs);
-    this.thirtyDaysAgoInSeconds = Math.round(thirtyDaysInMs);
+    this.datesInSeconds.today = this.getToday();
+    this.datesInSeconds.monthAgo = this.getPreviousDate(30);
   },
 };

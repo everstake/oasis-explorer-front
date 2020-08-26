@@ -32,21 +32,5 @@ export default {
       ],
     };
   },
-  methods: {
-    async fetchData() {
-      const data = await this.$api.getAccounts({ limit: this.limit });
-
-      return data.data;
-    },
-    handleScroll() {
-      this.scroll = window.scrollY || window.scrollTop;
-    },
-  },
-  created() {
-    window.addEventListener('scroll', this.handleScroll);
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.handleScroll);
-  },
 };
 </script>

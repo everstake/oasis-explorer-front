@@ -99,10 +99,10 @@
     </div>
     <b-table
       ref="table"
-      :busy="loading && data === null"
+      :busy="loading && items === null"
       :responsive="true"
       show-empty
-      :items="data"
+      :items="items"
       :fields="fields"
       class="table table--border transactions-list__table"
       :class="{
@@ -111,26 +111,25 @@
       :disabled="dropdownIsBusy"
       borderless
       no-border-collapse
-      @row-selected="handleRowClick"
     >
       <template #table-busy>
         <TableLoader />
       </template>
-      <template #cell(level)="data">
+      <template #cell(level)="items">
         <router-link
-          :to="{ name: 'block', params: { id: data.item.level } }"
+          :to="{ name: 'block', params: { id: items.item.level } }"
         >
-          {{ data.item.level }}
+          {{ items.item.level }}
         </router-link>
       </template>
-      <template #cell(hash)="data">
+      <template #cell(hash)="items">
         <router-link
-          :to="{ name: 'operation', params: { id: data.item.hash } }"
+          :to="{ name: 'operation', params: { id: items.item.hash } }"
           :class="{
             'table__hash': minifyTableHash
           }"
         >
-          {{ data.item.hash }}
+          {{ items.item.hash }}
         </router-link>
       </template>
       <template #cell(from)="items">
@@ -142,54 +141,54 @@
           {{ items.item.from }}
         </router-link>
       </template>
-      <template #cell(to)="data">
-        <span v-if="!data.item.to">-</span>
-        <span v-else-if="data.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='">
+      <template #cell(to)="items">
+        <span v-if="!items.item.to">-</span>
+        <span v-else-if="items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='">
           System Account
         </span>
         <router-link
           v-else
-          :to="{ name: 'account', params: { id: data.item.to } }"
+          :to="{ name: 'account', params: { id: items.item.to } }"
         >
-          {{ data.item.to }}
+          {{ items.item.to }}
         </router-link>
       </template>
-      <template #cell(fees)="data">
-        {{ !data.item.fees ? '-' : data.item.fees }}
+      <template #cell(fees)="items">
+        {{ !items.item.fees ? '-' : items.item.fees }}
       </template>
-      <template #cell(amount)="data">
-        <span v-if="data.item.escrow_amount">
-          {{ data.item.escrow_amount | formatAmount }}
+      <template #cell(amount)="items">
+        <span v-if="items.item.escrow_amount">
+          {{ items.item.escrow_amount | formatAmount }}
         </span>
-        <span v-else-if="data.item.reclaim_escrow_amount">
-          {{ data.item.reclaim_escrow_amount | formatAmount }}
+        <span v-else-if="items.item.reclaim_escrow_amount">
+          {{ items.item.reclaim_escrow_amount | formatAmount }}
         </span>
         <span v-else>
-          {{ data.item.amount | formatAmount }}
+          {{ items.item.amount | formatAmount }}
         </span>
       </template>
-      <template #cell(nonce)="data">
-        {{ data.item.nonce }}
+      <template #cell(nonce)="items">
+        {{ items.item.nonce }}
       </template>
-      <template #cell(timestamp)="data">
-        {{ data.item.timestamp | formatDate }}
+      <template #cell(timestamp)="items">
+        {{ items.item.timestamp | formatDate }}
         <div class="date-from-now">
-          {{ data.item.timestamp | formatDaysAgo }}
+          {{ items.item.timestamp | formatDaysAgo }}
         </div>
       </template>
     </b-table>
     <div
-      v-if="scrollToLoadMore && data !== null"
+      v-if="fetchOnScrollEnabled && items !== null"
       class="blocks-list__actions"
     >
       <b-button
-        @click="onShowMore"
+        @click="handleShowMore"
         variant="outline-primary"
         class="blocks-list__button font-weight-bold"
         :class="{
           'blocks-list__button--loading': loading
         }"
-        :disabled="loading || isShowMoreDisabled"
+        :disabled="loading || isShowMoreButtonDisabled"
       >
         <span v-if="error">
           Something went wrong, click to retry
@@ -209,10 +208,11 @@
 
 <script>
 import TableLoader from '@/components/TableLoader.vue';
-import debounce from 'lodash/debounce';
-import DateRangePicker from 'vue2-daterange-picker';
+import DateRangePicker from 'vue-daterange-picker-light';
 import { mapState } from 'vuex';
 import dayjs from 'dayjs';
+import fetchOnScroll from '@/mixins/fetchOnScroll';
+import fetchList from '@/mixins/fetchList';
 
 export default {
   name: 'OperationsList',
@@ -220,30 +220,11 @@ export default {
     TableLoader,
     DateRangePicker,
   },
+  mixins: [
+    fetchOnScroll,
+    fetchList,
+  ],
   props: {
-    rows: {
-      type: Number,
-      default: null,
-    },
-    scrollToLoadMore: {
-      type: Boolean,
-      default: true,
-    },
-    fields: {
-      type: Array,
-      default() {
-        return [
-          { key: 'level', label: 'Height' },
-          { key: 'hash', label: 'Operation Hash' },
-          { key: 'from', label: 'From' },
-          { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount', sortable: true },
-          { key: 'nonce', label: 'Nonce' },
-          { key: 'type', label: 'Type' },
-          { key: 'timestamp', label: 'Date', sortable: true },
-        ];
-      },
-    },
     minifyTableHash: {
       type: Boolean,
       default: false,
@@ -255,19 +236,22 @@ export default {
   },
   data() {
     return {
-      data: null,
-      loading: null,
-      limit: 50,
-      offset: 0,
-      error: false,
       dateRange: {
         startDate: null,
         endDate: null,
       },
       operations: ['transfer', 'addescrow', 'reclaimescrow', 'other'],
       dropdownIsBusy: false,
-      isShowMoreDisabled: false,
-      handleDebouncedScroll: null,
+      fields: [
+        { key: 'level', label: 'Height' },
+        { key: 'hash', label: 'Operation Hash' },
+        { key: 'from', label: 'From' },
+        { key: 'to', label: 'To' },
+        { key: 'amount', label: 'Amount', sortable: true },
+        { key: 'nonce', label: 'Nonce' },
+        { key: 'type', label: 'Type' },
+        { key: 'timestamp', label: 'Date', sortable: true },
+      ],
     };
   },
   watch: {
@@ -276,16 +260,9 @@ export default {
       async handler() {
         this.offset = 0;
         this.dropdownIsBusy = true;
-        const isDateRangeReady = this.dateRange.startDate && this.dateRange.endDate;
         let data;
 
-        if (isDateRangeReady) {
-          const isDatesEqual = this.dateRange.startDate.getTime()
-            === this.dateRange.endDate.getTime();
-          if (isDatesEqual) {
-            this.dateRange.endDate.setTime(this.dateRange.endDate.getTime()
-              + (12 * 60 * 60 * 1000));
-          }
+        if (this.isDatePickerSelected) {
           const from = +this.dateRange.startDate / 1000;
           const to = +this.dateRange.endDate / 1000;
           data = await this.fetchData({ from, to });
@@ -296,24 +273,14 @@ export default {
         if (data.status !== 200) {
           this.error = true;
         } else if (Array.isArray(data.data) && data.data.length === 0) {
-          this.isShowMoreDisabled = true;
+          this.isShowMoreButtonDisabled = true;
         } else {
-          this.isShowMoreDisabled = false;
+          this.isShowMoreButtonDisabled = false;
           this.error = false;
-          this.data = data.data;
+          this.items = data.data;
         }
 
         this.dropdownIsBusy = false;
-      },
-    },
-    isShowMoreDisabled: {
-      immediate: false,
-      handler(val) {
-        if (val && this.handleDebouncedScroll !== null) {
-          this.removeEventListenerOnScroll();
-        } else if (this.handleDebouncedScroll === null) {
-          this.setEventListenerOnScroll();
-        }
       },
     },
   },
@@ -338,105 +305,63 @@ export default {
     async handleCalendarUpdate(val) {
       this.dropdownIsBusy = true;
       const from = +val.startDate / 1000;
-      const to = +val.endDate / 1000;
+      let to = +val.endDate / 1000;
+
+      if (this.isSelectedDatesEqual) {
+        this.dateRange.endDate.setTime(this.dateRange.endDate.getTime() + (12 * 60 * 60 * 1000));
+        to = +this.dateRange.endDate / 1000;
+      }
 
       const data = await this.fetchData({ from, to });
+      const isRequestSuccessful = data.status === 200;
 
-      if (data.status !== 200) {
-        this.error = true;
-      } else if (Array.isArray(data.data) && data.data.length === 0) {
-        this.data = [];
-        this.isShowMoreDisabled = true;
+      if (isRequestSuccessful) {
+        if (Array.isArray(data.data) && data.data.length === 0) {
+          this.items = [];
+          this.isShowMoreButtonDisabled = true;
+        } else {
+          this.isShowMoreButtonDisabled = false;
+          this.error = false;
+          this.offset = 0;
+          this.items = data.data;
+        }
       } else {
-        this.isShowMoreDisabled = false;
-        this.error = false;
-        this.offset = 0;
-        this.data = data.data;
+        this.error = true;
       }
+
       this.dropdownIsBusy = false;
     },
-    scrollToTop() {
-      window.scrollTo(0, 0);
-    },
-    handleScroll() {
-      if (this.$refs.table) {
-        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
-          this.onShowMore();
-        }
-      }
-    },
-    handleRowClick(item) {
-      const { hash } = item[0];
-
-      this.$router.push({
-        name: 'transaction',
-        params: { hash },
-      });
-    },
     fetchData(params = {}) {
-      let operations;
-      const otherIndex = this.operations.findIndex((operation) => operation === 'other');
-      if (otherIndex >= 0) {
-        operations = [
-          ...this.operations.slice(0, otherIndex),
-          ...['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
-          ...this.operations.slice(otherIndex + 1),
-        ];
-      } else {
-        operations = this.operations;
-      }
-      return this.$api.getTransactions({
+      const options = {
         ...params,
-        limit: this.getTransactionsLimit,
-        operation_kind: operations,
-      });
-    },
-    async onShowMore() {
-      let data;
-      this.loading = true;
-      this.offset += 50;
+        limit: this.handleShowMore,
+        operation_kind: this.operations,
+      };
 
-      const isDateReady = this.dateRange.startDate && this.dateRange.endDate;
+      const otherOperationsList = ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'];
+      const isOperationOtherSelected = this.operations.includes((operation) => operation === 'other');
 
-      if (isDateReady) {
-        const isDatesEqual = this.dateRange.startDate.getTime()
-          === this.dateRange.endDate.getTime();
-        if (isDatesEqual) {
-          this.dateRange.endDate.setTime(this.dateRange.endDate.getTime()
-            + (12 * 60 * 60 * 1000));
+      if (isOperationOtherSelected) {
+        const otherOperationIndex = this.operations.findIndex((operation) => operation === 'other');
+
+        if (otherOperationIndex >= 0) {
+          options.operation_kind = [
+            ...this.operations.slice(0, otherOperationIndex),
+            ...otherOperationsList,
+            ...this.operations.slice(otherOperationIndex + 1),
+          ];
         }
+      }
+
+      if (this.isDatePickerSelected) {
         const from = +this.dateRange.startDate / 1000;
-        const to = this.dateRange.endDate / 1000;
-        data = await this.fetchData({ offset: this.offset, from, to });
-      } else {
-        data = await this.fetchData({ offset: this.offset });
+        const to = +this.dateRange.endDate / 1000;
+
+        options.from = from;
+        options.to = to;
       }
 
-      if (data.status !== 200) {
-        this.error = true;
-      } else if (Array.isArray(data.data) && data.data.length === 0) {
-        this.isShowMoreDisabled = true;
-      } else {
-        this.isShowMoreDisabled = false;
-        this.error = false;
-        this.data = [
-          ...this.data,
-          ...data.data,
-        ];
-      }
-
-      this.loading = false;
-    },
-    setEventListenerOnScroll() {
-      this.handleDebouncedScroll = debounce(this.handleScroll, 100);
-      window.addEventListener('scroll', this.handleDebouncedScroll);
-    },
-    removeEventListenerOnScroll() {
-      if (this.handleDebouncedScroll !== null) {
-        this.handleDebouncedScroll.cancel();
-      }
-      window.removeEventListener('scroll', this.handleDebouncedScroll);
-      this.handleDebouncedScroll = null;
+      return this.$api.getTransactions(options);
     },
   },
   computed: {
@@ -445,9 +370,6 @@ export default {
       const now = new Date();
 
       return dayjs(now.setFullYear(now.getFullYear() - 3)).$d;
-    },
-    getTransactionsLimit() {
-      return this.rows || this.limit;
     },
     getLocaleData() {
       if (this.dateFormat === this.$constants.DATE_FORMAT_US) {
@@ -460,21 +382,18 @@ export default {
         format: 'dd/mm/yyyy',
       };
     },
+    isDatePickerSelected() {
+      return this.dateRange.startDate && this.dateRange.endDate;
+    },
+    isSelectedDatesEqual() {
+      return this.dateRange.startDate.getTime() === this.dateRange.endDate.getTime();
+    },
   },
-  async created() {
-    this.loading = true;
-    const data = await this.fetchData();
-    this.data = data.data;
-    this.loading = false;
-
-    if (this.scrollToLoadMore) {
-      this.setEventListenerOnScroll();
-    }
-  },
-  beforeDestroy() {
-    if (this.scrollToLoadMore) {
-      this.removeEventListenerOnScroll();
-    }
+  created() {
+    this.fetchList('getTransactions', {
+      limit: this.getRequestLimit,
+      operation_kind: this.operations,
+    });
   },
 };
 </script>

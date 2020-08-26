@@ -31,7 +31,6 @@
       </div>
       <div class="settings">
         <TheSettings />
-<!--        <font-awesome-icon  class="icon settings__icon" :icon="['fas', 'cog']" />-->
       </div>
     </div>
   </div>
@@ -87,24 +86,6 @@ export default {
   .network-selection,
   .language {
     list-style: none;
-    /*
-    @extend .animations__default;
-
-    &:hover,
-    &:focus {
-      &  a,
-      & svg {
-        color: $color-primary;
-        @extend .animations__default--hover;
-      }
-    }
-
-    & a,
-    & svg {
-      color: #999;
-      @extend .animations__default--hover;
-    }
-    */
   }
 
   .network-selection,

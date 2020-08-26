@@ -23,11 +23,7 @@
             <v-lazy-image
               v-if="data.item.media_info.logotype"
               :src-placeholder="require('../assets/images/logo-oasis.svg')"
-              :src="
-                data.item.account_name.toLowerCase() === 'everstake'
-                  ? everstakeIcon
-                  : data.item.media_info.logotype
-              "
+              :src="getValidatorLogo(data.item)"
               :alt="`${data.item.account_name} logotype`"
               :class="{
                 'block__logotype--white': filterWhiteColorLogotypes(
@@ -156,7 +152,6 @@ export default {
         { key: 'status', label: 'Status' },
         { key: 'validate_since', label: 'Registered', sortable: true },
       ],
-      everstakeIcon,
     };
   },
   methods: {
@@ -172,6 +167,11 @@ export default {
       return whiteLogotypes.find(
         (logoName) => accountName.toLowerCase() === logoName,
       );
+    },
+    getValidatorLogo(validator) {
+      const name = validator.account_name.toLowerCase();
+      if (name === 'everstake') return everstakeIcon;
+      return validator.media_info.logotype;
     },
   },
   async created() {

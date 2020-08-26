@@ -980,7 +980,7 @@ export default {
         display: block;
       }
     }
-    
+
     &--mobile {
       display: none;
       margin-top: 15px;
@@ -1062,14 +1062,14 @@ export default {
       padding: 14px 20px;
     }
   }
-  
+
   &__contacts {
     display: flex;
     justify-content: space-around;
     align-items: center;
     margin-top: 10px;
   }
-  
+
   &__name {
     font-size: 21px;
   }

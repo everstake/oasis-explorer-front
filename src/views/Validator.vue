@@ -422,6 +422,16 @@
                           {{ tableItems.item.level }}
                         </router-link>
                       </template>
+                      <template #cell(block_level)="tableItems">
+                        <router-link
+                          :to="{
+                            name: 'block',
+                            params: { id: tableItems.item.block_level },
+                          }"
+                        >
+                          {{ tableItems.item.block_level }}
+                        </router-link>
+                      </template>
                       <template #cell(hash)="tableItems">
                         <router-link
                           :to="{
@@ -502,6 +512,9 @@
                       </template>
                       <template #cell(timestamp)="tableItems">
                         {{ tableItems.item.timestamp | formatDate }}
+                      </template>
+                      <template #cell(created_at)="tableItems">
+                        {{ tableItems.item.created_at | formatDate }}
                       </template>
                       <template #cell(level)="tableItems">
                         <router-link
@@ -844,7 +857,12 @@ export default {
           });
           break;
         case 'rewards':
-          data = await this.$api.get();
+          data = await this.$api.getValidatorRewards({
+            limit: this.limit,
+            offset: this.offset,
+            id: this.$route.params.id,
+          });
+          break;
         default:
           data = await this.$api.getTransactions({
             ...requestOptions,
@@ -1003,7 +1021,16 @@ export default {
           { key: 'to', label: 'To' },
           { key: 'nonce', label: 'Nonce' },
           { key: 'type', label: 'Type' },
-          { key: 'timestamp', label: 'Timestamp', sortable: true },
+          { key: 'timestamp', label: 'Date', sortable: true },
+        ];
+      }
+
+      if (this.activeTab === 'rewards') {
+        return [
+          { key: 'block_level', label: 'Height' },
+          { key: 'epoch', label: 'Epoch' },
+          { key: 'amount', label: 'Amount', sortable: true },
+          { key: 'created_at', label: 'Date', sortable: true },
         ];
       }
 
@@ -1060,7 +1087,7 @@ export default {
   }
 
   &__btn {
-    width: 20%;
+    width: 16.6%;
     padding: 7px 0;
     border-left: none;
     border-radius: 0;

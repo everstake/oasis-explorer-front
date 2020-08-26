@@ -20,23 +20,29 @@
           :to="{ name: 'validator', params: { id: data.item.account_id } }"
         >
           <span v-if="data.item.media_info">
-            <img
+            <v-lazy-image
               v-if="data.item.media_info.logotype"
-              :src="data.item.account_name.toLowerCase() === 'everstake'
-               ? everstakeIcon : data.item.media_info.logotype"
+              :src-placeholder="require('../assets/images/logo-oasis.svg')"
+              :src="
+                data.item.account_name.toLowerCase() === 'everstake'
+                  ? everstakeIcon
+                  : data.item.media_info.logotype
+              "
               :alt="`${data.item.account_name} logotype`"
               :class="{
-                'block__logotype--white': filterWhiteColorLogotypes(data.item.account_name)
+                'block__logotype--white': filterWhiteColorLogotypes(
+                  data.item.account_name,
+                ),
               }"
               class="validators-list__logo"
-            >
+            />
           </span>
           <img
             v-else
             class="validators-list__logo"
             src="../assets/images/logo-oasis.svg"
             alt="Oasis logotype"
-          >
+          />
           {{ data.item.account_name || data.item.account_id }}
         </router-link>
       </template>
@@ -51,11 +57,18 @@
           class="validators-list__status text-center"
           :class="{
             'validators-list__status--active': items.item.status === 'active',
-            'validators-list__status--inactive': items.item.status === 'inactive'
+            'validators-list__status--inactive':
+              items.item.status === 'inactive',
           }"
         >
-          <font-awesome-icon v-if="items.item.status === 'active'" icon="check-circle" />
-          <font-awesome-icon v-else-if="items.item.status === 'inactive'" icon="times-circle" />
+          <font-awesome-icon
+            v-if="items.item.status === 'active'"
+            icon="check-circle"
+          />
+          <font-awesome-icon
+            v-else-if="items.item.status === 'inactive'"
+            icon="times-circle"
+          />
         </div>
       </template>
       <template #cell(node_address)="items">
@@ -81,7 +94,7 @@
         variant="outline-primary"
         class="blocks-list__button font-weight-bold"
         :class="{
-          'blocks-list__button--loading': loading
+          'blocks-list__button--loading': loading,
         }"
         :disabled="loading || isShowMoreButtonDisabled"
       >
@@ -90,11 +103,19 @@
         </span>
         <span v-else-if="loading" disabled>
           Loading
-          <font-awesome-icon class="blocks-list__icon" icon="sync-alt" :spin="loading" />
+          <font-awesome-icon
+            class="blocks-list__icon"
+            icon="sync-alt"
+            :spin="loading"
+          />
         </span>
         <span v-else>
           Show more
-          <font-awesome-icon class="blocks-list__icon" icon="arrow-circle-down" :spin="loading" />
+          <font-awesome-icon
+            class="blocks-list__icon"
+            icon="arrow-circle-down"
+            :spin="loading"
+          />
         </span>
       </b-button>
     </div>
@@ -106,16 +127,15 @@ import TableLoader from '@/components/TableLoader.vue';
 import fetchList from '@/mixins/fetchList';
 import fetchOnScroll from '@/mixins/fetchOnScroll';
 import everstakeIcon from '@/assets/images/icon-everstake.png';
+import VLazyImage from 'v-lazy-image';
 
 export default {
   name: 'ValidatorsList',
   components: {
     TableLoader,
+    VLazyImage,
   },
-  mixins: [
-    fetchList,
-    fetchOnScroll,
-  ],
+  mixins: [fetchList, fetchOnScroll],
   props: {
     fetchOnScrollEnabled: {
       type: Boolean,
@@ -141,12 +161,17 @@ export default {
   },
   methods: {
     fetchData(params = {}) {
-      return this.$api.getValidators({ ...params, limit: this.getRequestLimit });
+      return this.$api.getValidators({
+        ...params,
+        limit: this.getRequestLimit,
+      });
     },
     filterWhiteColorLogotypes(accountName) {
       const whiteLogotypes = ['witval', 'forbole'];
 
-      return whiteLogotypes.find((logoName) => accountName.toLowerCase() === logoName);
+      return whiteLogotypes.find(
+        (logoName) => accountName.toLowerCase() === logoName,
+      );
     },
   },
   async created() {
@@ -156,75 +181,75 @@ export default {
 </script>
 
 <style lang="scss">
-  .validators-list {
-    &__actions {
-      margin-top: 50px;
-      margin-bottom: 50px;
+.validators-list {
+  &__actions {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  &__button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+
+    &:hover,
+    &:active {
+      color: $color-white !important;
     }
 
-    &__button {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: auto;
+    &--loading {
+      color: $color-primary;
+      background: $color-white;
+      box-shadow: none;
+      border: 1px solid transparent;
 
       &:hover,
-      &:active {
-        color: $color-white !important;
-      }
-
-      &--loading {
-        color: $color-primary;
+      &:focus {
+        color: $color-primary !important;
         background: $color-white;
+        outline: none;
         box-shadow: none;
-        border: 1px solid transparent;
-
-        &:hover,
-        &:focus {
-          color: $color-primary !important;
-          background: $color-white;
-          outline: none;
-          box-shadow: none;
-        }
-      }
-    }
-
-    &__icon {
-      margin-left: 10px;
-    }
-
-    & .date-from-now {
-      font-size: 14px;
-      color: #999;
-    }
-
-    &__status {
-      font-weight: 600;
-
-      &--active {
-        color: #28a745;
-      }
-
-      &--inactive {
-        color: #dc3545;
-      }
-    }
-
-    &__logo {
-      display: inline-block;
-      max-height: 30px;
-      max-width: 30px;
-      margin-right: 5px;
-      border-radius: 4px;
-    }
-  }
-
-  .table {
-    &__validators {
-      & td:nth-child(2),
-      & td:nth-child(3) {
-        max-width: 200px;
       }
     }
   }
+
+  &__icon {
+    margin-left: 10px;
+  }
+
+  & .date-from-now {
+    font-size: 14px;
+    color: #999;
+  }
+
+  &__status {
+    font-weight: 600;
+
+    &--active {
+      color: #28a745;
+    }
+
+    &--inactive {
+      color: #dc3545;
+    }
+  }
+
+  &__logo {
+    display: inline-block;
+    max-height: 30px;
+    max-width: 30px;
+    margin-right: 5px;
+    border-radius: 4px;
+  }
+}
+
+.table {
+  &__validators {
+    & td:nth-child(2),
+    & td:nth-child(3) {
+      max-width: 200px;
+    }
+  }
+}
 </style>

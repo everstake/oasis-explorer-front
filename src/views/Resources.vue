@@ -5,25 +5,52 @@
     <div class="container" fluid="lg">
       <div class="resources__content">
         <p class="resources__title">Wallets</p>
-        <p class="resources__text"><a href="https://docs.oasis.dev/hsm/ledger.html#prerequisites" target="_blank">Ledger: https://docs.oasis.dev/hsm/ledger.html#prerequisites</a></p>
+        <p class="resources__text">
+          <a
+            href="https://docs.oasis.dev/hsm/ledger.html#prerequisites"
+            target="_blank"
+            >Ledger</a
+          >
+        </p>
 
         <p class="resources__title">Social links</p>
-        <p class="resources__text"><a href="https://app.slack.com/client/TK9CZ7USZ/CLZPDEWTA" target="_blank">Slack:
-          https://app.slack.com/client/TK9CZ7USZ/CLZPDEWTA</a></p>
-        <p class="resources__text"><a href="https://t.me/oasisprotocolcommunity" target="_blank">Telegram:
-          https://t.me/oasisprotocolcommunity</a></p>
-        <p class="resources__text"><a href="https://www.oasislabs.com/blog" target="_blank">Blog:
-          https://www.oasislabs.com/blog</a></p>
-        <p class="resources__text"><a href="https://oasisfoundation.typeform.com/to/aFYokz" target="_blank">Dev
-          Accelerator: https://oasisfoundation.typeform.com/to/aFYokz</a></p>
+        <p class="resources__text">
+          <a
+            href="https://app.slack.com/client/TK9CZ7USZ/CLZPDEWTA"
+            target="_blank"
+            >Slack</a
+          >
+        </p>
+        <p class="resources__text">
+          <a href="https://t.me/oasisprotocolcommunity" target="_blank"
+            >Telegram</a
+          >
+        </p>
+        <p class="resources__text">
+          <a href="https://www.oasislabs.com/blog" target="_blank">Blog</a>
+        </p>
+        <p class="resources__text">
+          <a
+            href="https://oasisfoundation.typeform.com/to/aFYokz"
+            target="_blank"
+            >Dev Accelerator</a
+          >
+        </p>
 
         <p class="resources__title">Documentation</p>
-        <p class="resources__text"><a href="https://docs.oasis.dev/overview.html" target="_blank">Docs:
-          https://docs.oasis.dev/overview.html</a></p>
-        <p class="resources__text"><a href="https://github.com/oasislabs" target="_blank">Github:
-          https://github.com/oasislabs</a></p>
-        <p class="resources__text"><a href="https://oasisprotocol.org/papers" target="_blank">Research papers:
-          https://oasisprotocol.org/papers</a></p>
+        <p class="resources__text">
+          <a href="https://docs.oasis.dev/overview.html" target="_blank"
+            >Docs</a
+          >
+        </p>
+        <p class="resources__text">
+          <a href="https://github.com/oasislabs" target="_blank">Github</a>
+        </p>
+        <p class="resources__text">
+          <a href="https://oasisprotocol.org/papers" target="_blank"
+            >Research papers</a
+          >
+        </p>
       </div>
     </div>
   </div>
@@ -65,7 +92,7 @@ export default {
 
     padding: 40px;
     border-radius: 4px;
-    box-shadow: 0 10px 50px rgba(0,0,0,.1);
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
   }
 
   &__title {

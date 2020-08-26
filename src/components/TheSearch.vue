@@ -1,28 +1,18 @@
 <template>
   <div class="search">
-    <div
-      v-if="!isSearchVisible"
-       @click="showSearch()"
-      class="search__icon"
-    >
+    <div v-if="!isSearchVisible" @click="showSearch()" class="search__icon">
       <font-awesome-icon class="icon search__icon" :icon="['fas', 'search']" />
     </div>
-    <div
-        v-else
-        class="search__form"
-      >
-        <div
-          @click="hideSearch()"
-          class="search__close"
-        >
-          <font-awesome-icon class="icon social__icon" :icon="['fas', 'times']" />
-        </div>
-        <SearchContent
-          :loading="loading"
-          :autofocus="true"
-          @handleSubmit="handleSubmit"
-          class="search-content search--height-100-vh"
-        />
+    <div v-else class="search__form">
+      <div @click="hideSearch()" class="search__close">
+        <font-awesome-icon class="icon social__icon" :icon="['fas', 'times']" />
+      </div>
+      <SearchContent
+        :loading="loading"
+        :autofocus="true"
+        @handleSubmit="handleSubmit"
+        class="search-content search--height-100-vh"
+      />
     </div>
   </div>
 </template>
@@ -59,7 +49,9 @@ export default {
     checkIsQueryValidator(queryString) {
       return this.validators.find(({ account_id: id, account_name: name }) => {
         const isMatchComplete = queryString === id || queryString === name;
-        const isMatchPartically = name.toLowerCase().indexOf(queryString.toLowerCase());
+        const isMatchPartically = name
+          .toLowerCase()
+          .indexOf(queryString.toLowerCase());
 
         if (isMatchComplete || isMatchPartically >= 0) {
           return id;
@@ -96,11 +88,15 @@ export default {
         data = await this.$api.getBlocks({ block_level: Number(queryString) });
         options.id = Number(queryString);
       } else if (isQueryValidator) {
-        data = await this.$api.getValidator({ id: isQueryValidator.account_id });
+        data = await this.$api.getValidator({
+          id: isQueryValidator.account_id,
+        });
         options.id = isQueryValidator.account_id;
       } else if (isQueryAnAccount) {
         try {
-          data = await this.$api.getValidator({ id: isQueryValidator.account_id });
+          data = await this.$api.getValidator({
+            id: isQueryValidator.account_id,
+          });
           options.id = isQueryValidator.account_id;
           return;
         } catch {
@@ -113,24 +109,46 @@ export default {
       }
 
       this.loading = false;
-      
-      if (data.status !== 200 || data.data.length === 0) {
+
+      const showError = () => {
         this.$notify({
           type: 'error',
           title: 'Oasis Monitor',
           text: 'Oops, wrong input',
         });
+      };
+
+      if (data === undefined) {
+        showError();
+        return;
+      }
+
+      if (data && data.status !== 200) {
+        showError();
+        return;
+      }
+
+      if (Array.isArray(data) && data.data.length === 0) {
+        showError();
         return;
       }
 
       if (isQueryNumber) {
-        this.$router.push({ name: 'block', params: { ...options } }).catch(() => {});
+        this.$router
+          .push({ name: 'block', params: { ...options } })
+          .catch(() => {});
       } else if (isQueryValidator) {
-        this.$router.push({ name: 'validator', params: { ...options } }).catch(() => {});
+        this.$router
+          .push({ name: 'validator', params: { ...options } })
+          .catch(() => {});
       } else if (isQueryAnAccount) {
-        this.$router.push({ name: 'account', params: { ...options } }).catch(() => {});
+        this.$router
+          .push({ name: 'account', params: { ...options } })
+          .catch(() => {});
       } else if (queryString.length === 64) {
-        this.$router.push({ name: 'operation', params: { ...options } }).catch(() => {});
+        this.$router
+          .push({ name: 'operation', params: { ...options } })
+          .catch(() => {});
       }
     },
     async fetchValidatorsList() {

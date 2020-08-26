@@ -57,7 +57,7 @@ export default {
       return queryString.slice(0, 5) === 'oasis';
     },
     checkIsQueryValidator(queryString) {
-      this.validators.find(({ account_id: id, account_name: name }) => {
+      return this.validators.find(({ account_id: id, account_name: name }) => {
         const isMatchComplete = queryString === id || queryString === name;
         const isMatchPartically = name.toLowerCase().indexOf(queryString.toLowerCase());
 

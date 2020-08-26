@@ -25,6 +25,9 @@ import {
   faTwitter,
   faFacebookSquare,
   faMediumM,
+  faTelegram,
+  faFacebook,
+  faMedium,
 } from '@fortawesome/free-brands-svg-icons';
 
 library.add(
@@ -48,6 +51,9 @@ library.add(
   faTwitter,
   faFacebookSquare,
   faMediumM,
+  faTelegram,
+  faFacebook,
+  faMedium,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);

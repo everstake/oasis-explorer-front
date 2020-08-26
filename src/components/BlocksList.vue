@@ -15,9 +15,7 @@
         <TableLoader />
       </template>
       <template #cell(level)="items">
-        <router-link
-          :to="{ name: 'block', params: { id: items.item.level } }"
-        >
+        <router-link :to="{ name: 'block', params: { id: items.item.level } }">
           {{ items.item.level }}
         </router-link>
       </template>
@@ -25,7 +23,7 @@
         <router-link
           :to="{ name: 'block', params: { id: items.item.hash } }"
           :class="{
-            'table__hash': minifyTableHash
+            table__hash: minifyTableHash,
           }"
         >
           {{ items.item.hash }}
@@ -37,7 +35,7 @@
       <template #cell(timestamp)="items">
         {{ items.item.timestamp | formatDate }}
         <div class="date-from-now">
-        {{ items.item.timestamp | formatDaysAgo }}
+          {{ items.item.timestamp | formatDaysAgo }}
         </div>
       </template>
       <template #cell(number_of_txs)="items">
@@ -46,7 +44,11 @@
         </div>
       </template>
       <template #cell(number_of_signatures)="items">
-        {{ items.item.number_of_signatures ? items.item.number_of_signatures : '-' }}
+        {{
+          items.item.number_of_signatures
+            ? items.item.number_of_signatures
+            : '-'
+        }}
       </template>
     </b-table>
     <div
@@ -58,7 +60,7 @@
         variant="outline-primary"
         class="blocks-list__button font-weight-bold"
         :class="{
-          'transactions-list__button--loading': loading
+          'transactions-list__button--loading': loading,
         }"
         :disabled="loading || isShowMoreButtonDisabled"
       >
@@ -67,11 +69,19 @@
         </span>
         <span v-else-if="loading" disabled>
           Loading
-          <font-awesome-icon class="blocks-list__icon" icon="sync-alt" :spin="loading" />
+          <font-awesome-icon
+            class="blocks-list__icon"
+            icon="sync-alt"
+            :spin="loading"
+          />
         </span>
         <span v-else>
           Show more
-          <font-awesome-icon class="blocks-list__icon" icon="arrow-circle-down" :spin="loading" />
+          <font-awesome-icon
+            class="blocks-list__icon"
+            icon="arrow-circle-down"
+            :spin="loading"
+          />
         </span>
       </b-button>
     </div>
@@ -88,19 +98,15 @@ export default {
   components: {
     TableLoader,
   },
-  mixins: [
-    fetchList,
-    fetchOnScroll,
-  ],
+  mixins: [fetchList, fetchOnScroll],
   props: {
     minifyTableHash: {
       type: Boolean,
       default: false,
     },
-  },
-  data() {
-    return {
-      fields: [
+    fields: {
+      type: Array,
+      default: () => [
         { key: 'level', label: 'Height', sortable: true },
         { key: 'hash', label: 'Block hash' },
         { key: 'proposer', label: 'Proposer' },
@@ -110,7 +116,7 @@ export default {
         { key: 'fees', label: 'Fees' },
         { key: 'timestamp', label: 'Date', sortable: true },
       ],
-    };
+    },
   },
   methods: {
     fetchData(params = {}) {
@@ -124,51 +130,51 @@ export default {
 </script>
 
 <style lang="scss">
-  .blocks-list {
-    &__actions {
-      margin-top: 50px;
-      margin-bottom: 50px;
+.blocks-list {
+  &__actions {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  &__button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    border: none;
+
+    &:hover,
+    &:active {
+      &.disabled {
+        color: $color-primary !important;
+      }
+
+      color: $color-white !important;
     }
 
-    &__button {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: auto;
-      border: none;
+    &--loading {
+      color: $color-primary;
+      background: $color-white;
+      border: 1px solid transparent;
 
       &:hover,
-      &:active {
-        &.disabled {
-          color: $color-primary !important;
-        }
-
-        color: $color-white !important;
-      }
-
-      &--loading {
+      &:focus {
         color: $color-primary;
         background: $color-white;
-        border: 1px solid transparent;
-
-        &:hover,
-        &:focus {
-          color: $color-primary;
-          background: $color-white;
-          outline: none;
-          border: none;
-          box-shadow: none;
-        }
+        outline: none;
+        border: none;
+        box-shadow: none;
       }
     }
-
-    &__icon {
-      margin-left: 5px;
-    }
-
-    & .date-from-now {
-      font-size: 14px;
-      color: #999;
-    }
   }
+
+  &__icon {
+    margin-left: 5px;
+  }
+
+  & .date-from-now {
+    font-size: 14px;
+    color: #999;
+  }
+}
 </style>

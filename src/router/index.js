@@ -144,9 +144,23 @@ const routes = [
   {
     path: '/404',
     name: '404',
-    component: () => import(/* webpackChunkName: "404" */ '../views/NotFound.vue'),
+    component: () => import(/* webpackChunkName: "404" */ '../views/Error.vue'),
     meta: {
       title: '404 | Oasis Monitor',
+    },
+    props: {
+      status: 404,
+    },
+  },
+  {
+    path: '/503',
+    name: '503',
+    component: () => import(/* webpackChunkName: "503" */ '../views/Error.vue'),
+    meta: {
+      title: '503 | Oasis Monitor',
+    },
+    props: {
+      status: 503,
     },
   },
   {

@@ -11,7 +11,6 @@
 <script>
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import BlocksList from '@/components/BlocksList.vue';
-/* eslint-disable */
 
 export default {
   name: 'Blocks',
@@ -34,24 +33,5 @@ export default {
       ],
     };
   },
-  methods: {
-    handleRowClick() {
-      return false;
-    },
-    async fetchData() {
-      const data = await this.$api.getBlocks({ limit: this.limit += 50 });
-
-      return data.data;
-    },
-    handleScroll(e) {
-      this.scroll = window.scrollY || window.scrollTop
-    }
-  },
-  created() {
-    window.addEventListener('scroll', this.handleScroll);
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.handleScroll);
-  }
 };
 </script>

@@ -11,20 +11,6 @@
   overflow: hidden;
 }
 
-.disabled {
-  //color: rgba(33, 37, 41, .7);
-  //pointer-events: none;
-}
-
-
-// dropdown
-.btn-secondary {
-  //background-color: $color-red;
-}
-.btn-secondary:not(:disabled):not(.disabled):active, .btn-secondary:not(:disabled):not(.disabled).active, .show > .btn-secondary.dropdown-toggle {
-  //background-color: $color-red;
-}
-
 
 // menu
 .nav-item:first-child .nav-link {
@@ -124,11 +110,6 @@ td a {
     }
   }
 }
-
-// buttons
-//.btn-outline-primary:hover {
-//  color: $color-white;
-//}
 
 .button {
   &--outline {

@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <div
-      v-if="!isSearchActive"
+      v-if="!isSearchVisible"
        @click="showSearch()"
       class="search__icon"
     >
@@ -21,7 +21,7 @@
           :loading="loading"
           :autofocus="true"
           @handleSubmit="handleSubmit"
-          class="search--height-100-vh"
+          class="search-content search--height-100-vh"
         />
     </div>
   </div>
@@ -39,40 +39,50 @@ export default {
     return {
       query: '',
       error: null,
-      isSearchActive: false,
+      isSearchVisible: false,
       loading: null,
       validators: null,
     };
   },
   methods: {
+    /* eslint-disable */
     showSearch() {
-      this.isSearchActive = true;
+      this.isSearchVisible = true;
       document.body.className = 'scroll-disabled';
+    },
+    checkIsQueryNumber(queryString) {
+      return !Number.isNaN(Number(queryString));
+    },
+    checkIsQueryAnAccount(queryString) {
+      return queryString.slice(0, 5) === 'oasis';
+    },
+    checkIsQueryValidator(queryString) {
+      return this.validators.find(({ account_id: id, account_name: name }) => {
+        const isMatchComplete = queryString === id || queryString === name;
+        const isMatchPartically = name.toLowerCase().indexOf(queryString.toLowerCase());
+
+        if (isMatchComplete || isMatchPartically >= 0) {
+          return id;
+        }
+      });
     },
     hideSearch() {
       this.loading = false;
-      this.isSearchActive = false;
+      this.isSearchVisible = false;
       document.body.className = '';
     },
     async handleSubmit(input) {
-      /* eslint-disable */
       if (input === '') {
-        return;
+        return false;
       }
 
       this.loading = true;
       const queryString = input.trim();
 
-      const isQueryNumber = !Number.isNaN(Number(queryString));
-      const isQueryAnAccount = queryString.slice(0, 5) === 'oasis';
-      const isQueryValidator = this.validators.find(({ account_id, account_name }) => {
-        const isMatchComplete = queryString === account_id || queryString === account_name;
-        const isMatchPartically = account_name.toLowerCase().indexOf(queryString.toLowerCase());
+      const isQueryNumber = this.checkIsQueryNumber(queryString);
+      const isQueryAnAccount = this.checkIsQueryAnAccount(queryString);
+      const isQueryValidator = this.checkIsQueryValidator(queryString);
 
-        if (isMatchComplete || isMatchPartically >= 0) {
-          return account_id;
-        }
-      });
       const options = {};
       let data;
 
@@ -123,16 +133,6 @@ export default {
         this.$router.push({ name: 'operation', params: { ...options } }).catch(() => {});
       }
     },
-    validateForm(query) {
-      this.error = null;
-
-      if (query === '') {
-        this.error = 'Search string should not be empty.';
-        return false;
-      }
-
-      return true;
-    },
     async fetchValidatorsList() {
       const validators = await this.$api.getValidatorsList();
 
@@ -148,7 +148,7 @@ export default {
     if (this.validators === null) {
       this.fetchValidatorsList();
     }
-    if (this.isSearchActive) {
+    if (this.isSearchVisible) {
       document.title = 'Search | Oasis Monitor';
     } else {
       document.title = this.$route.meta.title;

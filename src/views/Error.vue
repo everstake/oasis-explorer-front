@@ -1,8 +1,8 @@
 <template>
   <div class="not-found">
-    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
+    <Breadcrumbs class="breadcrumbs" :crumbs="getBreadcrumbs" />
     <div class="not-found__content">
-      Page not found
+      {{ errorMessage }}
     </div>
   </div>
 </template>
@@ -11,23 +11,45 @@
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 
 export default {
-  name: 'NotFound',
+  name: 'Error',
   components: {
     Breadcrumbs,
   },
+  props: {
+    status: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
-      breadcrumbs: [
+      errorMessage: '',
+    };
+  },
+  computed: {
+    getBreadcrumbs() {
+      return [
         {
           toRouteName: 'home',
           text: 'Home',
         },
         {
-          text: 'Page not found',
+          text: this.errorMessage,
           active: true,
         },
-      ],
-    };
+      ];
+    },
+  },
+  created() {
+    const { status } = this;
+
+    if (status === 404) {
+      this.errorMessage = 'Page not found';
+    }
+
+    if (status === 503) {
+      this.errorMessage = 'Something went wrong';
+    }
   },
 };
 </script>

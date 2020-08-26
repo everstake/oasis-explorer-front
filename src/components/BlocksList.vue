@@ -2,34 +2,33 @@
   <div class="blocks-list">
     <b-table
       ref="table"
-      :busy="loading && data === null"
+      :busy="loading && items === null"
       :responsive="true"
       show-empty
       :fields="fields"
-      :items="data"
+      :items="items"
       class="table table--border table-list"
       borderless
       no-border-collapse
-      @row-selected="handleRowClick"
     >
       <template #table-busy>
         <TableLoader />
       </template>
-      <template #cell(level)="data">
+      <template #cell(level)="items">
         <router-link
-          :to="{ name: 'block', params: { id: data.item.level } }"
+          :to="{ name: 'block', params: { id: items.item.level } }"
         >
-          {{ data.item.level }}
+          {{ items.item.level }}
         </router-link>
       </template>
-      <template #cell(hash)="data">
+      <template #cell(hash)="items">
         <router-link
-          :to="{ name: 'block', params: { id: data.item.hash } }"
+          :to="{ name: 'block', params: { id: items.item.hash } }"
           :class="{
             'table__hash': minifyTableHash
           }"
         >
-          {{ data.item.hash }}
+          {{ items.item.hash }}
         </router-link>
       </template>
       <template #cell(fees)="items">
@@ -51,17 +50,17 @@
       </template>
     </b-table>
     <div
-      v-if="scrollToLoadMore && data !== null"
+      v-if="fetchOnScrollEnabled && items !== null"
       class="blocks-list__actions"
     >
       <b-button
-        @click="onShowMore"
+        @click="handleShowMore"
         variant="outline-primary"
         class="blocks-list__button font-weight-bold"
         :class="{
           'transactions-list__button--loading': loading
         }"
-        :disabled="loading || isShowMoreDisabled"
+        :disabled="loading || isShowMoreButtonDisabled"
       >
         <span v-if="error">
           Something went wrong, click to retry
@@ -81,37 +80,19 @@
 
 <script>
 import TableLoader from '@/components/TableLoader.vue';
-import debounce from 'lodash/debounce';
+import fetchList from '@/mixins/fetchList';
+import fetchOnScroll from '@/mixins/fetchOnScroll';
 
 export default {
   name: 'BlocksList',
   components: {
     TableLoader,
   },
+  mixins: [
+    fetchList,
+    fetchOnScroll,
+  ],
   props: {
-    rows: {
-      type: Number,
-      default: null,
-    },
-    scrollToLoadMore: {
-      type: Boolean,
-      default: true,
-    },
-    fields: {
-      type: Array,
-      default() {
-        return [
-          { key: 'level', label: 'Height', sortable: true },
-          { key: 'hash', label: 'Block hash' },
-          { key: 'proposer', label: 'Proposer' },
-          { key: 'number_of_signatures', label: 'Signatures' },
-          { key: 'number_of_txs', label: '# of Ops', sortable: true },
-          { key: 'epoch', label: 'Epoch' },
-          { key: 'fees', label: 'Fees' },
-          { key: 'timestamp', label: 'Date', sortable: true },
-        ];
-      },
-    },
     minifyTableHash: {
       type: Boolean,
       default: false,
@@ -119,97 +100,25 @@ export default {
   },
   data() {
     return {
-      data: null,
-      loading: null,
-      limit: 50,
-      offset: 0,
-      error: false,
-      isShowMoreDisabled: false,
-      handleDebouncedScroll: null,
+      fields: [
+        { key: 'level', label: 'Height', sortable: true },
+        { key: 'hash', label: 'Block hash' },
+        { key: 'proposer', label: 'Proposer' },
+        { key: 'number_of_signatures', label: 'Signatures' },
+        { key: 'number_of_txs', label: '# of Ops', sortable: true },
+        { key: 'epoch', label: 'Epoch' },
+        { key: 'fees', label: 'Fees' },
+        { key: 'timestamp', label: 'Date', sortable: true },
+      ],
     };
   },
-  watch: {
-    isShowMoreDisabled: {
-      immediate: false,
-      handler(val) {
-        if (val && this.handleDebouncedScroll !== null) {
-          this.removeEventListenerOnScroll();
-        } else if (this.handleDebouncedScroll === null) {
-          this.setEventListenerOnScroll();
-        }
-      },
-    },
-  },
-  computed: {
-    getTransactionsLimit() {
-      return this.rows || this.limit;
-    },
-  },
   methods: {
-    handleScroll() {
-      if (this.$refs.table) {
-        if (window.innerHeight > this.$refs.table.$el.getBoundingClientRect().bottom) {
-          this.onShowMore();
-        }
-      }
-    },
     fetchData(params = {}) {
-      return this.$api.getBlocks({ ...params, limit: this.getTransactionsLimit });
-    },
-    async onShowMore() {
-      this.loading = true;
-      this.offset += 50;
-      const data = await this.fetchData({ offset: this.offset });
-
-      if (data.status !== 200) {
-        this.error = true;
-      } else if (Array.isArray(data.data) && data.data.length === 0) {
-        this.isShowMoreDisabled = true;
-      } else {
-        this.isShowMoreDisabled = false;
-        this.error = false;
-        this.data = [
-          ...this.data,
-          ...data.data,
-        ];
-      }
-
-      this.loading = false;
-    },
-    handleRowClick(item) {
-      const { level } = item[0];
-
-      this.$router.push({
-        name: 'block',
-        params: { level },
-      });
-    },
-    setEventListenerOnScroll() {
-      this.handleDebouncedScroll = debounce(this.handleScroll, 100);
-      window.addEventListener('scroll', this.handleDebouncedScroll);
-    },
-    removeEventListenerOnScroll() {
-      if (this.handleDebouncedScroll !== null) {
-        this.handleDebouncedScroll.cancel();
-      }
-      window.removeEventListener('scroll', this.handleDebouncedScroll);
-      this.handleDebouncedScroll = null;
+      return this.$api.getBlocks({ ...params, limit: this.getRequestLimit });
     },
   },
-  async created() {
-    this.loading = true;
-    const data = await this.fetchData();
-    this.data = data.data;
-    this.loading = false;
-
-    if (this.scrollToLoadMore) {
-      this.setEventListenerOnScroll();
-    }
-  },
-  beforeDestroy() {
-    if (this.scrollToLoadMore) {
-      this.removeEventListenerOnScroll();
-    }
+  created() {
+    this.fetchList('getBlocks', { limit: this.getRequestLimit });
   },
 };
 </script>

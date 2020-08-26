@@ -1,7 +1,7 @@
 <template>
   <div class="settings">
     <div
-      v-if="!isSettingsActive"
+      v-if="!isSettingsVisible"
        @click="showSearch()"
       class="settings__icon"
     >
@@ -39,17 +39,17 @@ export default {
     return {
       query: '',
       error: null,
-      isSettingsActive: false,
+      isSettingsVisible: false,
       loading: null,
     };
   },
   methods: {
     showSearch() {
-      this.isSettingsActive = true;
+      this.isSettingsVisible = true;
       document.body.className = 'scroll-disabled';
     },
     hideSearch() {
-      this.isSettingsActive = false;
+      this.isSettingsVisible = false;
       document.body.className = '';
     },
     async handleSubmit(props) {
@@ -61,16 +61,6 @@ export default {
         this.loading = false;
       }, 200);
     },
-    validateForm(query) {
-      this.error = null;
-
-      if (query === '') {
-        this.error = 'Search string should not be empty.';
-        return false;
-      }
-
-      return true;
-    },
   },
   watch: {
     $route() {
@@ -78,7 +68,7 @@ export default {
     },
   },
   updated() {
-    if (this.isSettingsActive) {
+    if (this.isSettingsVisible) {
       document.title = 'Settings | Oasis Monitor';
     } else {
       document.title = this.$route.meta.title;

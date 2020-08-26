@@ -153,7 +153,7 @@
             <p class="home__title">Blocks list</p>
             <BlocksList
               :rows="10"
-              :scrollToLoadMore="false"
+              :fetchOnScrollEnabled="false"
               :fields="[
                 { key: 'level', label: 'Height' },
                 { key: 'hash', label: 'Hash' },
@@ -175,7 +175,7 @@
             <p class="home__title">Operations list</p>
             <OperationsList
               :rows="10"
-              :scrollToLoadMore="false"
+              :fetchOnScrollEnabled="false"
               :fields="[
                 { key: 'level', label: 'Height' },
                 { key: 'hash', label: 'Hash' },
@@ -322,16 +322,16 @@ export default {
     this.setInfo(data.data);
 
     const escrowRatio = await this.$api.getEscrowRatio({
-      from: this.thirtyDaysAgoInSeconds,
-      to: this.todayInSeconds,
+      from: this.datesInSeconds.monthAgo,
+      to: this.datesInSeconds.today,
       frame: 'D',
     });
 
     this.escrowRatio = escrowRatio.data;
 
     const transactionVolume = await this.$api.getTransactionVolume({
-      from: this.thirtyDaysAgoInSeconds,
-      to: this.todayInSeconds,
+      from: this.datesInSeconds.monthAgo,
+      to: this.datesInSeconds.today,
       frame: 'D',
     });
 

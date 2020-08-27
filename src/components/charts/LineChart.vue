@@ -51,12 +51,6 @@ export default {
         return label.toFixed(5);
       },
     },
-    options: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
     tooltipsLabelCallback: {
       type: Function,
       // eslint-disable-next-line consistent-return
@@ -74,82 +68,6 @@ export default {
       },
     },
   },
-  data() {
-    return {
-      defaultOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        legend: {
-          fullWidth: false,
-          position: 'bottom',
-          labels: {
-            fontFamily: 'Nunito',
-            fontColor: '#2d2e2c',
-          },
-        },
-        scales: {
-          yAxes: [
-            {
-              type: 'linear',
-              display: true,
-              gridLines: {
-                drawOnChartArea: true,
-                color: 'rgba(33, 37, 41, 0.1)',
-              },
-              ticks: {
-                maxTicksLimit: this.yAxesMaxTicksLimit,
-                fontFamily: 'Nunito',
-                fontColor: '#2d2e2c',
-                beginAtZero: this.yAxesBeginAtZero,
-                stepSize: this.yTicksStepSize,
-                callback: this.yTicksCallback,
-              },
-            },
-          ],
-          xAxes: [
-            {
-              gridLines: {
-                drawOnChartArea: false,
-              },
-              ticks: {
-                maxTicksLimit: this.xAxesMaxTicksLimit,
-                fontColor: '#2d2e2c',
-                fontFamily: 'Nunito',
-              },
-            },
-          ],
-        },
-        tooltips: {
-          mode: 'x-axis',
-          enabled: Boolean(this.customTooltip),
-          titleFontFamily: 'Nunito',
-          bodyFontFamily: 'Nunito',
-          displayColors: false,
-          backgroundColor: 'rgba(33, 37, 41, 0.8)',
-          bodyAlign: 'center',
-          titleAlign: 'center',
-          cornerRadius: 4,
-          callbacks: {
-            label: this.tooltipsLabelCallback,
-          },
-        },
-        elements: {
-          line: {
-            borderColor: 'rgba(76, 212, 169, 1)',
-            borderWidth: 1,
-            fill: true,
-            backgroundColor: 'rgba(76, 212, 169, 0.6)',
-            cubicInterpolationMode: 'monotone',
-          },
-          point: {
-            borderColor: 'rgba(76, 212, 169, 1)',
-            backgroundColor: '#fff',
-            borderWidth: 1,
-          },
-        },
-      },
-    };
-  },
   methods: {
     handleChartClick(point, event) {
       /* eslint-disable */
@@ -162,12 +80,82 @@ export default {
     },
   },
   mounted() {
+    console.log('yAxesType', this.yAxesType);
+    const defaultOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        fullWidth: false,
+        position: 'bottom',
+        labels: {
+          fontFamily: 'Nunito',
+          fontColor: '#2d2e2c',
+        },
+      },
+      scales: {
+        yAxes: [
+          {
+            type: this.yAxesType,
+            display: true,
+            gridLines: {
+              drawOnChartArea: true,
+              color: 'rgba(33, 37, 41, 0.1)',
+            },
+            ticks: {
+              maxTicksLimit: this.yAxesMaxTicksLimit,
+              fontFamily: 'Nunito',
+              fontColor: '#2d2e2c',
+              beginAtZero: this.yAxesBeginAtZero,
+              stepSize: this.yTicksStepSize,
+              callback: this.yTicksCallback,
+            },
+          },
+        ],
+        xAxes: [
+          {
+            gridLines: {
+              drawOnChartArea: false,
+            },
+            ticks: {
+              maxTicksLimit: this.xAxesMaxTicksLimit,
+              fontColor: '#2d2e2c',
+              fontFamily: 'Nunito',
+            },
+          },
+        ],
+      },
+      tooltips: {
+        mode: 'x-axis',
+        enabled: Boolean(this.customTooltip),
+        titleFontFamily: 'Nunito',
+        bodyFontFamily: 'Nunito',
+        displayColors: false,
+        backgroundColor: 'rgba(33, 37, 41, 0.8)',
+        bodyAlign: 'center',
+        titleAlign: 'center',
+        cornerRadius: 4,
+        callbacks: {
+          label: this.tooltipsLabelCallback,
+        },
+      },
+      elements: {
+        line: {
+          borderColor: 'rgba(76, 212, 169, 1)',
+          borderWidth: 1,
+          fill: true,
+          backgroundColor: 'rgba(76, 212, 169, 0.6)',
+          cubicInterpolationMode: 'monotone',
+        },
+        point: {
+          borderColor: 'rgba(76, 212, 169, 1)',
+          backgroundColor: '#fff',
+          borderWidth: 1,
+        },
+      },
+    };
     // this.chartData is created in the mixin.
     // If you want to pass options please create a local options object
-    this.renderChart(this.chartData, {
-      ...this.defaultOptions,
-      ...this.options,
-    });
+    this.renderChart(this.chartData, defaultOptions);
   },
 };
 </script>

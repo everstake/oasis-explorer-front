@@ -67,6 +67,10 @@ export default {
         }
       },
     },
+    propsOptions: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   methods: {
     handleChartClick(point, event) {
@@ -152,9 +156,14 @@ export default {
         },
       },
     };
+
+    const options = {
+      ...defaultOptions,
+      ...this.propsOptions,
+    };
     // this.chartData is created in the mixin.
     // If you want to pass options please create a local options object
-    this.renderChart(this.chartData, defaultOptions);
+    this.renderChart(this.chartData, options);
   },
 };
 </script>

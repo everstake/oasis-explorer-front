@@ -12,6 +12,7 @@
         :autofocus="true"
         @handleSubmit="handleSubmit"
         class="search-content search--height-100-vh"
+        :search="search"
       />
     </div>
   </div>
@@ -27,7 +28,10 @@ export default {
   },
   data() {
     return {
-      query: '',
+      search: {
+        completed: false,
+        query: '',
+      },
       error: null,
       isSearchVisible: false,
       loading: null,
@@ -88,6 +92,8 @@ export default {
         data = await this.$api.getBlocks({ block_level: Number(queryString) });
         options.id = Number(queryString);
       } else if (isQueryValidator) {
+        this.search.completed = true;
+        this.search.query = isQueryValidator.account_name;
         data = await this.$api.getValidator({
           id: isQueryValidator.account_id,
         });
@@ -150,6 +156,9 @@ export default {
           .push({ name: 'operation', params: { ...options } })
           .catch(() => {});
       }
+
+      this.search.completed = false;
+      this.search.query = '';
     },
     async fetchValidatorsList() {
       const validators = await this.$api.getValidatorsList();

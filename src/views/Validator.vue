@@ -772,7 +772,7 @@ export default {
 
       for (let i = 0; i <= 10; i += 1) {
         if (t.datasetIndex === i) {
-          return `${xLabel}: ${yLabel}`;
+          return `${xLabel}: ${yLabel}%`;
         }
       }
     },

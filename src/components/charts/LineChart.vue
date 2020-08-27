@@ -66,7 +66,9 @@ export default {
 
         for (let i = 0; i <= 10; i += 1) {
           if (t.datasetIndex === i) {
-            return `${xLabel}: ${numeral(yLabel / 1000000000).format('0,0.[000000000]')}`;
+            return `${xLabel}: ${numeral(yLabel / 1000000000).format(
+              '0,0.[000000000]',
+            )}`;
           }
         }
       },
@@ -145,16 +147,6 @@ export default {
             borderWidth: 1,
           },
         },
-        onClick(evt, array) {
-          /* eslint-disable */
-          if (array.length != 0) {
-            var position = array[0]._index;
-            var activeElement = this.tooltip._data.datasets[0].data[position]
-            console.log(activeElement);
-          } else {
-            console.log("You selected the background!");
-          }
-        },
       },
     };
   },
@@ -166,13 +158,16 @@ export default {
         index: item._index,
         backgroundColor: item._view.backgroundColor,
         value: this.values[item._index],
-      })
+      });
     },
   },
   mounted() {
     // this.chartData is created in the mixin.
     // If you want to pass options please create a local options object
-    this.renderChart(this.chartData, { ...this.defaultOptions, ...this.options });
+    this.renderChart(this.chartData, {
+      ...this.defaultOptions,
+      ...this.options,
+    });
   },
 };
 </script>

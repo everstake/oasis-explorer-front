@@ -399,6 +399,29 @@
                     class="validator__container validator__shadow"
                   >
                     <b-table
+                      v-if="activeTab === 'rewards' && getRewardsItems !== null"
+                      :busy="loading && tableItems === null"
+                      :responsive="true"
+                      :fields="getRewardsFields"
+                      :items="getRewardsItems"
+                      class="table table--border table-list validator__table table__rewards"
+                      borderless
+                      no-border-collapse
+                    >
+                      <template #cell(total_reward)="tableItems">
+                        {{ tableItems.item.total_reward | formatAmount }}
+                      </template>
+                      <template #cell(day_reward)="tableItems">
+                        {{ tableItems.item.day_reward | formatAmount }}
+                      </template>
+                      <template #cell(week_reward)="tableItems">
+                        {{ tableItems.item.week_reward | formatAmount }}
+                      </template>
+                      <template #cell(month_reward)="tableItems">
+                        {{ tableItems.item.month_reward | formatAmount }}
+                      </template>
+                    </b-table>
+                    <b-table
                       ref="table"
                       id="my-table"
                       :busy="loading && tableItems === null"
@@ -669,7 +692,7 @@
 </template>
 
 <script>
-/* eslint-disable */
+/*eslint-disable*/
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
@@ -731,6 +754,7 @@ export default {
         'rgba(47, 72, 88, .4)',
       ],
       xAxesMaxTicksLimit: 10,
+      getRewardsItems: null,
     };
   },
   watch: {
@@ -858,6 +882,17 @@ export default {
           });
           break;
         case 'rewards':
+          let stats;
+          stats = await this.$api.getValidatorRewardsStat({
+            limit: this.limit,
+            offset: this.offset,
+            id: this.$route.params.id,
+          });
+          this.getRewardsItems = [
+            {
+              ...stats.data,
+            },
+          ];
           data = await this.$api.getValidatorRewards({
             limit: this.limit,
             offset: this.offset,
@@ -886,6 +921,14 @@ export default {
     },
   },
   computed: {
+    getRewardsFields() {
+      return [
+        { key: 'total_reward', label: 'Total rewards' },
+        { key: 'day_reward', label: 'Day rewards' },
+        { key: 'week_reward', label: 'Week rewards' },
+        { key: 'month_reward', label: 'Month rewards' },
+      ];
+    },
     filterWhiteColorLogotypes() {
       const { account_name: accountName } = this.items;
       const whiteLogotypes = ['everstake', 'witval', 'forbole'];
@@ -1173,5 +1216,11 @@ export default {
       }
     }
   }
+}
+</style>
+
+<style lang="scss" scoped>
+.table__rewards th {
+  background-color: #353a38;
 }
 </style>

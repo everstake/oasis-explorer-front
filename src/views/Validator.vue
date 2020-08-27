@@ -1219,8 +1219,8 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .table__rewards th {
-  background-color: #353a38;
+  background-color: #353a38 !important;
 }
 </style>

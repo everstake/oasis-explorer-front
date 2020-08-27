@@ -1,6 +1,9 @@
 <template>
   <div class="validator">
-    <Breadcrumbs class="breadcrumbs validator__breadcrumbs" :crumbs="breadcrumbs" />
+    <Breadcrumbs
+      class="breadcrumbs validator__breadcrumbs"
+      :crumbs="breadcrumbs"
+    />
 
     <b-container fluid="lg">
       <b-row v-if="loading && items === null">
@@ -30,8 +33,8 @@
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'transfers'
-                    }"
+                  'validator__btn--active': activeTab === 'transfers',
+                }"
                 @click="updateTableData('transfers')"
               >
                 Transfers
@@ -39,8 +42,9 @@
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'addescrow/reclaimescrow'
-                    }"
+                  'validator__btn--active':
+                    activeTab === 'addescrow/reclaimescrow',
+                }"
                 @click="updateTableData('addescrow/reclaimescrow')"
               >
                 Escrow events
@@ -48,8 +52,8 @@
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'other'
-                    }"
+                  'validator__btn--active': activeTab === 'other',
+                }"
                 @click="updateTableData('other')"
               >
                 Other ops
@@ -57,8 +61,8 @@
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'delegators'
-                    }"
+                  'validator__btn--active': activeTab === 'delegators',
+                }"
                 @click="updateTableData('delegators')"
               >
                 Delegators
@@ -66,8 +70,8 @@
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'charts'
-                    }"
+                  'validator__btn--active': activeTab === 'charts',
+                }"
                 @click="updateTableData('charts')"
               >
                 Charts
@@ -78,44 +82,39 @@
         <b-row>
           <b-col cols="12" md="4">
             <div class="validator__section transaction__section">
-              <b-card
-                class="validator__info"
-                header="Validator information"
-              >
+              <b-card class="validator__info" header="Validator information">
                 <b-card-text class="block__content block__logotype">
                   <img
                     v-if="items.media_info && items.media_info.logotype"
                     class="block__logo"
                     :class="{
-                      'block__logotype--white': filterWhiteColorLogotypes
+                      'block__logotype--white': filterWhiteColorLogotypes,
                     }"
-                    :src='items.media_info.logotype'
-                    :alt='`${items.account_name} logotype`'
-                  >
+                    :src="items.media_info.logotype"
+                    :alt="`${items.account_name} logotype`"
+                  />
                   <img
                     v-else
                     class="block__logo"
                     src="../assets/images/logo-oasis.svg"
                     alt="Oasis logotype"
-                  >
+                  />
                 </b-card-text>
-                <b-card-text
-                  v-if="items.account_name"
-                  class="block__content"
-                >
+                <b-card-text v-if="items.account_name" class="block__content">
                   <span class="validator__name">{{ items.account_name }}</span>
 
-                  <div
-                    v-if="items.media_info"
-                    class="validator__contacts"
-                  >
+                  <div v-if="items.media_info" class="validator__contacts">
                     <a
                       class="validator__contact"
                       :class="{
                         'validator__contact--active':
-                         items.media_info.website_link
+                          items.media_info.website_link,
                       }"
-                      :href="items.media_info.website_link ? items.media_info.website_link : '#'"
+                      :href="
+                        items.media_info.website_link
+                          ? items.media_info.website_link
+                          : '#'
+                      "
                       target="_blank"
                     >
                       <font-awesome-icon
@@ -126,10 +125,14 @@
                     <a
                       class="validator__contact"
                       :class="{
-                        'validator__contact--active': items.media_info.email_address
+                        'validator__contact--active':
+                          items.media_info.email_address,
                       }"
-                      :href="items.media_info.email_address ?
-                       `mailto:${items.media_info.email_address}` : '#'"
+                      :href="
+                        items.media_info.email_address
+                          ? `mailto:${items.media_info.email_address}`
+                          : '#'
+                      "
                     >
                       <font-awesome-icon
                         class="validator__icon"
@@ -139,9 +142,13 @@
                     <a
                       class="validator__contact"
                       :class="{
-                        'validator__contact--active': items.media_info.tg_chat
+                        'validator__contact--active': items.media_info.tg_chat,
                       }"
-                      :href="items.media_info.tg_chat ? items.media_info.tg_chat : '#'"
+                      :href="
+                        items.media_info.tg_chat
+                          ? items.media_info.tg_chat
+                          : '#'
+                      "
                       target="_blank"
                     >
                       <font-awesome-icon
@@ -152,9 +159,14 @@
                     <a
                       class="validator__contact"
                       :class="{
-                        'validator__contact--active': items.media_info.twitter_acc
+                        'validator__contact--active':
+                          items.media_info.twitter_acc,
                       }"
-                      :href="items.media_info.twitter_acc ? items.media_info.twitter_acc : '#'"
+                      :href="
+                        items.media_info.twitter_acc
+                          ? items.media_info.twitter_acc
+                          : '#'
+                      "
                       target="_blank"
                     >
                       <font-awesome-icon
@@ -165,9 +177,14 @@
                     <a
                       class="validator__contact"
                       :class="{
-                        'validator__contact--active': items.media_info.facebook_acc
+                        'validator__contact--active':
+                          items.media_info.facebook_acc,
                       }"
-                      :href="items.media_info.facebook_acc ? items.media_info.facebook_acc : '#'"
+                      :href="
+                        items.media_info.facebook_acc
+                          ? items.media_info.facebook_acc
+                          : '#'
+                      "
                       target="_blank"
                     >
                       <font-awesome-icon
@@ -178,9 +195,14 @@
                     <a
                       class="validator__contact"
                       :class="{
-                        'validator__contact--active': items.media_info.medium_link
+                        'validator__contact--active':
+                          items.media_info.medium_link,
                       }"
-                      :href="items.media_info.medium_link ? items.media_info.medium_link : '#'"
+                      :href="
+                        items.media_info.medium_link
+                          ? items.media_info.medium_link
+                          : '#'
+                      "
                       target="_blank"
                     >
                       <font-awesome-icon
@@ -189,64 +211,38 @@
                       />
                     </a>
                   </div>
-                  <div
-                    v-else
-                    class="validator__contacts"
-                  >
-                    <a
-                      class="validator__contact"
-                      href="#"
-                      target="_blank"
-                    >
+                  <div v-else class="validator__contacts">
+                    <a class="validator__contact" href="#" target="_blank">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fa', iconName: 'globe' }"
                       />
                     </a>
-                    <a
-                      class="validator__contact"
-                      href="#"
-                    >
+                    <a class="validator__contact" href="#">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fa', iconName: 'envelope' }"
                       />
                     </a>
-                    <a
-                      class="validator__contact"
-                      href="#"
-                      target="_blank"
-                    >
+                    <a class="validator__contact" href="#" target="_blank">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'telegram' }"
                       />
                     </a>
-                    <a
-                      class="validator__contact"
-                      href="#"
-                      target="_blank"
-                    >
+                    <a class="validator__contact" href="#" target="_blank">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'twitter' }"
                       />
                     </a>
-                    <a
-                      class="validator__contact"
-                      href="#"
-                      target="_blank"
-                    >
+                    <a class="validator__contact" href="#" target="_blank">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'facebook' }"
                       />
                     </a>
-                    <a
-                      class="validator__contact"
-                      href="#"
-                      target="_blank"
-                    >
+                    <a class="validator__contact" href="#" target="_blank">
                       <font-awesome-icon
                         class="validator__icon"
                         :icon="{ prefix: 'fab', iconName: 'medium' }"
@@ -260,15 +256,13 @@
                     @click="copyToClipboard(items.account_id)"
                     class="block__copy"
                   >
-                    <span
-                      :ref="items.account_id"
-                    >
+                    <span :ref="items.account_id">
                       {{ items.account_id }}
                     </span>
                     <font-awesome-icon
                       :icon="['fas', 'copy']"
                       :class="{
-                        'icon--success': isHashCopied(items.account_id)
+                        'icon--success': isHashCopied(items.account_id),
                       }"
                       class="icon icon-copy delegator-card__icon"
                     />
@@ -282,11 +276,12 @@
                   <div class="block__header">Availability score</div>
                   {{ items.available_score }}
                 </b-card-text>
-                <b-card-text
-                  class="block__content"
-                >
+                <b-card-text class="block__content">
                   <div class="block__header">Total balance</div>
-                  {{ items.general_balance + items.escrow_balance | formatAmount }}
+                  {{
+                    (items.general_balance + items.escrow_balance)
+                      | formatAmount
+                  }}
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Escrow balance</div>
@@ -301,9 +296,7 @@
                   {{ items.debonding_balance | formatAmount }}
                 </b-card-text>
                 <b-card-text class="block__content">
-                  <div
-                    class="block__header"
-                  >
+                  <div class="block__header">
                     Delegators
                   </div>
                   {{ items.depositors_count }}
@@ -312,9 +305,10 @@
                   <div
                     v-if="items.status"
                     :class="{
-                        'validator__status--active': items.status === 'active',
-                        'validator__status--inactive': items.status === 'inactive'
-                      }"
+                      'validator__status--active': items.status === 'active',
+                      'validator__status--inactive':
+                        items.status === 'inactive',
+                    }"
                   >
                     <div class="block__header">Status</div>
                     <font-awesome-icon
@@ -328,7 +322,9 @@
                   </div>
                 </b-card-text>
                 <b-card-text class="block__content">
-                  <div class="block__header" v-if="items.validate_since">Registered</div>
+                  <div class="block__header" v-if="items.validate_since">
+                    Registered
+                  </div>
                   {{ items.validate_since | formatDate }}
                   <div class="date-from-now">
                     ({{ items.validate_since | formatDaysAgo }})
@@ -338,13 +334,12 @@
             </div>
           </b-col>
           <b-col cols="12" md="8">
-          <div
-               class="validator__actions validator__actions--mobile">
+            <div class="validator__actions validator__actions--mobile">
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'transfers'
-                    }"
+                  'validator__btn--active': activeTab === 'transfers',
+                }"
                 @click="updateTableData('transfers')"
               >
                 Transfers
@@ -352,8 +347,9 @@
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'addescrow/reclaimescrow'
-                    }"
+                  'validator__btn--active':
+                    activeTab === 'addescrow/reclaimescrow',
+                }"
                 @click="updateTableData('addescrow/reclaimescrow')"
               >
                 Escrow events
@@ -361,8 +357,8 @@
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'other'
-                    }"
+                  'validator__btn--active': activeTab === 'other',
+                }"
                 @click="updateTableData('other')"
               >
                 Other ops
@@ -370,8 +366,8 @@
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'delegators'
-                    }"
+                  'validator__btn--active': activeTab === 'delegators',
+                }"
                 @click="updateTableData('delegators')"
               >
                 Delegators
@@ -379,224 +375,270 @@
               <b-btn
                 class="validator__btn"
                 :class="{
-                      'validator__btn--active': activeTab === 'charts'
-                    }"
+                  'validator__btn--active': activeTab === 'charts',
+                }"
                 @click="updateTableData('charts')"
               >
                 Charts
               </b-btn>
             </div>
-          <div class="block__section">
-            <div class="block__section block__section--table">
-              <b-card class="validator__card">
-                <div
-                  v-if="activeTab !== 'charts'"
-                  class="validator__container validator__shadow"
-                >
-                  <b-table
-                    id="my-table"
-                    :busy="loading && tableItems === null"
-                    :responsive="true"
-                    show-empty
-                    :fields="getTableFields"
-                    :items="tableItems"
-                    class="table table--border table-list validator__table"
-                    borderless
-                    no-border-collapse
-                  >
-                    <template #table-busy>
-                      <TableLoader />
-                    </template>
-                    <template #cell(height)="tableItems">
-                      <router-link
-                        :to="{ name: 'block', params: { id: tableItems.item.level } }"
-                      >
-                        {{ tableItems.item.level }}
-                      </router-link>
-                    </template>
-                    <template #cell(hash)="tableItems">
-                      <router-link
-                        :to="{ name: 'transaction', params: { id: tableItems.item.hash } }"
-                      >
-                        {{ tableItems.item.hash }}
-                      </router-link>
-                    </template>
-                    <template #cell(account_id)="tableItems">
-                      <router-link
-                        :to="{ name: 'account', params: { id: tableItems.item.account_id } }"
-                      >
-                        {{ tableItems.item.account_name || tableItems.item.account_id }}
-                      </router-link>
-                    </template>
-                    <template #cell(escrow_amount)="tableItems">
-                      {{ tableItems.item.escrow_amount | formatAmount }}
-                    </template>
-                    <template #cell(delegate_since)="tableItems">
-                      {{ tableItems.item.delegate_since | formatYear }}
-                      <div class="date-from-now">
-                        {{ tableItems.item.delegate_since | formatDaysAgo }}
-                      </div>
-                    </template>
-                    <template #cell(hash)="tableItems">
-                      {{ !tableItems.item.hash ? '-' : tableItems.item.hash }}
-                    </template>
-                    <template #cell(to)="tableItems">
-                      <div class="table__hash">
-                        <span v-if="!tableItems.item.to">-</span>
-                        <span
-                          v-else-if="tableItems.item.to ===
-                          'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='"
-                        >
-                          System Account
-                        </span>
-                        <router-link
-                          v-else
-                          :to="{ name: 'account', params: { id: tableItems.item.to } }"
-                        >
-                          {{ tableItems.item.to }}
-                        </router-link>
-                      </div>
-                    </template>
-                    <template #cell(from)="tableItems" class="table__hash">
-                      <div class="table__hash">
-                        <span v-if="!tableItems.item.from">-</span>
-                        <router-link
-                          v-else
-                          :to="{ name: 'account', params: { id: tableItems.item.from } }"
-                        >
-                          {{ tableItems.item.from }}
-                        </router-link>
-                      </div>
-                    </template>
-                    <template #cell(proposer)="tableItems">
-                      {{ !tableItems.item.proposer ? '-' : tableItems.item.proposer }}
-                    </template>
-                    <template #cell(timestamp)="tableItems">
-                      {{ tableItems.item.timestamp | formatDate }}
-                    </template>
-                    <template #cell(level)="tableItems">
-                      <router-link
-                        :to="{ name: 'block', params: { id: tableItems.item.level } }"
-                      >
-                        {{ tableItems.item.level }}
-                      </router-link>
-                    </template>
-                    <template #cell(hash)="tableItems">
-                      <router-link
-                        class="table__hash"
-                        :to="{ name: 'operation', params: { id: tableItems.item.hash } }"
-                      >
-                        {{ tableItems.item.hash }}
-                      </router-link>
-                    </template>
-                    <template #cell(amount)="tableItems">
-                      {{ tableItems.item.amount | formatAmount }}
-                    </template>
-                    <template #cell(storage)="tableItems">
-                      {{ !tableItems.item.storage ? '-' : tableItems.item.storage }}
-                    </template>
-                    <template #cell(gas_used)="tableItems">
-                      {{ !tableItems.item.gas_used ? '-' : tableItems.item.gas_used }}
-                    </template>
-                    <template #cell(fees)="tableItems">
-                      {{ !tableItems.item.fees ? '-' : tableItems.item.fees }}
-                    </template>
-                  </b-table>
+            <div class="block__section">
+              <div class="block__section block__section--table">
+                <b-card class="validator__card">
                   <div
-                    v-if="fetchOnScrollEnabled"
-                    class="blocks-list__actions"
+                    v-if="activeTab !== 'charts'"
+                    class="validator__container validator__shadow"
                   >
-                    <b-button
-                      @click="handleShowMore"
-                      variant="outline-primary"
-                      class="blocks-list__button font-weight-bold"
-                      :class="{
-                        'blocks-list__button--loading': loading
-                      }"
+                    <b-table
+                      id="my-table"
+                      :busy="loading && tableItems === null"
+                      :responsive="true"
+                      show-empty
+                      :fields="getTableFields"
+                      :items="tableItems"
+                      class="table table--border table-list validator__table"
+                      borderless
+                      no-border-collapse
+                    >
+                      <template #table-busy>
+                        <TableLoader />
+                      </template>
+                      <template #cell(height)="tableItems">
+                        <router-link
+                          :to="{
+                            name: 'block',
+                            params: { id: tableItems.item.level },
+                          }"
+                        >
+                          {{ tableItems.item.level }}
+                        </router-link>
+                      </template>
+                      <template #cell(hash)="tableItems">
+                        <router-link
+                          :to="{
+                            name: 'transaction',
+                            params: { id: tableItems.item.hash },
+                          }"
+                        >
+                          {{ tableItems.item.hash }}
+                        </router-link>
+                      </template>
+                      <template #cell(account_id)="tableItems">
+                        <router-link
+                          :to="{
+                            name: 'account',
+                            params: { id: tableItems.item.account_id },
+                          }"
+                        >
+                          {{
+                            tableItems.item.account_name ||
+                            tableItems.item.account_id
+                          }}
+                        </router-link>
+                      </template>
+                      <template #cell(escrow_amount)="tableItems">
+                        {{ tableItems.item.escrow_amount | formatAmount }}
+                      </template>
+                      <template #cell(delegate_since)="tableItems">
+                        {{ tableItems.item.delegate_since | formatYear }}
+                        <div class="date-from-now">
+                          {{ tableItems.item.delegate_since | formatDaysAgo }}
+                        </div>
+                      </template>
+                      <template #cell(hash)="tableItems">
+                        {{ !tableItems.item.hash ? '-' : tableItems.item.hash }}
+                      </template>
+                      <template #cell(to)="tableItems">
+                        <div class="table__hash">
+                          <span v-if="!tableItems.item.to">-</span>
+                          <span
+                            v-else-if="
+                              tableItems.item.to ===
+                              'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
+                            "
+                          >
+                            System Account
+                          </span>
+                          <router-link
+                            v-else
+                            :to="{
+                              name: 'account',
+                              params: { id: tableItems.item.to },
+                            }"
+                          >
+                            {{ tableItems.item.to }}
+                          </router-link>
+                        </div>
+                      </template>
+                      <template #cell(from)="tableItems" class="table__hash">
+                        <div class="table__hash">
+                          <span v-if="!tableItems.item.from">-</span>
+                          <router-link
+                            v-else
+                            :to="{
+                              name: 'account',
+                              params: { id: tableItems.item.from },
+                            }"
+                          >
+                            {{ tableItems.item.from }}
+                          </router-link>
+                        </div>
+                      </template>
+                      <template #cell(proposer)="tableItems">
+                        {{
+                          !tableItems.item.proposer
+                            ? '-'
+                            : tableItems.item.proposer
+                        }}
+                      </template>
+                      <template #cell(timestamp)="tableItems">
+                        {{ tableItems.item.timestamp | formatDate }}
+                      </template>
+                      <template #cell(level)="tableItems">
+                        <router-link
+                          :to="{
+                            name: 'block',
+                            params: { id: tableItems.item.level },
+                          }"
+                        >
+                          {{ tableItems.item.level }}
+                        </router-link>
+                      </template>
+                      <template #cell(hash)="tableItems">
+                        <router-link
+                          class="table__hash"
+                          :to="{
+                            name: 'operation',
+                            params: { id: tableItems.item.hash },
+                          }"
+                        >
+                          {{ tableItems.item.hash }}
+                        </router-link>
+                      </template>
+                      <template #cell(amount)="tableItems">
+                        {{ tableItems.item.amount | formatAmount }}
+                      </template>
+                      <template #cell(storage)="tableItems">
+                        {{
+                          !tableItems.item.storage
+                            ? '-'
+                            : tableItems.item.storage
+                        }}
+                      </template>
+                      <template #cell(gas_used)="tableItems">
+                        {{
+                          !tableItems.item.gas_used
+                            ? '-'
+                            : tableItems.item.gas_used
+                        }}
+                      </template>
+                      <template #cell(fees)="tableItems">
+                        {{ !tableItems.item.fees ? '-' : tableItems.item.fees }}
+                      </template>
+                    </b-table>
+                    <div
+                      v-if="fetchOnScrollEnabled"
+                      class="blocks-list__actions"
+                    >
+                      <b-button
+                        @click="handleShowMore"
+                        variant="outline-primary"
+                        class="blocks-list__button font-weight-bold"
+                        :class="{
+                          'blocks-list__button--loading': loading,
+                        }"
                         :disabled="loading || isShowMoreButtonDisabled"
                       >
-                      <span v-if="loading" disabled>
-                        Loading
-                        <font-awesome-icon
-                          class="blocks-list__icon"
-                          icon="sync-alt"
-                          :spin="loading"
-                        />
-                      </span>
-                      <span v-else>
-                        Show more
-                        <font-awesome-icon
-                          class="blocks-list__icon"
-                          icon="arrow-circle-down"
-                          :spin="loading"
-                        />
-                      </span>
-                    </b-button>
-                  </div>
-                </div>
-                <div v-else class="validator-chart">
-                  <div>
-                    <b-row v-if="loading && items === null">
-                      <b-col cols="12">
-                        <div class="text-center account__loading">
-                          <font-awesome-icon class="icon account__icon" icon="spinner" spin />
-                        </div>
-                      </b-col>
-                    </b-row>
-                    <b-row v-else-if="!loading && (Array.isArray(items) && items.length === 0)">
-                      <b-col cols="12">
-                        <div class="text-center block__empty">
-                          No data
-                        </div>
-                      </b-col>
-                    </b-row>
-                    <div class="stats__charts" v-else>
-                      <b-row class="stats__information mb-5">
-                        <b-col cols="12">
-                          <div class="stats__section">
-                            <b-card
-                              class="validator-chart__header"
-                              header="Uptime"
-                            >
-                              <b-card-text class="stats__content">
-                                <LineChart
-                                  :chart-data="getUptimeChartData"
-                                  :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
-                                  :y-axes-begin-at-zero="false"
-                                  :yTicksCallback="uptimeTicksCallback"
-                                  :tooltipsLabelCallback="uptimeTooltipsCallback"
-                                />
-                              </b-card-text>
-                            </b-card>
-                          </div>
-                        </b-col>
-                      </b-row>
-                      <b-row>
-                        <b-col cols="12">
-                          <div class="stats__section">
-                            <b-card
-                              class="validator-chart__header"
-                              header="Stake change"
-                            >
-                              <b-card-text class="stats__content">
-                                <LineChart
-                                  :chart-data="getStakeChartData"
-                                  :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
-                                  :y-axes-begin-at-zero="false"
-                                  :yTicksCallback="chartsTicksCallback"
-                                />
-                              </b-card-text>
-                            </b-card>
-                          </div>
-                        </b-col>
-                      </b-row>
+                        <span v-if="loading" disabled>
+                          Loading
+                          <font-awesome-icon
+                            class="blocks-list__icon"
+                            icon="sync-alt"
+                            :spin="loading"
+                          />
+                        </span>
+                        <span v-else>
+                          Show more
+                          <font-awesome-icon
+                            class="blocks-list__icon"
+                            icon="arrow-circle-down"
+                            :spin="loading"
+                          />
+                        </span>
+                      </b-button>
                     </div>
                   </div>
-                </div>
-              </b-card>
+                  <div v-else class="validator-chart">
+                    <div>
+                      <b-row v-if="loading && items === null">
+                        <b-col cols="12">
+                          <div class="text-center account__loading">
+                            <font-awesome-icon
+                              class="icon account__icon"
+                              icon="spinner"
+                              spin
+                            />
+                          </div>
+                        </b-col>
+                      </b-row>
+                      <b-row
+                        v-else-if="!loading && (Array.isArray(items) && items.length === 0)"
+                      >
+                        <b-col cols="12">
+                          <div class="text-center block__empty">
+                            No data
+                          </div>
+                        </b-col>
+                      </b-row>
+                      <div class="stats__charts" v-else>
+                        <b-row class="stats__information mb-5">
+                          <b-col cols="12">
+                            <div class="stats__section">
+                              <b-card
+                                class="validator-chart__header"
+                                header="Uptime"
+                              >
+                                <b-card-text class="stats__content">
+                                  <LineChart
+                                    :chart-data="getUptimeChartData"
+                                    :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                                    :y-axes-begin-at-zero="false"
+                                    :yTicksCallback="uptimeTicksCallback"
+                                    :tooltipsLabelCallback="
+                                      uptimeTooltipsCallback
+                                    "
+                                  />
+                                </b-card-text>
+                              </b-card>
+                            </div>
+                          </b-col>
+                        </b-row>
+                        <b-row>
+                          <b-col cols="12">
+                            <div class="stats__section">
+                              <b-card
+                                class="validator-chart__header"
+                                header="Stake change"
+                              >
+                                <b-card-text class="stats__content">
+                                  <LineChart
+                                    :chart-data="getStakeChartData"
+                                    :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                                    :y-axes-begin-at-zero="false"
+                                    :yTicksCallback="chartsTicksCallback"
+                                  />
+                                </b-card-text>
+                              </b-card>
+                            </div>
+                          </b-col>
+                        </b-row>
+                      </div>
+                    </div>
+                  </div>
+                </b-card>
+              </div>
             </div>
-          </div>
-        </b-col>
+          </b-col>
         </b-row>
       </div>
     </b-container>
@@ -604,6 +646,7 @@
 </template>
 
 <script>
+/*eslint-disable*/
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
@@ -622,12 +665,7 @@ export default {
     TableLoader,
     LineChart,
   },
-  mixins: [
-    copyToClipboard,
-    getDatesInSeconds,
-    fetchOnScroll,
-    uuid,
-  ],
+  mixins: [copyToClipboard, getDatesInSeconds, fetchOnScroll, uuid],
   data() {
     return {
       loading: null,
@@ -660,7 +698,6 @@ export default {
         'rgba(0, 0, 0, .4)',
         'rgba(76, 212, 169, .4)',
         'rgba(47, 72, 88, .4)',
-
       ],
       palette: [
         'rgba(76, 212, 169, .4)',
@@ -713,7 +750,7 @@ export default {
 
       for (let i = 0; i <= 10; i += 1) {
         if (t.datasetIndex === i) {
-          return `${xLabel}: ${yLabel}`;
+          return `${xLabel}: ${yLabel}%`;
         }
       }
     },
@@ -722,7 +759,7 @@ export default {
       const { activeTab } = this;
       this.tableItems = [
         ...this.tableItems,
-        ...await this.fetchData(activeTab),
+        ...(await this.fetchData(activeTab)),
       ];
     },
     setActiveTab(tabName) {
@@ -788,7 +825,12 @@ export default {
         case 'other':
           data = await this.$api.getTransactions({
             ...requestOptions,
-            operation_kind: ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
+            operation_kind: [
+              'registernode',
+              'registerentity',
+              'amendcommissionschedule',
+              'registerruntime',
+            ],
             account_id: this.$route.params.id,
           });
           break;
@@ -800,7 +842,10 @@ export default {
           });
       }
 
-      if (Array.isArray(data.data) && (data.data.length === 0 || data.data.length < this.limit)) {
+      if (
+        Array.isArray(data.data) &&
+        (data.data.length === 0 || data.data.length < this.limit)
+      ) {
         this.isShowMoreButtonDisabled = true;
       } else if (Array.isArray(data.data) && data.data.length > 0) {
         this.isShowMoreButtonDisabled = false;
@@ -815,7 +860,9 @@ export default {
       const { account_name: accountName } = this.items;
       const whiteLogotypes = ['everstake', 'witval', 'forbole'];
 
-      return whiteLogotypes.find((logoName) => accountName.toLowerCase() === logoName);
+      return whiteLogotypes.find(
+        (logoName) => accountName.toLowerCase() === logoName,
+      );
     },
     getUptimeChartData() {
       return {
@@ -823,7 +870,9 @@ export default {
           {
             label: 'Availability score',
             // eslint-disable-next-line camelcase
-            data: this.charts.uptime.map(({ availability_score }) => availability_score),
+            data: this.charts.uptime.map(
+              ({ availability_score }) => availability_score,
+            ),
             borderWidth: 1,
             backgroundColor: this.palette[0],
           },
@@ -837,7 +886,9 @@ export default {
           {
             label: 'Signatures count',
             // eslint-disable-next-line camelcase
-            data: this.charts.uptime.map(({ signatures_count }) => signatures_count),
+            data: this.charts.uptime.map(
+              ({ signatures_count }) => signatures_count,
+            ),
             borderWidth: 1,
             backgroundColor: this.palette[2],
           },
@@ -858,9 +909,11 @@ export default {
           {
             label: 'Total balance',
             /* eslint-disable */
-              data: this.charts.stake.map(({ general_balance, escrow_balance }) => {
-              return general_balance + escrow_balance;
-            }),
+            data: this.charts.stake.map(
+              ({ general_balance, escrow_balance }) => {
+                return general_balance + escrow_balance;
+              },
+            ),
             borderWidth: 1,
             backgroundColor: this.palette[0],
           },
@@ -874,14 +927,18 @@ export default {
           {
             label: 'Debonding balance',
             // eslint-disable-next-line camelcase
-            data: this.charts.stake.map(({ debonding_balance }) => debonding_balance),
+            data: this.charts.stake.map(
+              ({ debonding_balance }) => debonding_balance,
+            ),
             borderWidth: 1,
             backgroundColor: this.palette[2],
           },
           {
             label: 'Self stake balance',
             // eslint-disable-next-line camelcase
-            data: this.charts.stake.map(({ self_stake_balance }) => self_stake_balance),
+            data: this.charts.stake.map(
+              ({ self_stake_balance }) => self_stake_balance,
+            ),
             borderWidth: 1,
             backgroundColor: this.palette[3],
           },
@@ -980,7 +1037,7 @@ export default {
         display: block;
       }
     }
-    
+
     &--mobile {
       display: none;
       margin-top: 15px;
@@ -1062,14 +1119,14 @@ export default {
       padding: 14px 20px;
     }
   }
-  
+
   &__contacts {
     display: flex;
     justify-content: space-around;
     align-items: center;
     margin-top: 10px;
   }
-  
+
   &__name {
     font-size: 21px;
   }

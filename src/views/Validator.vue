@@ -282,7 +282,7 @@
                   {{ items.signatures_count }} / {{ items.blocks_count }}
                 </b-card-text>
                 <b-card-text class="block__content">
-                  <div class="block__header">Availability score</div>
+                  <div class="block__header">Uptime</div>
                   {{ items.available_score }}
                 </b-card-text>
                 <b-card-text class="block__content">
@@ -772,7 +772,7 @@ export default {
 
       for (let i = 0; i <= 10; i += 1) {
         if (t.datasetIndex === i) {
-          return `${xLabel}: ${yLabel}`;
+          return `${xLabel}: ${yLabel}%`;
         }
       }
     },
@@ -897,29 +897,13 @@ export default {
       return {
         datasets: [
           {
-            label: 'Availability score',
+            label: 'Uptime',
             // eslint-disable-next-line camelcase
-            data: this.charts.uptime.map(
-              ({ availability_score }) => availability_score,
+            data: this.charts.uptime.map(({ uptime }) =>
+              (uptime * 100).toFixed(2),
             ),
             borderWidth: 1,
             backgroundColor: this.palette[0],
-          },
-          {
-            label: 'Proposals count',
-            // eslint-disable-next-line camelcase
-            data: this.charts.uptime.map(({ blocks_count }) => blocks_count),
-            borderWidth: 1,
-            backgroundColor: this.palette[1],
-          },
-          {
-            label: 'Signatures count',
-            // eslint-disable-next-line camelcase
-            data: this.charts.uptime.map(
-              ({ signatures_count }) => signatures_count,
-            ),
-            borderWidth: 1,
-            backgroundColor: this.palette[2],
           },
         ],
         // eslint-disable-next-line max-len

@@ -1,7 +1,12 @@
 <template>
   <div class="home">
     <b-container fluid="lg" v-if="loading">
-      <font-awesome-icon v-if="loading" class="icon home__icon" icon="spinner" spin />
+      <font-awesome-icon
+        v-if="loading"
+        class="icon home__icon"
+        icon="spinner"
+        spin
+      />
     </b-container>
     <div class="home__content" v-else>
       <b-container fluid="lg">
@@ -15,7 +20,12 @@
               >
                 <b-card-text>
                   <span class="home__link">
-                    <font-awesome-icon v-if="!height" class="icon home__icon" icon="spinner" spin />
+                    <font-awesome-icon
+                      v-if="!height"
+                      class="icon home__icon"
+                      icon="spinner"
+                      spin
+                    />
                     <span v-else>{{ height }}</span>
                   </span>
                 </b-card-text>
@@ -30,7 +40,9 @@
                     icon="spinner"
                     spin
                   />
-                  <span v-else>{{ parseFloat(topStakeWeight.toFixed(3)) }}%</span>
+                  <span v-else
+                    >{{ parseFloat(topStakeWeight.toFixed(3)) }}%</span
+                  >
                 </b-card-text>
               </b-card>
             </b-col>
@@ -42,7 +54,11 @@
               >
                 <b-card-text>
                   <div v-if="!escrowRatio" class="home__loader">
-                    <font-awesome-icon class="icon home__icon" icon="spinner" spin />
+                    <font-awesome-icon
+                      class="icon home__icon"
+                      icon="spinner"
+                      spin
+                    />
                   </div>
                   <line-chart
                     v-else
@@ -62,7 +78,11 @@
               >
                 <b-card-text class="home__chart">
                   <div v-if="!transactionVolume" class="home__loader">
-                    <font-awesome-icon class="icon home__icon" icon="spinner" spin />
+                    <font-awesome-icon
+                      class="icon home__icon"
+                      icon="spinner"
+                      spin
+                    />
                   </div>
                   <line-chart
                     v-else
@@ -76,44 +96,35 @@
             </b-col>
           </b-row>
           <b-row>
-          <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
-            <b-card
-              class="card--home"
-              title="Price"
-            >
-              <b-card-text>
-                No data
-              </b-card-text>
-            </b-card>
-          </b-col>
-          <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
-            <b-card title="Market cap" class="card--home">
-              <b-card-text>
-                No data
-              </b-card-text>
-            </b-card>
-          </b-col>
-          <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
-            <b-card
-              class="card--home"
-              title="Trading volume"
-            >
-              <b-card-text>
-                No data
-              </b-card-text>
-            </b-card>
-          </b-col>
-          <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
-            <b-card
-              class="card--home"
-              title="Circulating supply"
-            >
-              <b-card-text>
-                No data
-              </b-card-text>
-            </b-card>
-          </b-col>
-        </b-row>
+            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
+              <b-card class="card--home" title="Price">
+                <b-card-text>
+                  No data
+                </b-card-text>
+              </b-card>
+            </b-col>
+            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
+              <b-card title="Market cap" class="card--home">
+                <b-card-text>
+                  No data
+                </b-card-text>
+              </b-card>
+            </b-col>
+            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
+              <b-card class="card--home" title="Trading volume">
+                <b-card-text>
+                  No data
+                </b-card-text>
+              </b-card>
+            </b-col>
+            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
+              <b-card class="card--home" title="Circulating supply">
+                <b-card-text>
+                  No data
+                </b-card-text>
+              </b-card>
+            </b-col>
+          </b-row>
         </div>
         <b-row
           class="home__section"
@@ -121,16 +132,12 @@
         >
           <b-col v-if="price" cols="3">
             <b-card title="Price" class="card--home">
-              <b-card-text>
-                {{ data.price }} chart
-              </b-card-text>
+              <b-card-text> {{ data.price }} chart </b-card-text>
             </b-card>
           </b-col>
           <b-col v-if="marketCup" cols="3">
             <b-card title="Market cap" class="card--home">
-              <b-card-text>
-                {{ data.marketCup }} chart
-              </b-card-text>
+              <b-card-text> {{ data.marketCup }} chart </b-card-text>
             </b-card>
           </b-col>
           <b-col v-if="tradingVolume" cols="3">
@@ -215,9 +222,7 @@ export default {
     OperationsList,
     LineChart,
   },
-  mixins: [
-    getDatesInSeconds,
-  ],
+  mixins: [getDatesInSeconds],
   data() {
     return {
       answer: null,
@@ -246,20 +251,24 @@ export default {
           },
         },
         scales: {
-          xAxes: [{
-            display: false,
-            gridLines: {
+          xAxes: [
+            {
               display: false,
+              gridLines: {
+                display: false,
+              },
             },
-          }],
-          yAxes: [{
-            ticks: {
-              display: false,
+          ],
+          yAxes: [
+            {
+              ticks: {
+                display: false,
+              },
+              gridLines: {
+                display: false,
+              },
             },
-            gridLines: {
-              display: false,
-            },
-          }],
+          ],
         },
         legend: {
           display: false,
@@ -274,7 +283,7 @@ export default {
     setAnswer() {
       /* eslint-disable */
       const vm = this;
-      setTimeout(function() {
+      setTimeout(function () {
         vm.answer = 1;
       });
     },
@@ -284,12 +293,18 @@ export default {
       if (!this.escrowRatio) return;
 
       return {
-        labels: [...this.escrowRatio.map(({timestamp}) => dayjs.unix(timestamp).format('DD/MM/YYYY'))],
-        datasets: [{
-          backgroundColor: '#4cd4a9',
-          borderColor: '#4cd4a9',
-          data: [...this.escrowRatio.map(({escrow_ratio}) => escrow_ratio)],
-        }],
+        labels: [
+          ...this.escrowRatio.map(({ timestamp }) =>
+            dayjs.unix(timestamp).format('DD/MM/YYYY'),
+          ),
+        ],
+        datasets: [
+          {
+            backgroundColor: '#4cd4a9',
+            borderColor: '#4cd4a9',
+            data: [...this.escrowRatio.map(({ escrow_ratio }) => escrow_ratio)],
+          },
+        ],
       };
     },
     getTransactionVolumeData() {
@@ -297,12 +312,22 @@ export default {
       if (!this.transactionVolume) return;
 
       return {
-        labels: [...this.transactionVolume.map(({timestamp}) => dayjs.unix(timestamp).format('DD/MM/YYYY'))],
-        datasets: [{
-          backgroundColor: '#4cd4a9',
-          borderColor: '#4cd4a9',
-          data: [...this.transactionVolume.map(({transaction_volume}) => transaction_volume)],
-        }],
+        labels: [
+          ...this.transactionVolume.map(({ timestamp }) =>
+            dayjs.unix(timestamp).format('DD/MM/YYYY'),
+          ),
+        ],
+        datasets: [
+          {
+            backgroundColor: '#4cd4a9',
+            borderColor: '#4cd4a9',
+            data: [
+              ...this.transactionVolume.map(
+                ({ transaction_volume }) => transaction_volume,
+              ),
+            ],
+          },
+        ],
       };
     },
     handleCardClick() {
@@ -341,62 +366,79 @@ export default {
 </script>
 
 <style lang="scss">
-  .home {
-    margin: 100px 0;
-    text-align: center;
+.home {
+  margin: 100px 0;
+  text-align: center;
 
-    &__cards {
-      margin-bottom: 100px;
-    }
-    
-    &__section {
-      overflow: hidden;
-    }
+  &__cards {
+    margin-bottom: 100px;
+  }
 
-    &__section:not(:last-child) {
-      padding-bottom: 50px;
-    }
+  &__section {
+    overflow: hidden;
+  }
 
-    &__title {
+  &__section .table-list th,
+  &__section .table-list td,
+  &__section .table-list td div,
+  &__section .table-list td a {
+    @media (max-width: 991px) {
       margin-left: auto;
       margin-right: auto;
-      margin-bottom: 25px;
-      font-size: 24px;
-      color: #333;
-      font-weight: bold;
+      text-align: center;
     }
 
-    &__link {
-      color: $color-primary;
-    }
-
-    &__chart {
-      display: block;
-    }
-
-    &__loader {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 60px;
-    }
-
-    &__icon {
-      font-size: 20px;
-      color: $color-primary;
-    }
-
-    &-card {
-      &__chart {
-        height: 100%;
-        cursor: pointer;
-      }
-    }
-
-    &__col {
-      @include from-992-down {
-        margin-bottom: 50px;
-      }
+    @media (max-width: 480px) {
+      margin-left: 0;
+      margin-right: 0;
+      text-align: left;
     }
   }
+
+  &__section:not(:last-child) {
+    padding-bottom: 50px;
+  }
+
+  &__title {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+  }
+
+  &__link {
+    color: $color-primary;
+  }
+
+  &__chart {
+    display: block;
+  }
+
+  &__loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+  }
+
+  &__icon {
+    font-size: 20px;
+    color: $color-primary;
+  }
+
+  &-card {
+    &__chart {
+      height: 100%;
+      cursor: pointer;
+    }
+  }
+
+  &__col {
+    @include from-992-down {
+      margin-bottom: 50px;
+    }
+  }
+}
 </style>

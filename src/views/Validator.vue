@@ -399,6 +399,7 @@
                     class="validator__container validator__shadow"
                   >
                     <b-table
+                      ref="table"
                       id="my-table"
                       :busy="loading && tableItems === null"
                       :responsive="true"

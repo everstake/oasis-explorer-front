@@ -80,7 +80,6 @@ export default {
     },
   },
   mounted() {
-    console.log('yAxesType', this.yAxesType);
     const defaultOptions = {
       responsive: true,
       maintainAspectRatio: false,

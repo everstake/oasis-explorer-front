@@ -208,12 +208,13 @@
 </template>
 
 <script>
-import BlocksList from '@/components/BlocksList.vue';
-import OperationsList from '@/components/OperationsList.vue';
 import LineChart from '@/components/charts/LineChart.vue';
 import dayjs from 'dayjs';
 import { mapMutations } from 'vuex';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
+
+const BlocksList = () => import(/* webpackPreload: true */'@/components/BlocksList.vue');
+const OperationsList = () => import(/* webpackPreload: true */ '@/components/OperationsList.vue');
 
 export default {
   name: 'Home',

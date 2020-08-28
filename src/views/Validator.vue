@@ -283,7 +283,7 @@
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Uptime</div>
-                  {{ items.available_score }}
+                  {{ String(items.total_uptime * 100).slice(0, 4) }}%
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Total balance</div>

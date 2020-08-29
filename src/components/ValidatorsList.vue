@@ -125,6 +125,8 @@ import fetchOnScroll from '@/mixins/fetchOnScroll';
 import everstakeIcon from '@/assets/images/icon-everstake.png';
 import VLazyImage from 'v-lazy-image';
 
+const oasisLogo = require('../assets/images/logo-oasis.svg');
+
 export default {
   name: 'ValidatorsList',
   components: {
@@ -170,8 +172,15 @@ export default {
     },
     getValidatorLogo(validator) {
       const name = validator.account_name.toLowerCase();
+      const isHttps = new URL(validator.media_info.logotype).protocol === 'https:';
+
       if (name === 'everstake') return everstakeIcon;
-      return validator.media_info.logotype;
+
+      if (isHttps) {
+        return validator.media_info.logotype;
+      }
+
+      return oasisLogo;
     },
   },
   async created() {

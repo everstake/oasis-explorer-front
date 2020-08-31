@@ -209,11 +209,12 @@
 
 <script>
 /*eslint-disable*/
-import LineChart from '@/components/charts/LineChart.vue';
 import dayjs from 'dayjs';
 import { mapMutations, mapState } from 'vuex';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 
+const LineChart = () =>
+  import(/* webpackPreload: true */ '@/components/charts/LineChart.vue');
 const BlocksList = () =>
   import(/* webpackPreload: true */ '@/components/BlocksList.vue');
 const OperationsList = () =>
@@ -229,7 +230,6 @@ export default {
   mixins: [getDatesInSeconds],
   data() {
     return {
-      answer: null,
       loading: null,
       price: null,
       marketCup: null,
@@ -280,17 +280,10 @@ export default {
           enabled: false,
         },
       },
-      isChartFetched: false,
+      chartsAreFetched: false,
     };
   },
   methods: {
-    setAnswer() {
-      /* eslint-disable */
-      const vm = this;
-      setTimeout(function () {
-        vm.answer = 1;
-      });
-    },
     ...mapMutations(['setInfo']),
     getEscrowData() {
       /* eslint-disable */
@@ -340,6 +333,35 @@ export default {
     handleChartClick() {
       this.$router.push({ name: 'stats' });
     },
+    initCharts() {
+      setTimeout(() => {
+        const getEscrowRatio = this.$api.getEscrowRatio({
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
+          frame: 'D',
+        });
+
+        getEscrowRatio.then((res) => (this.escrowRatio = res.data));
+
+        const transactionVolume = this.$api.getTransactionVolume({
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
+          frame: 'D',
+        });
+
+        transactionVolume.then((res) => (this.transactionVolume = res.data));
+      }, 1000);
+    },
+  },
+  watch: {
+    topStakeWeight: {
+      handler(val) {
+        if (val !== null && this.chartsAreFetched === false) {
+          this.initCharts();
+          this.chartsAreFetched = true;
+        }
+      },
+    },
   },
   computed: {
     ...mapState({
@@ -347,37 +369,11 @@ export default {
     }),
   },
   async created() {
-    this.setAnswer();
     const data = await this.$api.getInfo();
 
     this.topStakeWeight = data.data.top_escrow;
 
     this.setInfo(data.data);
-  },
-  watch: {
-    latestHeight: {
-      immediate: true,
-      async handler(val) {
-        if (val !== null && this.isChartFetched === false) {
-          const escrowRatio = await this.$api.getEscrowRatio({
-            from: this.datesInSeconds.monthAgo,
-            to: this.datesInSeconds.today,
-            frame: 'D',
-          });
-
-          this.escrowRatio = escrowRatio.data;
-
-          const transactionVolume = await this.$api.getTransactionVolume({
-            from: this.datesInSeconds.monthAgo,
-            to: this.datesInSeconds.today,
-            frame: 'D',
-          });
-
-          this.transactionVolume = transactionVolume.data;
-          this.isChartFetched = true;
-        }
-      },
-    },
   },
 };
 </script>

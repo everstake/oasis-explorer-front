@@ -584,7 +584,7 @@
                     </b-table>
                     <div
                       v-if="fetchOnScrollEnabled"
-                      class="blocks-list__actions"
+                      class="validator-list__actions"
                     >
                       <b-button
                         @click="handleShowMore"
@@ -1070,6 +1070,10 @@ export default {
 
 <style lang="scss">
 .validator {
+  &-list__actions {
+    text-align: center;
+  }
+
   &__breadcrumbs {
     margin-bottom: 35px;
   }

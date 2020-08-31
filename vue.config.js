@@ -1,3 +1,4 @@
+/*eslint-disable*/
 const webpack = require('webpack');
 
 module.exports = {
@@ -7,6 +8,7 @@ module.exports = {
     ],
   },
   css: {
+    extract: false,
     sourceMap: true,
     loaderOptions: {
       sass: {

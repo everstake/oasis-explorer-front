@@ -5,16 +5,14 @@
       <div class="top-line__item search">
         <TheSearch />
       </div>
-      <b-nav-item-dropdown
-        class="top-line__item network-selection"
-      >
+      <b-nav-item-dropdown class="top-line__item network-selection">
         <template slot="button-content">
-           <font-awesome-icon icon="network-wired" class="icon" />
-            Amber
+          <font-awesome-icon icon="network-wired" class="icon" />
+          Amber
         </template>
         <b-dropdown-item disabled active-class="top-line__active">
-           <font-awesome-icon icon="network-wired" class="icon" />
-            Mainnet
+          <font-awesome-icon icon="network-wired" class="icon" />
+          Mainnet
         </b-dropdown-item>
       </b-nav-item-dropdown>
       <div class="top-line__item language">
@@ -52,58 +50,52 @@ export default {
 </script>
 
 <style lang="scss">
-  .top-line {
-    padding: 20px 0;
+.top-line {
+  padding: 20px 0;
 
-    &__item {
-      margin: 0 5px;
+  &__item {
+    margin: 0 5px;
 
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-
-    &__active {
-      color: $color-white;
-      background-color: $color-primary;
+    &:last-child {
+      margin-right: 0;
     }
   }
 
-  .top-line,
-  .top-line-right {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  &__active {
+    color: $color-white;
+    background-color: $color-primary;
   }
+}
 
-  .logo {
-    &__img {
-      width: 300px;
+.top-line,
+.top-line-right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.logo {
+  &__img {
+    width: 300px;
+
+    @media (max-width: 420px) {
+      max-width: none;
+      width: 100%;
     }
   }
+}
 
-  .network-selection,
-  .language {
-    list-style: none;
-  }
+.network-selection,
+.language {
+  list-style: none;
+}
 
-  .network-selection,
-  .language-selection {
-    &.show {
-      & > a {
-        color: $color-primary;
-        @extend .animations__default;
-
-        &:hover {
-          color: $color-primary;
-          @extend .animations__default--hover;
-        }
-      }
-    }
-
+.network-selection,
+.language-selection {
+  &.show {
     & > a {
-      color: #999;
+      color: $color-primary;
       @extend .animations__default;
 
       &:hover {
@@ -113,10 +105,21 @@ export default {
     }
   }
 
-  .settings {
-    &__icon {
-      font-size: 20px;
-      color: $color-gray-999;
+  & > a {
+    color: #999;
+    @extend .animations__default;
+
+    &:hover {
+      color: $color-primary;
+      @extend .animations__default--hover;
     }
   }
+}
+
+.settings {
+  &__icon {
+    font-size: 20px;
+    color: $color-gray-999;
+  }
+}
 </style>

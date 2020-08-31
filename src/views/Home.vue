@@ -334,23 +334,21 @@ export default {
       this.$router.push({ name: 'stats' });
     },
     initCharts() {
-      setTimeout(() => {
-        const getEscrowRatio = this.$api.getEscrowRatio({
-          from: this.datesInSeconds.monthAgo,
-          to: this.datesInSeconds.today,
-          frame: 'D',
-        });
+      const getEscrowRatio = this.$api.getEscrowRatio({
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
+        frame: 'D',
+      });
 
-        getEscrowRatio.then((res) => (this.escrowRatio = res.data));
+      getEscrowRatio.then((res) => (this.escrowRatio = res.data));
 
-        const transactionVolume = this.$api.getTransactionVolume({
-          from: this.datesInSeconds.monthAgo,
-          to: this.datesInSeconds.today,
-          frame: 'D',
-        });
+      const transactionVolume = this.$api.getTransactionVolume({
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
+        frame: 'D',
+      });
 
-        transactionVolume.then((res) => (this.transactionVolume = res.data));
-      }, 1000);
+      transactionVolume.then((res) => (this.transactionVolume = res.data));
     },
   },
   watch: {

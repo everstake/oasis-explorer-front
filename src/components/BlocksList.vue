@@ -93,6 +93,9 @@ import TableLoader from '@/components/TableLoader.vue';
 import fetchList from '@/mixins/fetchList';
 import fetchOnScroll from '@/mixins/fetchOnScroll';
 
+// eslint-disable-next-line no-unused-expressions
+import(/* webpackPreload: true */ '@/assets/styles/blocksList.scss');
+
 export default {
   name: 'BlocksList',
   components: {
@@ -128,53 +131,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.blocks-list {
-  &__actions {
-    margin-top: 50px;
-    margin-bottom: 50px;
-  }
-
-  &__button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: auto;
-    border: none;
-
-    &:hover,
-    &:active {
-      &.disabled {
-        color: $color-primary !important;
-      }
-
-      color: $color-white !important;
-    }
-
-    &--loading {
-      color: $color-primary;
-      background: $color-white;
-      border: 1px solid transparent;
-
-      &:hover,
-      &:focus {
-        color: $color-primary;
-        background: $color-white;
-        outline: none;
-        border: none;
-        box-shadow: none;
-      }
-    }
-  }
-
-  &__icon {
-    margin-left: 5px;
-  }
-
-  & .date-from-now {
-    font-size: 14px;
-    color: #999;
-  }
-}
-</style>

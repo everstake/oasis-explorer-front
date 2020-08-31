@@ -1,3 +1,8 @@
+html {
+  min-width: 320px;
+  overflow-x: auto;
+}
+
 ::selection {
   color: $color-white;
   background: $color-primary;

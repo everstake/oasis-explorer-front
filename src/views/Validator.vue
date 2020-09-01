@@ -282,8 +282,8 @@
                   {{ items.signatures_count }} / {{ items.blocks_count }}
                 </b-card-text>
                 <b-card-text class="block__content">
-                  <div class="block__header">Availability score</div>
-                  {{ items.available_score }}
+                  <div class="block__header">Uptime</div>
+                  {{ String(items.total_uptime * 100).slice(0, 4) }}%
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Total balance</div>
@@ -399,6 +399,30 @@
                     class="validator__container validator__shadow"
                   >
                     <b-table
+                      v-if="activeTab === 'rewards' && getRewardsItems !== null"
+                      :busy="loading && tableItems === null"
+                      :responsive="true"
+                      :fields="getRewardsFields"
+                      :items="getRewardsItems"
+                      class="table table--border table-list validator__table table__rewards"
+                      borderless
+                      no-border-collapse
+                    >
+                      <template #cell(total_reward)="tableItems">
+                        {{ tableItems.item.total_reward | formatAmount }}
+                      </template>
+                      <template #cell(day_reward)="tableItems">
+                        {{ tableItems.item.day_reward | formatAmount }}
+                      </template>
+                      <template #cell(week_reward)="tableItems">
+                        {{ tableItems.item.week_reward | formatAmount }}
+                      </template>
+                      <template #cell(month_reward)="tableItems">
+                        {{ tableItems.item.month_reward | formatAmount }}
+                      </template>
+                    </b-table>
+                    <b-table
+                      ref="table"
                       id="my-table"
                       :busy="loading && tableItems === null"
                       :responsive="true"
@@ -560,7 +584,7 @@
                     </b-table>
                     <div
                       v-if="fetchOnScrollEnabled"
-                      class="blocks-list__actions"
+                      class="validator-list__actions"
                     >
                       <b-button
                         @click="handleShowMore"
@@ -579,7 +603,7 @@
                             :spin="loading"
                           />
                         </span>
-                        <span v-else>
+                        <span v-else ref="showMoreButton">
                           Show more
                           <font-awesome-icon
                             class="blocks-list__icon"
@@ -668,7 +692,7 @@
 </template>
 
 <script>
-/* eslint-disable */
+/*eslint-disable*/
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
@@ -730,6 +754,7 @@ export default {
         'rgba(47, 72, 88, .4)',
       ],
       xAxesMaxTicksLimit: 10,
+      getRewardsItems: null,
     };
   },
   watch: {
@@ -772,7 +797,7 @@ export default {
 
       for (let i = 0; i <= 10; i += 1) {
         if (t.datasetIndex === i) {
-          return `${xLabel}: ${yLabel}`;
+          return `${xLabel}: ${yLabel}%`;
         }
       }
     },
@@ -857,6 +882,17 @@ export default {
           });
           break;
         case 'rewards':
+          let stats;
+          stats = await this.$api.getValidatorRewardsStat({
+            limit: this.limit,
+            offset: this.offset,
+            id: this.$route.params.id,
+          });
+          this.getRewardsItems = [
+            {
+              ...stats.data,
+            },
+          ];
           data = await this.$api.getValidatorRewards({
             limit: this.limit,
             offset: this.offset,
@@ -885,6 +921,14 @@ export default {
     },
   },
   computed: {
+    getRewardsFields() {
+      return [
+        { key: 'total_reward', label: 'Total rewards' },
+        { key: 'day_reward', label: 'Daily rewards' },
+        { key: 'week_reward', label: 'Weekly rewards' },
+        { key: 'month_reward', label: 'Monthly rewards' },
+      ];
+    },
     filterWhiteColorLogotypes() {
       const { account_name: accountName } = this.items;
       const whiteLogotypes = ['everstake', 'witval', 'forbole'];
@@ -897,29 +941,13 @@ export default {
       return {
         datasets: [
           {
-            label: 'Availability score',
+            label: 'Uptime',
             // eslint-disable-next-line camelcase
-            data: this.charts.uptime.map(
-              ({ availability_score }) => availability_score,
+            data: this.charts.uptime.map(({ uptime }) =>
+              (uptime * 100).toFixed(2),
             ),
             borderWidth: 1,
             backgroundColor: this.palette[0],
-          },
-          {
-            label: 'Proposals count',
-            // eslint-disable-next-line camelcase
-            data: this.charts.uptime.map(({ blocks_count }) => blocks_count),
-            borderWidth: 1,
-            backgroundColor: this.palette[1],
-          },
-          {
-            label: 'Signatures count',
-            // eslint-disable-next-line camelcase
-            data: this.charts.uptime.map(
-              ({ signatures_count }) => signatures_count,
-            ),
-            borderWidth: 1,
-            backgroundColor: this.palette[2],
           },
         ],
         // eslint-disable-next-line max-len
@@ -1042,6 +1070,10 @@ export default {
 
 <style lang="scss">
 .validator {
+  &-list__actions {
+    text-align: center;
+  }
+
   &__breadcrumbs {
     margin-bottom: 35px;
   }
@@ -1188,5 +1220,11 @@ export default {
       }
     }
   }
+}
+</style>
+
+<style lang="scss">
+.table__rewards th {
+  background-color: #353a38 !important;
 }
 </style>

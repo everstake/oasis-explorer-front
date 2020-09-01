@@ -4,14 +4,8 @@
       <div class="transactions-list__title">Operations filters</div>
       <div class="transactions-list__container">
         <div class="transactions-list__reset">
-          <b-btn
-            @click="clearFilters"
-            class="transactions-list__btn"
-          >
-            <font-awesome-icon
-              icon="sync"
-              :spin="dropdownIsBusy"
-            />
+          <b-btn @click="clearFilters" class="transactions-list__btn">
+            <font-awesome-icon icon="sync" :spin="dropdownIsBusy" />
           </b-btn>
         </div>
         <date-range-picker
@@ -34,8 +28,12 @@
                 icon="calendar-check"
               />
             </div>
-            <span class="transactions-list__date" v-if="dateRange.startDate && dateRange.endDate">
-              {{ formatDate(picker.startDate) }} - {{ formatDate(picker.endDate) }}
+            <span
+              class="transactions-list__date"
+              v-if="dateRange.startDate && dateRange.endDate"
+            >
+              {{ formatDate(picker.startDate) }} -
+              {{ formatDate(picker.endDate) }}
             </span>
           </template>
         </date-range-picker>
@@ -45,11 +43,13 @@
               class="transactions-dropdown__content"
               :disabled="dropdownIsBusy"
               :class="{
-                'transactions-dropdown--disabled': dropdownIsBusy
+                'transactions-dropdown--disabled': dropdownIsBusy,
               }"
             >
               <b-form-checkbox
-                :disabled="operations.length === 1 && operations[0] === 'transfer'"
+                :disabled="
+                  operations.length === 1 && operations[0] === 'transfer'
+                "
                 v-model="operations"
                 value="transfer"
                 class="mb-3"
@@ -58,17 +58,20 @@
               </b-form-checkbox>
 
               <b-form-checkbox
-                :disabled="operations.length === 1 && operations[0] === 'addescrow'"
+                :disabled="
+                  operations.length === 1 && operations[0] === 'addescrow'
+                "
                 v-model="operations"
                 value="addescrow"
                 class="mb-3"
               >
-
                 Addescrow
               </b-form-checkbox>
 
               <b-form-checkbox
-                :disabled="operations.length === 1 && operations[0] === 'reclaimescrow'"
+                :disabled="
+                  operations.length === 1 && operations[0] === 'reclaimescrow'
+                "
                 v-model="operations"
                 value="reclaimescrow"
                 class="mb-3"
@@ -106,7 +109,7 @@
       :fields="fields"
       class="table table--border transactions-list__table"
       :class="{
-        'transactions-list__table--disabled': dropdownIsBusy
+        'transactions-list__table--disabled': dropdownIsBusy,
       }"
       :disabled="dropdownIsBusy"
       borderless
@@ -116,9 +119,7 @@
         <TableLoader />
       </template>
       <template #cell(level)="items">
-        <router-link
-          :to="{ name: 'block', params: { id: items.item.level } }"
-        >
+        <router-link :to="{ name: 'block', params: { id: items.item.level } }">
           {{ items.item.level }}
         </router-link>
       </template>
@@ -126,7 +127,7 @@
         <router-link
           :to="{ name: 'operation', params: { id: items.item.hash } }"
           :class="{
-            'table__hash': minifyTableHash
+            table__hash: minifyTableHash,
           }"
         >
           {{ items.item.hash }}
@@ -143,7 +144,11 @@
       </template>
       <template #cell(to)="items">
         <span v-if="!items.item.to">-</span>
-        <span v-else-if="items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='">
+        <span
+          v-else-if="
+            items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
+          "
+        >
           System Account
         </span>
         <router-link
@@ -177,16 +182,13 @@
         </div>
       </template>
     </b-table>
-    <div
-      v-if="fetchOnScrollEnabled && items !== null"
-      class="blocks-list__actions"
-    >
+    <div v-if="fetchOnScrollEnabled && items !== null" class="list__actions">
       <b-button
         @click="handleShowMore"
         variant="outline-primary"
-        class="blocks-list__button font-weight-bold"
+        class="list__button font-weight-bold"
         :class="{
-          'blocks-list__button--loading': loading
+          'list__button--loading': loading,
         }"
         :disabled="loading || isShowMoreButtonDisabled"
       >
@@ -195,11 +197,19 @@
         </span>
         <span v-else-if="loading" disabled>
           Loading
-          <font-awesome-icon class="blocks-list__icon" icon="sync-alt" :spin="loading" />
+          <font-awesome-icon
+            class="list__icon"
+            icon="sync-alt"
+            :spin="loading"
+          />
         </span>
-        <span v-else>
+        <span v-else ref="showMoreButton">
           Show more
-          <font-awesome-icon class="blocks-list__icon" icon="arrow-circle-down" :spin="loading" />
+          <font-awesome-icon
+            class="list__icon"
+            icon="arrow-circle-down"
+            :spin="loading"
+          />
         </span>
       </b-button>
     </div>
@@ -214,16 +224,16 @@ import dayjs from 'dayjs';
 import fetchOnScroll from '@/mixins/fetchOnScroll';
 import fetchList from '@/mixins/fetchList';
 
+// eslint-disable-next-line no-unused-expressions
+import(/* webpackPreload: true */ '@/assets/styles/operationsList.scss');
+
 export default {
   name: 'OperationsList',
   components: {
     TableLoader,
     DateRangePicker,
   },
-  mixins: [
-    fetchOnScroll,
-    fetchList,
-  ],
+  mixins: [fetchOnScroll, fetchList],
   props: {
     minifyTableHash: {
       type: Boolean,
@@ -232,6 +242,19 @@ export default {
     filters: {
       type: Boolean,
       default: false,
+    },
+    fields: {
+      type: Array,
+      default: () => [
+        { key: 'level', label: 'Height' },
+        { key: 'hash', label: 'Operation Hash' },
+        { key: 'from', label: 'From' },
+        { key: 'to', label: 'To' },
+        { key: 'amount', label: 'Amount', sortable: true },
+        { key: 'nonce', label: 'Nonce' },
+        { key: 'type', label: 'Type' },
+        { key: 'timestamp', label: 'Date', sortable: true },
+      ],
     },
   },
   data() {
@@ -242,16 +265,6 @@ export default {
       },
       operations: ['transfer', 'addescrow', 'reclaimescrow', 'other'],
       dropdownIsBusy: false,
-      fields: [
-        { key: 'level', label: 'Height' },
-        { key: 'hash', label: 'Operation Hash' },
-        { key: 'from', label: 'From' },
-        { key: 'to', label: 'To' },
-        { key: 'amount', label: 'Amount', sortable: true },
-        { key: 'nonce', label: 'Nonce' },
-        { key: 'type', label: 'Type' },
-        { key: 'timestamp', label: 'Date', sortable: true },
-      ],
     };
   },
   watch: {
@@ -308,7 +321,9 @@ export default {
       let to = +val.endDate / 1000;
 
       if (this.isSelectedDatesEqual) {
-        this.dateRange.endDate.setTime(this.dateRange.endDate.getTime() + (12 * 60 * 60 * 1000));
+        this.dateRange.endDate.setTime(
+          this.dateRange.endDate.getTime() + 12 * 60 * 60 * 1000,
+        );
         to = +this.dateRange.endDate / 1000;
       }
 
@@ -338,11 +353,20 @@ export default {
         operation_kind: this.operations,
       };
 
-      const otherOperationsList = ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'];
-      const isOperationOtherSelected = this.operations.includes((operation) => operation === 'other');
+      const otherOperationsList = [
+        'registernode',
+        'registerentity',
+        'amendcommissionschedule',
+        'registerruntime',
+      ];
+      const isOperationOtherSelected = this.operations.includes(
+        (operation) => operation === 'other',
+      );
 
       if (isOperationOtherSelected) {
-        const otherOperationIndex = this.operations.findIndex((operation) => operation === 'other');
+        const otherOperationIndex = this.operations.findIndex(
+          (operation) => operation === 'other',
+        );
 
         if (otherOperationIndex >= 0) {
           options.operation_kind = [
@@ -386,7 +410,9 @@ export default {
       return this.dateRange.startDate && this.dateRange.endDate;
     },
     isSelectedDatesEqual() {
-      return this.dateRange.startDate.getTime() === this.dateRange.endDate.getTime();
+      return (
+        this.dateRange.startDate.getTime() === this.dateRange.endDate.getTime()
+      );
     },
   },
   created() {
@@ -397,166 +423,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-  .transactions-list {
-    &__actions {
-      margin-top: 50px;
-      margin-bottom: 50px;
-    }
-
-    &__button {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: auto;
-
-      &:hover,
-      &:active {
-        color: $color-white !important;
-      }
-
-      &--loading {
-        color: $color-primary;
-        background: $color-white;
-        box-shadow: none;
-        border: 1px solid transparent;
-
-        &:hover,
-        &:focus {
-          color: $color-primary !important;
-          background: $color-white;
-          outline: none;
-          box-shadow: none;
-        }
-      }
-    }
-
-    &__icon {
-      margin-left: 10px;
-
-      @include from-480-down {
-        display: none;
-      }
-    }
-
-    &__date {
-      margin-left: 10px;
-      font-weight: 700;
-      color: $color-white;
-    }
-
-    & .date-from-now {
-      font-size: 14px;
-      color: #999;
-    }
-
-    &__filter {
-      margin-bottom: 10px;
-      font-family: $open-sans;
-      font-size: 16px;
-    }
-
-    &__reset {
-      margin-right: 10px;
-      & .btn-secondary {
-        background-color: $color-primary !important;
-        border-color: $color-primary !important;
-      }
-    }
-
-    &__btn {
-      &:focus,
-      &:active,
-      &:hover,
-      &:active:focus {
-        box-shadow: none !important;
-      }
-    }
-
-    &__container {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    &__title {
-      margin-bottom: 5px;
-      font-family: $open-sans;
-      font-size: 16px;
-      color: $color-gray-666;
-    }
-
-    &__calendar {
-      margin-right: 10px;
-      text-align: center;
-      background-color: $color-primary;
-      border-radius: 4px;
-    }
-
-    &__label {
-      font-size: 15px;
-      font-weight: bold;
-      color: #fff;
-    }
-
-    &__icon {
-      margin-left: 5px;
-    }
-
-    &__table {
-      position: relative;
-
-      &--disabled {
-        & a {
-          pointer-events: none;
-        }
-
-        &:before {
-          content: '';
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          display: block;
-          background-color: $color-primary-transparent-01;
-        }
-      }
-    }
-  }
-</style>
-
-<style lang="scss">
-  .transactions-dropdown {
-    &__content {
-      font-size: 15px;
-
-      & form:focus {
-        outline: none !important;
-      }
-    }
-
-    & .btn-secondary {
-      display: flex;
-      align-items: center;
-      font-size: 15px;
-      background-color: $color-primary !important;
-      border: 2px solid $color-primary !important;
-      font-weight: bold;
-      border-radius: 4px;
-    }
-
-    &--disabled:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: block;
-      background-color: $color-primary-transparent-01;
-      pointer-events: none;
-    }
-  }
-</style>

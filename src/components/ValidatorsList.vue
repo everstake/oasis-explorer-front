@@ -82,16 +82,13 @@
         </div>
       </template>
     </b-table>
-    <div
-      v-if="fetchOnScrollEnabled && items !== null"
-      class="blocks-list__actions"
-    >
+    <div v-if="fetchOnScrollEnabled && items !== null" class="list-actions">
       <b-button
         @click="handleShowMore"
         variant="outline-primary"
-        class="blocks-list__button font-weight-bold"
+        class="list__button font-weight-bold"
         :class="{
-          'blocks-list__button--loading': loading,
+          'list__button--loading': loading,
         }"
         :disabled="loading || isShowMoreButtonDisabled"
       >
@@ -101,15 +98,15 @@
         <span v-else-if="loading" disabled>
           Loading
           <font-awesome-icon
-            class="blocks-list__icon"
+            class="list__icon"
             icon="sync-alt"
             :spin="loading"
           />
         </span>
-        <span v-else>
+        <span v-else ref="showMoreButton">
           Show more
           <font-awesome-icon
-            class="blocks-list__icon"
+            class="list__icon"
             icon="arrow-circle-down"
             :spin="loading"
           />
@@ -200,48 +197,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~@/assets/styles/list';
+
 .validators-list {
-  &__actions {
-    margin-top: 50px;
-    margin-bottom: 50px;
-  }
-
-  &__button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: auto;
-
-    &:hover,
-    &:active {
-      color: $color-white !important;
-    }
-
-    &--loading {
-      color: $color-primary;
-      background: $color-white;
-      box-shadow: none;
-      border: 1px solid transparent;
-
-      &:hover,
-      &:focus {
-        color: $color-primary !important;
-        background: $color-white;
-        outline: none;
-        box-shadow: none;
-      }
-    }
-  }
-
-  &__icon {
-    margin-left: 10px;
-  }
-
-  & .date-from-now {
-    font-size: 14px;
-    color: #999;
-  }
-
   &__status {
     font-weight: 600;
 

@@ -54,6 +54,7 @@
     justify-content: space-around;
     align-items: center;
     text-align: center;
+    margin: auto;
 
     @include from-768-down {
       padding: 0 15px;

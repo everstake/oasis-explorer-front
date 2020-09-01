@@ -388,7 +388,9 @@ export default {
           {
             label: 'Escrow ratio',
             // eslint-disable-next-line camelcase
-            data: this.escrowRatioData.map(({ escrow_ratio }) => escrow_ratio),
+            data: this.escrowRatioData.map(({ escrow_ratio }) =>
+              String(escrow_ratio).slice(0, 6),
+            ),
             borderWidth: 1,
           },
         ],

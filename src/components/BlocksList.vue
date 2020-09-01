@@ -51,14 +51,11 @@
         }}
       </template>
     </b-table>
-    <div
-      v-if="fetchOnScrollEnabled && items !== null"
-      class="blocks-list__actions"
-    >
+    <div v-if="fetchOnScrollEnabled && items !== null" class="list-actions">
       <b-button
         @click="handleShowMore"
         variant="outline-primary"
-        class="blocks-list__button font-weight-bold"
+        class="list__button font-weight-bold"
         :class="{
           'transactions-list__button--loading': loading,
         }"
@@ -70,15 +67,15 @@
         <span v-else-if="loading" disabled>
           Loading
           <font-awesome-icon
-            class="blocks-list__icon"
+            class="list__icon"
             icon="sync-alt"
             :spin="loading"
           />
         </span>
-        <span v-else>
+        <span v-else ref="showMoreButton">
           Show more
           <font-awesome-icon
-            class="blocks-list__icon"
+            class="list__icon"
             icon="arrow-circle-down"
             :spin="loading"
           />
@@ -131,3 +128,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import '~@/assets/styles/list.scss';
+</style>

@@ -603,7 +603,7 @@
                             :spin="loading"
                           />
                         </span>
-                        <span v-else>
+                        <span v-else ref="showMoreButton">
                           Show more
                           <font-awesome-icon
                             class="blocks-list__icon"
@@ -924,9 +924,9 @@ export default {
     getRewardsFields() {
       return [
         { key: 'total_reward', label: 'Total rewards' },
-        { key: 'day_reward', label: 'Day rewards' },
-        { key: 'week_reward', label: 'Week rewards' },
-        { key: 'month_reward', label: 'Month rewards' },
+        { key: 'day_reward', label: 'Daily rewards' },
+        { key: 'week_reward', label: 'Weekly rewards' },
+        { key: 'month_reward', label: 'Monthly rewards' },
       ];
     },
     filterWhiteColorLogotypes() {

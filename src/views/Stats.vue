@@ -10,7 +10,9 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-else-if="!loading && (Array.isArray(items) && items.length === 0)">
+      <b-row
+        v-else-if="!loading && (Array.isArray(items) && items.length === 0)"
+      >
         <b-col cols="12">
           <div class="text-center block__empty">
             No data
@@ -21,9 +23,7 @@
         <b-row>
           <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
-              <b-card
-                header="Escrow ratio"
-              >
+              <b-card header="Escrow ratio">
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
@@ -39,9 +39,7 @@
           </b-col>
           <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
-              <b-card
-                header="Transfer volume"
-              >
+              <b-card header="Transfer volume">
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
@@ -59,15 +57,13 @@
         <b-row class="stats__information">
           <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section stats__section--filter">
-              <b-card
-                header="# of operations"
-              >
+              <b-card header="# of operations">
                 <b-button-group class="stats__actions">
                   <b-button
                     @click="operationDateFormat = 'D'"
                     class="stats__switcher"
                     :class="{
-                      'stats__switcher--active': operationDateFormat === 'D'
+                      'stats__switcher--active': operationDateFormat === 'D',
                     }"
                   >
                     day
@@ -76,7 +72,7 @@
                     @click="operationDateFormat = 'H'"
                     class="stats__switcher"
                     :class="{
-                      'stats__switcher--active': operationDateFormat === 'H'
+                      'stats__switcher--active': operationDateFormat === 'H',
                     }"
                   >
                     hour
@@ -98,9 +94,7 @@
           </b-col>
           <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
-              <b-card
-                header="# of accounts"
-              >
+              <b-card header="# of accounts">
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <LineChart
@@ -109,6 +103,7 @@
                       :y-axes-begin-at-zero="false"
                       :tooltips-label-callback="tooltipsFeesLabelCallback"
                       :yTicksCallback="formattedTicksCallback"
+                      class="stats-accounts"
                     />
                   </div>
                 </b-card-text>
@@ -119,15 +114,13 @@
         <b-row class="stats__information">
           <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section stats__section--filter">
-              <b-card
-                header="Fee volume"
-              >
+              <b-card header="Fee volume">
                 <b-button-group class="stats__actions">
                   <b-button
                     @click="feesDateFormat = 'D'"
                     class="stats__switcher"
                     :class="{
-                      'stats__switcher--active': feesDateFormat === 'D'
+                      'stats__switcher--active': feesDateFormat === 'D',
                     }"
                   >
                     day
@@ -136,7 +129,7 @@
                     @click="feesDateFormat = 'H'"
                     class="stats__switcher"
                     :class="{
-                      'stats__switcher--active': feesDateFormat === 'H'
+                      'stats__switcher--active': feesDateFormat === 'H',
                     }"
                   >
                     hour
@@ -157,9 +150,7 @@
           </b-col>
           <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
-              <b-card
-                header="Top-10 voting power"
-              >
+              <b-card header="Top-10 voting power">
                 <b-card-text class="stats__content">
                   <div class="stats__container">
                     <PieChart
@@ -178,6 +169,7 @@
 </template>
 
 <script>
+/*eslint-disable*/
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import LineChart from '@/components/charts/LineChart.vue';
 import { state } from '@/store';
@@ -193,9 +185,7 @@ export default {
     Breadcrumbs,
     PieChart,
   },
-  mixins: [
-    getDatesInSeconds,
-  ],
+  mixins: [getDatesInSeconds],
   data() {
     return {
       operationDateFormat: 'D',
@@ -370,7 +360,9 @@ export default {
     },
     tooltipsLabelCallbackFormatAmount(tooltipItem, data) {
       if (data.datasets[0].data[tooltipItem.index] > 0) {
-        return `Transfer volume: ${numeral(data.datasets[0].data[tooltipItem.index] / 1000000000).format('0,0.000000000')}`;
+        return `Transfer volume: ${numeral(
+          data.datasets[0].data[tooltipItem.index] / 1000000000,
+        ).format('0,0.000000000')}`;
       }
 
       return data.datasets[0].data[tooltipItem.index];
@@ -416,7 +408,9 @@ export default {
           {
             label: '# of operations',
             // eslint-disable-next-line camelcase
-            data: this.operationsData.map(({ operations_count }) => operations_count),
+            data: this.operationsData.map(
+              ({ operations_count }) => operations_count,
+            ),
             borderWidth: 1,
           },
         ],
@@ -466,7 +460,9 @@ export default {
           {
             label: 'Transfer volume',
             // eslint-disable-next-line camelcase
-            data: this.transactionVolumeData.map(({ transaction_volume }) => transaction_volume),
+            data: this.transactionVolumeData.map(
+              ({ transaction_volume }) => transaction_volume,
+            ),
             borderWidth: 1,
           },
         ],
@@ -517,11 +513,13 @@ export default {
           {
             data: this.topEscrowData.map(({ esrow_ratio }) => esrow_ratio),
             backgroundColor: this.palette,
-            borderWidth: 1
-          }
+            borderWidth: 1,
+          },
         ],
-        labels: this.topEscrowData.map(({ account_name, account_id }) => account_name || account_id),
-      }
+        labels: this.topEscrowData.map(
+          ({ account_name, account_id }) => account_name || account_id,
+        ),
+      };
     },
   },
   created() {
@@ -531,70 +529,75 @@ export default {
 </script>
 
 <style lang="scss">
-  .stats {
-    &__content {}
-    &__container {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-content: space-between;
-      height: 100%;
-      margin: 0 15px;
-    }
-    &__item {
-      color: $color-gray-999;
+.stats {
+  &__content {
+  }
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: space-between;
+    height: 100%;
+    margin: 0 15px;
+  }
+  &__item {
+    color: $color-gray-999;
 
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-    &__title {
-      margin-bottom: 35px;
-      font-size: 24px;
-      color: $color-gray-333;
-    }
-    &__validator {
-      margin-top: 50px;
-    }
-    &__value {
-      color: #333;
-    }
-    &__information {
-      margin-bottom: 50px;
-    }
-    &__section,
-    &__section .card,
-    &__section .card-body {
-      height: 100%;
-    }
-    &__section--filter .card-body {
-      padding-top: 10px;
-    }
-    &__switcher {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding: 5px 10px;
-      margin-bottom: 10px;
-      font-size: 13px;
-      color: $color-gray-333;
-      background-color: #fff;
-      border-color: #eee;
-
-      &--active {
-        background-color: #eee;
-        border-color: #eee;
-        color: $color-gray-333;
-      }
-
-      &:hover,
-      &:focus,
-      &:active {
-        background-color: #eee !important;
-        border-color: #eee !important;
-        color: $color-gray-333 !important;
-        box-shadow: none !important;
-      }
+    &:last-child {
+      margin-bottom: 0;
     }
   }
+  &__title {
+    margin-bottom: 35px;
+    font-size: 24px;
+    color: $color-gray-333;
+  }
+  &__validator {
+    margin-top: 50px;
+  }
+  &__value {
+    color: #333;
+  }
+  &__information {
+    margin-bottom: 50px;
+  }
+  &__section,
+  &__section .card,
+  &__section .card-body {
+    height: 100%;
+  }
+  &__section--filter .card-body {
+    padding-top: 10px;
+  }
+  &__switcher {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: $color-gray-333;
+    background-color: #fff;
+    border-color: #eee;
+
+    &--active {
+      background-color: #eee;
+      border-color: #eee;
+      color: $color-gray-333;
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: #eee !important;
+      border-color: #eee !important;
+      color: $color-gray-333 !important;
+      box-shadow: none !important;
+    }
+  }
+
+  &-accounts {
+    margin-top: 30px;
+  }
+}
 </style>

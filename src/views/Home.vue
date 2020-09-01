@@ -328,7 +328,10 @@ export default {
       };
     },
     handleCardClick() {
-      this.$router.push({ name: 'block', params: { id: this.latestHeight } });
+      this.$router.push({
+        name: 'block',
+        params: { id: this.latestHeight.height },
+      });
     },
     handleChartClick() {
       this.$router.push({ name: 'stats' });

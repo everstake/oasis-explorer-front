@@ -1,34 +1,8 @@
+.operations-list,
 .transactions-list {
   &__actions {
     margin-top: 50px;
     margin-bottom: 50px;
-  }
-
-  &__button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: auto;
-
-    &:hover,
-    &:active {
-      color: $color-white !important;
-    }
-
-    &--loading {
-      color: $color-primary;
-      background: $color-white;
-      box-shadow: none;
-      border: 1px solid transparent;
-
-      &:hover,
-      &:focus {
-        color: $color-primary !important;
-        background: $color-white;
-        outline: none;
-        box-shadow: none;
-      }
-    }
   }
 
   &__icon {

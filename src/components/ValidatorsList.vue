@@ -45,8 +45,9 @@
       <template #cell(escrow_balance)="items">
         {{ items.item.escrow_balance | formatAmount }}
       </template>
-      <template #cell(available_score)="items">
-        {{ items.item.available_score }}
+      <template #cell(day_uptime)="items">
+        {{ String(items.item.day_uptime * 100).slice(0, 4) }}% /
+        {{ String(items.item.total_uptime * 100).slice(0, 4) }}%
       </template>
       <template #cell(status)="items">
         <div
@@ -144,12 +145,21 @@ export default {
         { key: '#', label: '#' },
         { key: 'account_id', label: 'Account' },
         { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
-        { key: 'available_score', label: 'Availability', sortable: true },
+        {
+          key: 'day_uptime',
+          label: 'Uptime day/total',
+          thClass: 'table__uptime',
+        },
         { key: 'depositors_count', label: 'Delegators' },
         { key: 'blocks_count', label: 'Proposals', sortable: true },
         { key: 'signatures_count', label: 'Signatures', sortable: true },
         { key: 'fee', label: 'Fee', sortable: true },
-        { key: 'status', label: 'Status' },
+        {
+          key: 'status',
+          label: 'Status',
+          thClass: 'table__status',
+          tdClass: 'table__status',
+        },
         { key: 'validate_since', label: 'Registered', sortable: true },
       ],
     };
@@ -250,6 +260,15 @@ export default {
     & td:nth-child(3) {
       max-width: 200px;
     }
+  }
+
+  &__uptime {
+    max-width: 160px;
+  }
+
+  &__status {
+    padding-left: 3px !important;
+    padding-right: 3px !important;
   }
 }
 </style>

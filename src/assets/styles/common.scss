@@ -1,3 +1,26 @@
+html {
+  min-width: 320px;
+  overflow-x: auto;
+}
+
+[class^='container-'] {
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  //box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $color-gray-999;
+}
+
 ::selection {
   color: $color-white;
   background: $color-primary;
@@ -11,6 +34,19 @@
   overflow: hidden;
 }
 
+.mb-5,
+.my-5 {
+  margin-bottom: 3rem !important;
+}
+
+.mb-3,
+.my-3 {
+  margin-bottom: 1rem !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
 
 // menu
 .nav-item:first-child .nav-link {
@@ -56,6 +92,10 @@ td a {
 .table-list {
   & .table__hash {
     max-width: 60px;
+
+    &--large {
+      max-width: 120px;
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="page">
+  <div id="app" class="page" ref="page">
     <TheHeader class="page__header" />
 
     <main class="page__main">
@@ -26,5 +26,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '~@/assets/styles/index.scss';
+@import '~@/assets/styles/index.scss';
 </style>

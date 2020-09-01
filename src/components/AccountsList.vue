@@ -66,7 +66,7 @@
         variant="outline-primary"
         class="blocks-list__button font-weight-bold"
         :class="{
-          'blocks-list__button--loading': loading
+          'blocks-list__button--loading': loading,
         }"
         :disabled="loading || isShowMoreButtonDisabled"
       >
@@ -75,11 +75,19 @@
         </span>
         <span v-else-if="loading" disabled>
           Loading
-          <font-awesome-icon class="blocks-list__icon" icon="sync-alt" :spin="loading" />
+          <font-awesome-icon
+            class="blocks-list__icon"
+            icon="sync-alt"
+            :spin="loading"
+          />
         </span>
-        <span v-else>
+        <span v-else ref="showMoreButton">
           Show more
-          <font-awesome-icon class="blocks-list__icon" icon="arrow-circle-down" :spin="loading" />
+          <font-awesome-icon
+            class="blocks-list__icon"
+            icon="arrow-circle-down"
+            :spin="loading"
+          />
         </span>
       </b-button>
     </div>
@@ -96,10 +104,7 @@ export default {
   components: {
     TableLoader,
   },
-  mixins: [
-    fetchList,
-    fetchOnScroll,
-  ],
+  mixins: [fetchList, fetchOnScroll],
   data() {
     return {
       fields: [
@@ -143,46 +148,46 @@ export default {
 </script>
 
 <style lang="scss">
-  .accounts-list {
-    &__actions {
-      margin-top: 50px;
-      margin-bottom: 50px;
+.accounts-list {
+  &__actions {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  &__button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+
+    &:hover,
+    &:active {
+      color: $color-white !important;
     }
 
-    &__button {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: auto;
+    &--loading {
+      color: $color-primary;
+      background: $color-white;
+      box-shadow: none;
+      border: 1px solid transparent;
 
       &:hover,
-      &:active {
-        color: $color-white !important;
-      }
-
-      &--loading {
-        color: $color-primary;
+      &:focus {
+        color: $color-primary !important;
         background: $color-white;
+        outline: none;
         box-shadow: none;
-        border: 1px solid transparent;
-
-        &:hover,
-        &:focus {
-          color: $color-primary !important;
-          background: $color-white;
-          outline: none;
-          box-shadow: none;
-        }
       }
-    }
-
-    &__icon {
-      margin-left: 10px;
-    }
-
-    & .date-from-now {
-      font-size: 14px;
-      color: #999;
     }
   }
+
+  &__icon {
+    margin-left: 10px;
+  }
+
+  & .date-from-now {
+    font-size: 14px;
+    color: #999;
+  }
+}
 </style>

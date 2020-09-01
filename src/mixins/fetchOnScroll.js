@@ -29,7 +29,6 @@ export default {
     onUserScroll() {
       const { innerHeight } = window;
       const tableHeight = this.$refs.table.$el.getBoundingClientRect().bottom;
-
       if (this.$refs.table) {
         if (innerHeight > tableHeight) {
           this.handleShowMore();
@@ -37,18 +36,18 @@ export default {
       }
     },
     async handleShowMore() {
+      if (this.loading) return;
+
       this.loading = true;
       this.offset += 50;
       const data = await this.fetchData({ offset: this.offset });
       const isRequestSuccessful = data.status === 200;
       const isDataEmpty = Array.isArray(data.data) && data.data.length === 0;
-
       if (isDataEmpty) {
         this.isShowMoreButtonDisabled = true;
         this.loading = false;
         return;
       }
-
       if (isRequestSuccessful) {
         this.items = [...this.items, ...data.data];
         this.error = false;
@@ -56,7 +55,6 @@ export default {
       } else {
         this.error = true;
       }
-
       this.loading = false;
     },
     setEventListenerOnScroll() {
@@ -70,10 +68,54 @@ export default {
       window.removeEventListener('scroll', this.timeout);
       this.timeout = null;
     },
+    handleScrollToShowMore() {
+      const { showMoreButton } = this.$refs;
+
+      if (!showMoreButton) {
+        return;
+      }
+
+      const root = null;
+      const target = showMoreButton;
+      const rootMargin = '0px 0px -100px 0px';
+      const threshold = 1.0;
+
+      const options = { root, rootMargin, threshold };
+
+      const callback = (entries) => {
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio > 0) {
+            const handleScroll = debounce(this.handleShowMore, 200);
+            handleScroll();
+          }
+        });
+      };
+
+      const observer = new IntersectionObserver(callback, options);
+
+      observer.observe(target);
+    },
   },
-  created() {
-    if (this.fetchOnScrollEnabled) {
-      this.setEventListenerOnScroll();
+  updated() {
+    const {
+      isShowMoreButtonDisabled,
+      fetchOnScrollEnabled,
+      setEventListenerOnScroll,
+      handleScrollToShowMore,
+    } = this;
+
+    if (isShowMoreButtonDisabled) {
+      return;
+    }
+
+    const { IntersectionObserver } = window;
+
+    if (!IntersectionObserver && fetchOnScrollEnabled) {
+      setEventListenerOnScroll();
+    }
+
+    if (IntersectionObserver && fetchOnScrollEnabled) {
+      handleScrollToShowMore();
     }
   },
   beforeDestroy() {

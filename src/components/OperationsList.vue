@@ -206,7 +206,7 @@
             :spin="loading"
           />
         </span>
-        <span v-else>
+        <span v-else ref="showMoreButton">
           Show more
           <font-awesome-icon
             class="blocks-list__icon"

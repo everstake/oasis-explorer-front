@@ -21,7 +21,7 @@
                 <b-card-text>
                   <span class="home__link">
                     <font-awesome-icon
-                      v-if="!latestHeight"
+                      v-if="!latestHeight.height"
                       class="icon home__icon"
                       icon="spinner"
                       spin

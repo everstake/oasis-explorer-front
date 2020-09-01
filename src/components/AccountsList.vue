@@ -37,8 +37,8 @@
       <template #cell(escrow_balance_share)="items">
         {{ items.item.escrow_balance_share | formatAmount }}
       </template>
-      <template #cell(operations_amount)="items">
-        {{ items.item.operations_amount | formatAmount }}
+      <template #cell(operations_number)="items">
+        {{ items.item.operations_number }}
       </template>
       <template #cell(account_id)="items">
         <router-link
@@ -111,7 +111,7 @@ export default {
         { key: 'general_balance', label: 'General balance', sortable: true },
         { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
         { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
-        { key: 'operations_amount', label: 'Ops amount', sortable: true },
+        { key: 'operations_number', label: 'Ops number', sortable: true },
         { key: 'type', label: 'Type' },
         { key: 'created_at', label: 'Created at', sortable: true },
       ],

@@ -88,6 +88,10 @@ td a {
 .table-list {
   & .table__hash {
     max-width: 60px;
+
+    &--large {
+      max-width: 120px;
+    }
   }
 }
 

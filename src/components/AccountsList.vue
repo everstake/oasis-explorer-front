@@ -22,7 +22,7 @@
         <router-link
           v-if="items.item.delegate"
           :to="{ name: 'account', params: { id: items.item.delegate } }"
-          class="table__hash"
+          class="table__hash--large"
         >
           {{ items.item.delegate }}
         </router-link>

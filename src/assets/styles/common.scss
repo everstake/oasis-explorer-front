@@ -3,6 +3,10 @@ html {
   overflow-x: auto;
 }
 
+[class^='container-'] {
+  overflow: hidden;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

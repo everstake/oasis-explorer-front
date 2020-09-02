@@ -27,11 +27,13 @@ export default {
   },
   methods: {
     onUserScroll() {
-      const { innerHeight } = window;
-      const tableHeight = this.$refs.table.$el.getBoundingClientRect().bottom;
       if (this.$refs.table) {
-        if (innerHeight > tableHeight) {
-          this.handleShowMore();
+        const { innerHeight } = window;
+        const tableHeight = this.$refs.table.$el.getBoundingClientRect().bottom;
+        if (this.$refs.table) {
+          if (innerHeight > tableHeight) {
+            this.handleShowMore();
+          }
         }
       }
     },
@@ -97,26 +99,13 @@ export default {
     },
   },
   updated() {
-    const {
-      isShowMoreButtonDisabled,
-      fetchOnScrollEnabled,
-      setEventListenerOnScroll,
-      handleScrollToShowMore,
-    } = this;
+    const { isShowMoreButtonDisabled, setEventListenerOnScroll } = this;
 
     if (isShowMoreButtonDisabled) {
       return;
     }
 
-    const { IntersectionObserver } = window;
-
-    if (!IntersectionObserver && fetchOnScrollEnabled) {
-      setEventListenerOnScroll();
-    }
-
-    if (IntersectionObserver && fetchOnScrollEnabled) {
-      handleScrollToShowMore();
-    }
+    setEventListenerOnScroll();
   },
   beforeDestroy() {
     if (this.fetchOnScrollEnabled) {

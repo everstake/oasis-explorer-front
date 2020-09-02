@@ -390,6 +390,15 @@
               >
                 Charts
               </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                  'validator__btn--active': activeTab === 'rewards',
+                }"
+                @click="updateTableData('rewards')"
+              >
+                Rewards
+              </b-btn>
             </div>
             <div class="block__section">
               <div class="block__section block__section--table">

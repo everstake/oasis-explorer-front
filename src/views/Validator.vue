@@ -390,6 +390,15 @@
               >
                 Charts
               </b-btn>
+              <b-btn
+                class="validator__btn"
+                :class="{
+                  'validator__btn--active': activeTab === 'rewards',
+                }"
+                @click="updateTableData('rewards')"
+              >
+                Rewards
+              </b-btn>
             </div>
             <div class="block__section">
               <div class="block__section block__section--table">
@@ -480,7 +489,14 @@
                         </router-link>
                       </template>
                       <template #cell(escrow_amount)="tableItems">
-                        {{ tableItems.item.escrow_amount | formatAmount }}
+                        <span v-if="tableItems.item.escrow_amount">
+                          {{ tableItems.item.escrow_amount | formatAmount }}
+                        </span>
+                        <span v-else-if="tableItems.item.reclaim_escrow_amount">
+                          {{
+                            tableItems.item.reclaim_escrow_amount | formatAmount
+                          }}
+                        </span>
                       </template>
                       <template #cell(delegate_since)="tableItems">
                         {{ tableItems.item.delegate_since | formatYear }}

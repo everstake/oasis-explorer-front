@@ -45,9 +45,7 @@ export default {
 
     if (status === 404) {
       this.errorMessage = 'Page not found';
-    }
-
-    if (status === 503) {
+    } else {
       this.errorMessage = 'Something went wrong';
     }
   },

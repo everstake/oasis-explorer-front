@@ -79,7 +79,7 @@ export default {
   &__img {
     width: 300px;
 
-    @media (max-width: 420px) {
+    @media (max-width: 480px) {
       max-width: none;
       width: 100%;
     }

@@ -1,10 +1,9 @@
 html {
   min-width: 320px;
-  overflow-x: auto;
-}
 
-[class^='container-'] {
-  overflow: hidden;
+  @media (max-width: 480px) {
+    overflow-x: hidden;
+  }
 }
 
 ::-webkit-scrollbar {

@@ -232,7 +232,7 @@ export default {
       ...options,
     });
     if (data.status !== 200) {
-      this.$router.push({ name: '404' });
+      this.$router.replace({ name: '404' });
     }
     this.items = data.data;
     this.loading = false;

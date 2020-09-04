@@ -213,7 +213,7 @@ export default {
       const data = await this.$api.getAccount({ id });
 
       if (data.status !== 200) {
-        this.$router.push({ name: '404' });
+        this.$router.replace({ name: '404' });
       }
 
       this.items = data.data;

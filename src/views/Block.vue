@@ -10,7 +10,9 @@
           </div>
         </b-col>
       </b-row>
-      <b-row v-else-if="!loading && (Array.isArray(items) && items.length === 0)">
+      <b-row
+        v-else-if="!loading && (Array.isArray(items) && items.length === 0)"
+      >
         <b-col cols="12">
           <div class="text-center block__empty">
             No data
@@ -20,95 +22,100 @@
       <b-row v-else>
         <b-col class="block__col" cols="12" md="4">
           <div class="block__section">
-           <b-card
-            header="General information"
-          >
-            <b-card-text class="block__content">
-              <div class="block__header">Block height</div>
-              <div class="block__navigation">
-                <div
-                  :disabled="Number($route.params.id) === 0"
-                  @click="onNavigation('prev', Number($route.params.id) === 0)"
-                  :class="{ 'card__block-prev--disabled': Number($route.params.id) === 0 }"
-                  class="card__block-prev"
-                >
-                  <font-awesome-icon icon="chevron-left" class="ml-1"/>
-                </div>
-                {{ items[0].level }}
-                <div
-                  :disabled="Number($route.params.id) === height"
-                  @click="onNavigation('next', Number($route.params.id) === height)"
-                  :class="{ 'card__block-prev--disabled': Number($route.params.id) === height }"
-                  class="card__block-next"
-                >
-                  <font-awesome-icon icon="chevron-right" class="mr-1"/>
-                </div>
-              </div>
-            </b-card-text>
-            <b-card-text class="block__content">
-              <div class="block__header">Block hash</div>
-              <div
-                @click="copyToClipboard(items[0].hash)"
-                class="block__copy"
-              >
-                  <span
-                    :ref="items[0].hash"
+            <b-card header="General information">
+              <b-card-text class="block__content">
+                <div class="block__header">Block height</div>
+                <div class="block__navigation">
+                  <div
+                    :disabled="Number($route.params.id) === 0"
+                    @click="
+                      onNavigation('prev', Number($route.params.id) === 0)
+                    "
+                    :class="{
+                      'card__block-prev--disabled':
+                        Number($route.params.id) === 0,
+                    }"
+                    class="card__block-prev"
                   >
+                    <font-awesome-icon icon="chevron-left" class="ml-1" />
+                  </div>
+                  {{ items[0].level }}
+                  <div
+                    :disabled="Number($route.params.id) === height"
+                    @click="
+                      onNavigation('next', Number($route.params.id) === height)
+                    "
+                    :class="{
+                      'card__block-prev--disabled':
+                        Number($route.params.id) === height,
+                    }"
+                    class="card__block-next"
+                  >
+                    <font-awesome-icon icon="chevron-right" class="mr-1" />
+                  </div>
+                </div>
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Block hash</div>
+                <div
+                  @click="copyToClipboard(items[0].hash)"
+                  class="block__copy"
+                >
+                  <span :ref="items[0].hash">
                     {{ items[0].hash }}
                   </span>
-                <font-awesome-icon
-                  :icon="['fas', 'copy']"
-                  :class="{
-                      'icon--success': isHashCopied(items[0].hash)
+                  <font-awesome-icon
+                    :icon="['fas', 'copy']"
+                    :class="{
+                      'icon--success': isHashCopied(items[0].hash),
                     }"
-                  class="icon icon-copy delegator-card__icon"
-                />
-              </div>
-            </b-card-text>
-            <b-card-text class="block__content">
-               <div class="block__header">Epoch</div>
-               {{ items[0].epoch }}
-             </b-card-text>
-            <b-card-text class="block__content">
-              <div
-                class="block__header"
-              >
-                Proposer
-              </div>
-              <div
-                class="block__copy"
-                @click="copyToClipboard(items[0].proposer)"
-              >
-                <span
-                  :ref="items[0].proposer"
+                    class="icon icon-copy delegator-card__icon"
+                  />
+                </div>
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Epoch</div>
+                {{ items[0].epoch }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">
+                  Proposer
+                </div>
+                <div
+                  class="block__copy"
+                  @click="copyToClipboard(items[0].proposer)"
                 >
-                {{ items[0].proposer }}
-              </span>
-                <font-awesome-icon
-                  :icon="['fas', 'copy']"
-                  :class="{
-                      'icon--success': isHashCopied(items[0].proposer)
+                  <span :ref="items[0].proposer">
+                    {{ items[0].proposer }}
+                  </span>
+                  <font-awesome-icon
+                    :icon="['fas', 'copy']"
+                    :class="{
+                      'icon--success': isHashCopied(items[0].proposer),
                     }"
-                  class="icon icon-copy delegator-card__icon"
-                />
-              </div>
-            </b-card-text>
-            <b-card-text class="block__content" v-if="items[0].number_of_signatures">
-              <div class="block__header">Signatures</div>
-              {{ items[0].number_of_signatures }}
-            </b-card-text>
-            <b-card-text class="block__content" v-if="items[0].number_of_txs">
-              <div class="block__header">Operations</div>
-              {{ items[0].number_of_txs }}
-            </b-card-text>
-            <b-card-text class="block__content">
-              <div class="block__header">Date</div>
-              {{ items[0].timestamp | formatDate }}
-              <div class="block__time-ago">
-                ({{ items[0].timestamp | formatDaysAgo }})
-              </div>
-            </b-card-text>
-          </b-card>
+                    class="icon icon-copy delegator-card__icon"
+                  />
+                </div>
+              </b-card-text>
+              <b-card-text
+                class="block__content"
+                v-if="items[0].number_of_signatures"
+              >
+                <div class="block__header">Signatures</div>
+                {{ items[0].number_of_signatures }}
+              </b-card-text>
+              <b-card-text class="block__content" v-if="items[0].number_of_txs">
+                <div class="block__header">Operations</div>
+                {{ items[0].number_of_txs }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Date</div>
+                {{ items[0].timestamp | formatDate }}
+                <div class="block__time-ago">
+                  ({{ items[0].timestamp | formatDaysAgo }})
+                </div>
+              </b-card-text>
+            </b-card>
           </div>
         </b-col>
         <b-col cols="12" md="8">
@@ -135,15 +142,18 @@
                   <div class="table__hash">
                     <router-link
                       v-if="items.item.hash"
-                      :to="{ name: 'operation', params: { id: items.item.hash } }"
+                      :to="{
+                        name: 'operation',
+                        params: { id: items.item.hash },
+                      }"
                     >
                       {{ items.item.hash }}
                     </router-link>
                     <span v-else>-</span>
                   </div>
                 </template>
-                <template #cell(from)="items" class="table__hash">
-                  <div class="table__hash">
+                <template #cell(from)="items" class="table__hash--large">
+                  <div class="table__hash--large">
                     <span v-if="!items.item.from">-</span>
                     <router-link
                       v-else
@@ -154,8 +164,13 @@
                   </div>
                 </template>
                 <template #cell(to)="items">
-                  {{ items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
-                  ? 'System Account' : !items.item.to ? '-' : items.item.to }}
+                  <span v-if="!items.item.to">-</span>
+                  <router-link
+                    v-else
+                    :to="{ name: 'account', params: { id: items.item.to } }"
+                  >
+                    {{ items.item.to }}
+                  </router-link>
                 </template>
                 <template #cell(proposer)="items">
                   {{ !items.item.proposer ? '-' : items.item.proposer }}
@@ -197,9 +212,7 @@ export default {
     Breadcrumbs,
     TableLoader,
   },
-  mixins: [
-    copyToClipboard,
-  ],
+  mixins: [copyToClipboard],
   data() {
     return {
       level: null,
@@ -255,7 +268,10 @@ export default {
       const { id } = this.$route.params;
 
       if (position === 'prev') {
-        this.$router.push({ name: 'block', params: { id: id > 0 ? id - 1 : 0 } });
+        this.$router.push({
+          name: 'block',
+          params: { id: id > 0 ? id - 1 : 0 },
+        });
         return;
       }
 
@@ -303,20 +319,20 @@ export default {
         }
         this.items = data.data;
         this.loading = false;
-      }
-    }
+      },
+    },
   },
 };
 </script>
 
 <style lang="scss">
-  .card__block-next,
-  .card__block-prev {
-    cursor: pointer;
-  }
-  .card__block-prev--disabled {
-    color: rgba(0,0,0,0.3);
-    cursor: text;
-    pointer-events: none;
-  }
+.card__block-next,
+.card__block-prev {
+  cursor: pointer;
+}
+.card__block-prev--disabled {
+  color: rgba(0, 0, 0, 0.3);
+  cursor: text;
+  pointer-events: none;
+}
 </style>

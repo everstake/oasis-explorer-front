@@ -21,12 +21,12 @@
                 <b-card-text>
                   <span class="home__link">
                     <font-awesome-icon
-                      v-if="!height"
+                      v-if="!latestHeight.height"
                       class="icon home__icon"
                       icon="spinner"
                       spin
                     />
-                    <span v-else>{{ height }}</span>
+                    <span v-else>{{ latestHeight.height }}</span>
                   </span>
                 </b-card-text>
               </b-card>
@@ -208,13 +208,17 @@
 </template>
 
 <script>
-import LineChart from '@/components/charts/LineChart.vue';
+/*eslint-disable*/
 import dayjs from 'dayjs';
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 
-const BlocksList = () => import(/* webpackPreload: true */'@/components/BlocksList.vue');
-const OperationsList = () => import(/* webpackPreload: true */ '@/components/OperationsList.vue');
+const LineChart = () =>
+  import(/* webpackPreload: true */ '@/components/charts/LineChart.vue');
+const BlocksList = () =>
+  import(/* webpackPreload: true */ '@/components/BlocksList.vue');
+const OperationsList = () =>
+  import(/* webpackPreload: true */ '@/components/OperationsList.vue');
 
 export default {
   name: 'Home',
@@ -226,7 +230,6 @@ export default {
   mixins: [getDatesInSeconds],
   data() {
     return {
-      answer: null,
       loading: null,
       price: null,
       marketCup: null,
@@ -234,7 +237,6 @@ export default {
       circulatingSupply: null,
       escrowRatio: null,
       transactionVolume: null,
-      height: null,
       topStakeWeight: null,
       data: {
         price: 0,
@@ -278,16 +280,10 @@ export default {
           enabled: false,
         },
       },
+      chartsAreFetched: false,
     };
   },
   methods: {
-    setAnswer() {
-      /* eslint-disable */
-      const vm = this;
-      setTimeout(function () {
-        vm.answer = 1;
-      });
-    },
     ...mapMutations(['setInfo']),
     getEscrowData() {
       /* eslint-disable */
@@ -332,36 +328,53 @@ export default {
       };
     },
     handleCardClick() {
-      this.$router.push({ name: 'block', params: { id: this.height } });
+      this.$router.push({
+        name: 'block',
+        params: { id: this.latestHeight.height },
+      });
     },
     handleChartClick() {
       this.$router.push({ name: 'stats' });
     },
+    initCharts() {
+      const getEscrowRatio = this.$api.getEscrowRatio({
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
+        frame: 'D',
+      });
+
+      getEscrowRatio.then((res) => (this.escrowRatio = res.data));
+
+      const transactionVolume = this.$api.getTransactionVolume({
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
+        frame: 'D',
+      });
+
+      transactionVolume.then((res) => (this.transactionVolume = res.data));
+    },
+  },
+  watch: {
+    topStakeWeight: {
+      handler(val) {
+        if (val !== null && this.chartsAreFetched === false) {
+          this.initCharts();
+          this.chartsAreFetched = true;
+        }
+      },
+    },
+  },
+  computed: {
+    ...mapState({
+      latestHeight: (height) => height,
+    }),
   },
   async created() {
-    this.setAnswer();
     const data = await this.$api.getInfo();
 
-    this.height = data.data.height;
     this.topStakeWeight = data.data.top_escrow;
 
     this.setInfo(data.data);
-
-    const escrowRatio = await this.$api.getEscrowRatio({
-      from: this.datesInSeconds.monthAgo,
-      to: this.datesInSeconds.today,
-      frame: 'D',
-    });
-
-    this.escrowRatio = escrowRatio.data;
-
-    const transactionVolume = await this.$api.getTransactionVolume({
-      from: this.datesInSeconds.monthAgo,
-      to: this.datesInSeconds.today,
-      frame: 'D',
-    });
-
-    this.transactionVolume = transactionVolume.data;
   },
 };
 </script>

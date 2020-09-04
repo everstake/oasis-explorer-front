@@ -182,16 +182,13 @@
         </div>
       </template>
     </b-table>
-    <div
-      v-if="fetchOnScrollEnabled && items !== null"
-      class="blocks-list__actions"
-    >
+    <div v-if="fetchOnScrollEnabled && items !== null" class="list__actions">
       <b-button
         @click="handleShowMore"
         variant="outline-primary"
-        class="blocks-list__button font-weight-bold"
+        class="list__button font-weight-bold"
         :class="{
-          'blocks-list__button--loading': loading,
+          'list__button--loading': loading,
         }"
         :disabled="loading || isShowMoreButtonDisabled"
       >
@@ -201,15 +198,15 @@
         <span v-else-if="loading" disabled>
           Loading
           <font-awesome-icon
-            class="blocks-list__icon"
+            class="list__icon"
             icon="sync-alt"
             :spin="loading"
           />
         </span>
-        <span v-else>
+        <span v-else ref="showMoreButton">
           Show more
           <font-awesome-icon
-            class="blocks-list__icon"
+            class="list__icon"
             icon="arrow-circle-down"
             :spin="loading"
           />
@@ -226,6 +223,9 @@ import { mapState } from 'vuex';
 import dayjs from 'dayjs';
 import fetchOnScroll from '@/mixins/fetchOnScroll';
 import fetchList from '@/mixins/fetchList';
+
+// eslint-disable-next-line no-unused-expressions
+import(/* webpackPreload: true */ '@/assets/styles/operationsList.scss');
 
 export default {
   name: 'OperationsList',
@@ -423,166 +423,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.transactions-list {
-  &__actions {
-    margin-top: 50px;
-    margin-bottom: 50px;
-  }
-
-  &__button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: auto;
-
-    &:hover,
-    &:active {
-      color: $color-white !important;
-    }
-
-    &--loading {
-      color: $color-primary;
-      background: $color-white;
-      box-shadow: none;
-      border: 1px solid transparent;
-
-      &:hover,
-      &:focus {
-        color: $color-primary !important;
-        background: $color-white;
-        outline: none;
-        box-shadow: none;
-      }
-    }
-  }
-
-  &__icon {
-    margin-left: 10px;
-
-    @include from-480-down {
-      display: none;
-    }
-  }
-
-  &__date {
-    margin-left: 10px;
-    font-weight: 700;
-    color: $color-white;
-  }
-
-  & .date-from-now {
-    font-size: 14px;
-    color: #999;
-  }
-
-  &__filter {
-    margin-bottom: 10px;
-    font-family: $open-sans;
-    font-size: 16px;
-  }
-
-  &__reset {
-    margin-right: 10px;
-    & .btn-secondary {
-      background-color: $color-primary !important;
-      border-color: $color-primary !important;
-    }
-  }
-
-  &__btn {
-    &:focus,
-    &:active,
-    &:hover,
-    &:active:focus {
-      box-shadow: none !important;
-    }
-  }
-
-  &__container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  &__title {
-    margin-bottom: 5px;
-    font-family: $open-sans;
-    font-size: 16px;
-    color: $color-gray-666;
-  }
-
-  &__calendar {
-    margin-right: 10px;
-    text-align: center;
-    background-color: $color-primary;
-    border-radius: 4px;
-  }
-
-  &__label {
-    font-size: 15px;
-    font-weight: bold;
-    color: #fff;
-  }
-
-  &__icon {
-    margin-left: 5px;
-  }
-
-  &__table {
-    position: relative;
-
-    &--disabled {
-      & a {
-        pointer-events: none;
-      }
-
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: block;
-        background-color: $color-primary-transparent-01;
-      }
-    }
-  }
-}
-</style>
-
-<style lang="scss">
-.transactions-dropdown {
-  &__content {
-    font-size: 15px;
-
-    & form:focus {
-      outline: none !important;
-    }
-  }
-
-  & .btn-secondary {
-    display: flex;
-    align-items: center;
-    font-size: 15px;
-    background-color: $color-primary !important;
-    border: 2px solid $color-primary !important;
-    font-weight: bold;
-    border-radius: 4px;
-  }
-
-  &--disabled:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: block;
-    background-color: $color-primary-transparent-01;
-    pointer-events: none;
-  }
-}
-</style>

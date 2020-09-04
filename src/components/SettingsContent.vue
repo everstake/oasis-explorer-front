@@ -7,7 +7,11 @@
         <div class="search__controls search__controls--inline">
           <b-form>
             <b-form-group label="Date format">
-              <b-form-radio v-model="dateFormat" name="standart" value="standart">
+              <b-form-radio
+                v-model="dateFormat"
+                name="standart"
+                value="standart"
+              >
                 Standart format
               </b-form-radio>
               <b-form-radio v-model="dateFormat" name="us" value="us">
@@ -17,50 +21,29 @@
           </b-form>
 
           <b-form @submit="onSubmit">
-            <b-form-group id="input-group-2" label="Your Name" label-for="input-2">
-              <b-form-input
-                id="input-2"
-                v-model="name"
-                placeholder="Enter name"
-                @input="isFormSaved = false"
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group
-                id="input-group-1"
-                label="Email address"
-                label-for="input-1"
-                description="We'll never share your email with anyone else."
-                class="mt-4"
-              >
-                <b-form-input
-                  id="input-1"
-                  v-model="email"
-                  type="email"
-                  placeholder="Enter email"
-                  @input="isFormSaved = false"
-                ></b-form-input>
-              </b-form-group>
-            <b-form-group id="input-group-4">
-              <b-form-checkbox v-model="subscribe">Subscribe to our newsletter</b-form-checkbox>
-            </b-form-group>
             <b-button
               type="submit"
               variant="outline-primary"
               class="font-weight-bold button button--outline"
               :class="{
-                'transactions-list__button--loading': loading
+                'transactions-list__button--loading': loading,
               }"
               :disabled="loading"
             >
               <span v-if="loading" disabled>
                 Saving
-                <font-awesome-icon class="blocks-list__icon" icon="sync-alt" :spin="loading" />
+                <font-awesome-icon
+                  class="blocks-list__icon"
+                  icon="sync-alt"
+                  :spin="loading"
+                />
               </span>
-              <span
-                v-else-if="!loading && isFormSaved"
-              >
+              <span v-else-if="!loading && isFormSaved">
                 Saved
-                <font-awesome-icon class="blocks-list__icon" icon="check-circle" />
+                <font-awesome-icon
+                  class="blocks-list__icon"
+                  icon="check-circle"
+                />
               </span>
               <span v-else>
                 Save
@@ -162,7 +145,8 @@ export default {
 </script>
 
 <style lang="scss">
-  .settings {
-    &__button {}
+.settings {
+  &__button {
   }
+}
 </style>

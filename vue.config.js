@@ -1,3 +1,4 @@
+/*eslint-disable*/
 const webpack = require('webpack');
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
     ],
   },
   css: {
-    sourceMap: true,
+    extract: true,
     loaderOptions: {
       sass: {
         prependData: `
@@ -20,6 +21,19 @@ module.exports = {
     },
   },
   chainWebpack: (config) => {
+    // config.plugins.delete('prefetch');
+    // config.plugin('preload').tap((options) => {
+    //   options[0].as = (entry) => {
+    //     if (/\.css$/.test(entry)) return 'style';
+    //     if (/\.woff$/.test(entry)) return 'font';
+    //     if (/\.png$/.test(entry)) return 'image';
+    //     return 'script';
+    //   };
+    //   options[0].include = 'allAssets';
+    //   // options[0].fileWhitelist: [/\.files/, /\.to/, /\.include/]
+    //   // options[0].fileBlacklist: [/\.files/, /\.to/, /\.exclude/]
+    //   return options;
+    // });
     config.plugin('html').tap((args) => {
       // eslint-disable-next-line no-param-reassign
       args[0].title = 'Oasis Monitor';

@@ -354,12 +354,6 @@ export default {
         operation_kind: this.operations,
       };
 
-      const otherOperationsList = [
-        'registernode',
-        'registerentity',
-        'amendcommissionschedule',
-        'registerruntime',
-      ];
       const isOperationOtherSelected = this.operations.some(
         (operation) => operation === 'other',
       );
@@ -372,7 +366,7 @@ export default {
         if (otherOperationIndex >= 0) {
           options.operation_kind = [
             ...this.operations.slice(0, otherOperationIndex),
-            ...otherOperationsList,
+            ...this.otherOperations,
             ...this.operations.slice(otherOperationIndex + 1),
           ];
         }
@@ -422,12 +416,6 @@ export default {
       operation_kind: this.operations,
     };
 
-    const otherOperationsList = [
-      'registernode',
-      'registerentity',
-      'amendcommissionschedule',
-      'registerruntime',
-    ];
     const isOperationOtherSelected = this.operations.some(
       (operation) => operation === 'other',
     );
@@ -440,7 +428,7 @@ export default {
       if (otherOperationIndex >= 0) {
         options.operation_kind = [
           ...this.operations.slice(0, otherOperationIndex),
-          ...otherOperationsList,
+          ...this.otherOperations,
           ...this.operations.slice(otherOperationIndex + 1),
         ];
       }

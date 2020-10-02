@@ -1,10 +1,10 @@
 <template>
   <header class="header">
-    <b-container fluid="lg">
+    <b-container>
       <TopLine />
     </b-container>
     <div class="header__menu">
-      <b-container fluid="lg">
+      <b-container>
         <TheMenu />
       </b-container>
     </div>

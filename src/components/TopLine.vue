@@ -8,11 +8,11 @@
       <b-nav-item-dropdown class="top-line__item network-selection">
         <template slot="button-content">
           <font-awesome-icon icon="network-wired" class="icon" />
-          Amber
+          Betanet
         </template>
         <b-dropdown-item disabled active-class="top-line__active">
           <font-awesome-icon icon="network-wired" class="icon" />
-          Mainnet
+          Testnet
         </b-dropdown-item>
       </b-nav-item-dropdown>
       <div class="top-line__item language">

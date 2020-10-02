@@ -264,6 +264,7 @@ export default {
         endDate: null,
       },
       operations: ['transfer', 'addescrow', 'reclaimescrow', 'other'],
+      otherOperations: ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
       dropdownIsBusy: false,
     };
   },
@@ -353,13 +354,7 @@ export default {
         operation_kind: this.operations,
       };
 
-      const otherOperationsList = [
-        'registernode',
-        'registerentity',
-        'amendcommissionschedule',
-        'registerruntime',
-      ];
-      const isOperationOtherSelected = this.operations.includes(
+      const isOperationOtherSelected = this.operations.some(
         (operation) => operation === 'other',
       );
 
@@ -371,7 +366,7 @@ export default {
         if (otherOperationIndex >= 0) {
           options.operation_kind = [
             ...this.operations.slice(0, otherOperationIndex),
-            ...otherOperationsList,
+            ...this.otherOperations,
             ...this.operations.slice(otherOperationIndex + 1),
           ];
         }
@@ -416,10 +411,30 @@ export default {
     },
   },
   created() {
-    this.fetchList('getTransactions', {
+    const options = {
       limit: this.getRequestLimit,
       operation_kind: this.operations,
-    });
+    };
+
+    const isOperationOtherSelected = this.operations.some(
+      (operation) => operation === 'other',
+    );
+
+    if (isOperationOtherSelected) {
+      const otherOperationIndex = this.operations.findIndex(
+        (operation) => operation === 'other',
+      );
+
+      if (otherOperationIndex >= 0) {
+        options.operation_kind = [
+          ...this.operations.slice(0, otherOperationIndex),
+          ...this.otherOperations,
+          ...this.operations.slice(otherOperationIndex + 1),
+        ];
+      }
+    }
+
+    this.fetchList('getTransactions', options);
   },
 };
 </script>

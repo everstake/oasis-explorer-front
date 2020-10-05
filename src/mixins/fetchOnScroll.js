@@ -58,7 +58,7 @@ export default {
       this.loading = false;
     },
     setEventListenerOnScroll() {
-      this.timeout = debounce(this.onUserScroll, 100);
+      this.timeout = debounce(this.onUserScroll, 300);
       window.addEventListener('scroll', this.timeout);
     },
     removeEventListenerOnScroll() {

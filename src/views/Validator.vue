@@ -1109,6 +1109,10 @@ export default {
   &__shadow {
     height: 100%;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+    
+    &:last-child {
+      box-shadow: none;
+    }
   }
 
   &__actions {

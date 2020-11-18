@@ -31,6 +31,7 @@
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
                       :tooltipsLabelCallback="tooltipsLabelCallback"
+                      :yTicksCallback="yTickEscrowCallback"
                     />
                   </div>
                 </b-card-text>
@@ -321,9 +322,12 @@ export default {
 
       for (let i = 0; i <= 10; i += 1) {
         if (t.datasetIndex === i) {
-          return `${xLabel}: ${yLabel * 100}%`;
+          return `${xLabel}: ${yLabel}%`;
         }
       }
+    },
+    yTickEscrowCallback(label) {
+      return `${label.toFixed()}%`;
     },
     // eslint-disable-next-line consistent-return
     tooltipsDefaultLabelCallback(t, d) {

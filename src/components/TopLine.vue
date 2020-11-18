@@ -8,7 +8,7 @@
       <b-nav-item-dropdown class="top-line__item network-selection">
         <template slot="button-content">
           <font-awesome-icon icon="network-wired" class="icon" />
-          Betanet
+          Mainnet
         </template>
         <b-dropdown-item disabled active-class="top-line__active">
           <font-awesome-icon icon="network-wired" class="icon" />

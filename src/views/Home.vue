@@ -60,13 +60,16 @@
                       spin
                     />
                   </div>
-                  <line-chart
-                    v-else
-                    :height="60"
-                    :propsOptions="options"
-                    :chart-data="getEscrowData()"
-                    class="home__chart"
-                  />
+                  <span v-else class="home-card__value">
+                    {{ getEscrowData().datasets[0].data[0].toString().slice(0, 6) }}%
+                  </span>
+<!--                  <line-chart-->
+<!--                    v-else-->
+<!--                    :height="60"-->
+<!--                    :propsOptions="options"-->
+<!--                    :chart-data="getEscrowData()"-->
+<!--                    class="home__chart"-->
+<!--                  />-->
                 </b-card-text>
               </b-card>
             </b-col>
@@ -84,13 +87,16 @@
                       spin
                     />
                   </div>
-                  <line-chart
-                    v-else
-                    :height="60"
-                    :propsOptions="options"
-                    :chart-data="getTransactionVolumeData()"
-                    class="home__chart"
-                  />
+                  <span v-else class="home-card__value">
+                    {{ getTransactionVolumeValue }}
+                  </span>
+<!--                  <line-chart-->
+<!--                    v-else-->
+<!--                    :height="60"-->
+<!--                    :propsOptions="options"-->
+<!--                    :chart-data="getTransactionVolumeData()"-->
+<!--                    class="home__chart"-->
+<!--                  />-->
                 </b-card-text>
               </b-card>
             </b-col>
@@ -212,6 +218,7 @@
 import dayjs from 'dayjs';
 import { mapMutations, mapState } from 'vuex';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
+import numeral from 'numeral';
 
 const LineChart = () =>
   import(/* webpackPreload: true */ '@/components/charts/LineChart.vue');
@@ -368,6 +375,11 @@ export default {
     ...mapState({
       latestHeight: (height) => height,
     }),
+    getTransactionVolumeValue() {
+      const value = this.getTransactionVolumeData().datasets[0].data[0];
+      const formattedValue = numeral(Number(value) / 1000000000).format('0,0.[000000000]');
+      return String(formattedValue).split('.')[0];
+    }
   },
   async created() {
     const data = await this.$api.getInfo();
@@ -454,5 +466,13 @@ export default {
       margin-bottom: 50px;
     }
   }
+}
+
+.home-card__value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  font-size: 26px;
 }
 </style>

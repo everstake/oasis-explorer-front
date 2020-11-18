@@ -31,6 +31,8 @@
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
                       :tooltipsLabelCallback="tooltipsLabelCallback"
+                      :y-ticks-callback="yTickEscrowCallback"
+                      :yTicksStepSize="1"
                     />
                   </div>
                 </b-card-text>
@@ -39,20 +41,35 @@
           </b-col>
           <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
-              <b-card header="Transfer volume">
+              <b-card header="Top-10 voting power">
                 <b-card-text class="stats__content">
                   <div class="stats__container">
-                    <LineChart
-                      :chart-data="getTransactionVolumeData"
-                      :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
-                      :y-axes-begin-at-zero="false"
-                      :yTicksCallback="transactionVolumeTicksCallback"
+                    <PieChart
+                      :chart-data="getTopEscrowData"
+                      :tooltips-label-callback="pieTooltipsLabelCallback"
                     />
                   </div>
                 </b-card-text>
               </b-card>
             </div>
           </b-col>
+<!--          <b-col class="stats__information" cols="12" md="6">-->
+<!--            <div class="stats__section">-->
+<!--              <b-card header="Transfer volume">-->
+<!--                <b-card-text class="stats__content">-->
+<!--                  <div class="stats__container">-->
+<!--                    <LineChart-->
+<!--                      :chart-data="getTransactionVolumeData"-->
+<!--                      :x-axes-max-ticks-limit="xAxesMaxTicksLimit"-->
+<!--                      :y-axes-begin-at-zero="false"-->
+<!--                      :yTicksCallback="transactionVolumeTicksCallback"-->
+<!--                      :y-ticks-step-size="100"-->
+<!--                    />-->
+<!--                  </div>-->
+<!--                </b-card-text>-->
+<!--              </b-card>-->
+<!--            </div>-->
+<!--          </b-col>-->
         </b-row>
         <b-row class="stats__information">
           <b-col class="stats__information" cols="12" md="6">
@@ -86,6 +103,7 @@
                       :y-axes-begin-at-zero="false"
                       :tooltips-label-callback="tooltipsFeesLabelCallback"
                       :yTicksCallback="formattedTicksCallback"
+                      :y-ticks-step-size="100"
                     />
                   </div>
                 </b-card-text>
@@ -104,6 +122,7 @@
                       :tooltips-label-callback="tooltipsFeesLabelCallback"
                       :yTicksCallback="formattedTicksCallback"
                       class="stats-accounts"
+                      :y-ticks-step-size="10"
                     />
                   </div>
                 </b-card-text>
@@ -142,20 +161,8 @@
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
                       :tooltips-label-callback="tooltipsFeesLabelCallback"
-                    />
-                  </div>
-                </b-card-text>
-              </b-card>
-            </div>
-          </b-col>
-          <b-col class="stats__information" cols="12" md="6">
-            <div class="stats__section">
-              <b-card header="Top-10 voting power">
-                <b-card-text class="stats__content">
-                  <div class="stats__container">
-                    <PieChart
-                      :chart-data="getTopEscrowData"
-                      :tooltips-label-callback="pieTooltipsLabelCallback"
+                      :y-ticks-callback="yTicksFeesCallback"
+                      :y-ticks-step-size="100000"
                     />
                   </div>
                 </b-card-text>
@@ -326,6 +333,10 @@ export default {
       }
     },
     // eslint-disable-next-line consistent-return
+    yTickEscrowCallback(label) {
+      return `${label.toFixed()}%`;
+    },
+    // eslint-disable-next-line consistent-return
     tooltipsDefaultLabelCallback(t, d) {
       const xLabel = d.datasets[t.datasetIndex].label;
       const { yLabel } = t;
@@ -346,6 +357,10 @@ export default {
           return `${xLabel}: ${numeral(yLabel).format('0,0')}`;
         }
       }
+    },
+    // eslint-disable-next-line consistent-return
+    yTicksFeesCallback(label) {
+      return numeral(label).format('0,0');
     },
     // eslint-disable-next-line consistent-return
     tooltipsDefaultToFixedLabelCallback(t, d) {

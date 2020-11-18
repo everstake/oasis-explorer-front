@@ -216,6 +216,11 @@ export default {
         this.$router.push({ name: '404' });
       }
 
+      if (data.data.created_at === '1970-01-01T00:00:00Z') {
+        // eslint-disable-next-line
+        data.data.created_at = '2020-11-18T16:01:00Z';
+      }
+
       this.items = data.data;
       this.loading = false;
     },

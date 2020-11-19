@@ -208,7 +208,10 @@ export default {
   },
   methods: {
     async fetchData(id) {
+      /* eslint-disable */
       this.loading = true;
+      const unixEpoch = '1970-01-01T00:00:00Z';
+      const mainnetStart = '2020-11-18T16:01:00Z';
 
       const data = await this.$api.getAccount({ id });
 
@@ -216,9 +219,10 @@ export default {
         this.$router.push({ name: '404' });
       }
 
-      if (data.data.created_at === '1970-01-01T00:00:00Z') {
-        // eslint-disable-next-line
-        data.data.created_at = '2020-11-18T16:01:00Z';
+      let { created_at, last_active } = data.data;
+      if (created_at == unixEpoch && last_active == unixEpoch) {
+        data.data.created_at = mainnetStart;
+        data.data.last_active = mainnetStart;
       }
 
       this.items = data.data;

@@ -126,11 +126,8 @@
       <template #cell(hash)="items">
         <router-link
           :to="{ name: 'operation', params: { id: items.item.hash } }"
-          :class="{
-            table__hash: minifyTableHash,
-          }"
         >
-          {{ items.item.hash }}
+          {{ items.item.hash | trimHash }}
         </router-link>
       </template>
       <template #cell(from)="items">
@@ -139,7 +136,7 @@
           v-else
           :to="{ name: 'account', params: { id: items.item.from } }"
         >
-          {{ items.item.from }}
+          {{ items.item.from | trimHash }}
         </router-link>
       </template>
       <template #cell(to)="items">
@@ -155,7 +152,7 @@
           v-else
           :to="{ name: 'account', params: { id: items.item.to } }"
         >
-          {{ items.item.to }}
+          {{ items.item.to | trimHash }}
         </router-link>
       </template>
       <template #cell(fees)="items">
@@ -235,10 +232,6 @@ export default {
   },
   mixins: [fetchOnScroll, fetchList],
   props: {
-    minifyTableHash: {
-      type: Boolean,
-      default: false,
-    },
     filters: {
       type: Boolean,
       default: false,

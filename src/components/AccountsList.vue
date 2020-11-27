@@ -22,9 +22,8 @@
         <router-link
           v-if="items.item.delegate"
           :to="{ name: 'account', params: { id: items.item.delegate } }"
-          class="table__hash--large"
         >
-          {{ items.item.delegate }}
+          {{ items.item.delegate | trimHash }}
         </router-link>
         <span v-else>-</span>
       </template>
@@ -44,9 +43,8 @@
         <router-link
           v-if="items.item.account_id"
           :to="{ name: 'account', params: { id: items.item.account_id } }"
-          class="table__hash"
         >
-          {{ items.item.account_id }}
+          {{ items.item.account_id | trimHash }}
         </router-link>
         <span v-else>-</span>
       </template>

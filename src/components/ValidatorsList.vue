@@ -19,7 +19,7 @@
         <router-link
           :to="{ name: 'validator', params: { id: data.item.account_id } }"
         >
-          <span v-if="data.item.media_info">
+          <span v-if="data.item.media_info && data.item.media_info.logotype">
             <v-lazy-image
               v-if="data.item.media_info.logotype"
               :src-placeholder="require('../assets/images/logo-oasis.svg')"
@@ -39,7 +39,12 @@
             src="../assets/images/logo-oasis.svg"
             alt="Oasis logotype"
           />
-          {{ data.item.account_name || data.item.account_id }}
+          <span v-if="data.item.account_name">
+            {{ data.item.account_name }}
+          </span>
+          <span v-else-if="data.item.account_id">
+            {{ data.item.account_id | trimHash }}
+          </span>
         </router-link>
       </template>
       <template #cell(escrow_balance)="items">

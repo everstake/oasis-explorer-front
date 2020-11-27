@@ -41,35 +41,22 @@
           </b-col>
           <b-col class="stats__information" cols="12" md="6">
             <div class="stats__section">
-              <b-card header="Top-10 voting power">
+              <b-card header="Transfer volume">
                 <b-card-text class="stats__content">
                   <div class="stats__container">
-                    <PieChart
-                      :chart-data="getTopEscrowData"
-                      :tooltips-label-callback="pieTooltipsLabelCallback"
+                    <LineChart
+                      :chart-data="getTransactionVolumeData"
+                      :y-axes-max-ticks-limit="12"
+                      :x-axes-max-ticks-limit="28"
+                      y-axes-type="logarithmic"
+                      :y-ticks-callback="$_yTicksCallback"
+                      :tooltips-label-callback="$_tooltipsLabelCallback"
                     />
                   </div>
                 </b-card-text>
               </b-card>
             </div>
           </b-col>
-<!--          <b-col class="stats__information" cols="12" md="6">-->
-<!--            <div class="stats__section">-->
-<!--              <b-card header="Transfer volume">-->
-<!--                <b-card-text class="stats__content">-->
-<!--                  <div class="stats__container">-->
-<!--                    <LineChart-->
-<!--                      :chart-data="getTransactionVolumeData"-->
-<!--                      :x-axes-max-ticks-limit="xAxesMaxTicksLimit"-->
-<!--                      :y-axes-begin-at-zero="false"-->
-<!--                      :yTicksCallback="transactionVolumeTicksCallback"-->
-<!--                      :y-ticks-step-size="100"-->
-<!--                    />-->
-<!--                  </div>-->
-<!--                </b-card-text>-->
-<!--              </b-card>-->
-<!--            </div>-->
-<!--          </b-col>-->
         </b-row>
         <b-row class="stats__information">
           <b-col class="stats__information" cols="12" md="6">
@@ -169,6 +156,20 @@
               </b-card>
             </div>
           </b-col>
+          <b-col class="stats__information" cols="12" md="6">
+            <div class="stats__section">
+              <b-card header="Top-10 voting power">
+                <b-card-text class="stats__content">
+                  <div class="stats__container">
+                    <PieChart
+                      :chart-data="getTopEscrowData"
+                      :tooltips-label-callback="pieTooltipsLabelCallback"
+                    />
+                  </div>
+                </b-card-text>
+              </b-card>
+            </div>
+          </b-col>
         </b-row>
       </div>
     </div>
@@ -257,6 +258,14 @@ export default {
     },
   },
   methods: {
+    $_yTicksCallback(label) {
+      return `${numeral(label / 1000000000).format('0,0')}`;
+    },
+    $_tooltipsLabelCallback(tooltipItem, data) {
+      return `${data.datasets[0].label}: ${numeral(tooltipItem.value / 1000000000).format(
+        '0,0',
+      )}`;
+    },
     async fetchData() {
       this.loading = true;
 
@@ -478,7 +487,9 @@ export default {
             label: 'Transfer volume',
             // eslint-disable-next-line camelcase
             data: this.transactionVolumeData.map(
-              ({ transaction_volume }) => transaction_volume,
+              ({ transaction_volume }) => {
+                return transaction_volume;
+              }
             ),
             borderWidth: 1,
           },

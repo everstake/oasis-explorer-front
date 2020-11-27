@@ -221,10 +221,6 @@ export default {
   mixins: [getDatesInSeconds],
   data() {
     return {
-      loading: {
-        blocks: false,
-        operations: false,
-      },
       price: null,
       marketCup: null,
       tradingVolume: null,

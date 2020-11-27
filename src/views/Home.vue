@@ -174,7 +174,6 @@
                 { key: 'timestamp', label: 'Date' },
               ]"
               class="table-list"
-              :minify-table-hash="true"
             />
             <b-button
               to="/blocks"
@@ -195,7 +194,6 @@
                 { key: 'type', label: 'Type' },
                 { key: 'timestamp', label: 'Date' },
               ]"
-              :minifyTableHash="true"
               :filters="false"
               class="table-list"
             />

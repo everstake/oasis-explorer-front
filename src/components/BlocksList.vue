@@ -22,11 +22,8 @@
       <template #cell(hash)="items">
         <router-link
           :to="{ name: 'block', params: { id: items.item.hash } }"
-          :class="{
-            table__hash: minifyTableHash,
-          }"
         >
-          {{ items.item.hash }}
+          {{ items.item.hash | trimHash }}
         </router-link>
       </template>
       <template #cell(fees)="items">
@@ -100,10 +97,6 @@ export default {
   },
   mixins: [fetchList, fetchOnScroll],
   props: {
-    minifyTableHash: {
-      type: Boolean,
-      default: false,
-    },
     fields: {
       type: Array,
       default: () => [

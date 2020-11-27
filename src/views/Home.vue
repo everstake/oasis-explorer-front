@@ -1,14 +1,6 @@
 <template>
   <div class="home">
-    <b-container fluid="lg" v-if="loading">
-      <font-awesome-icon
-        v-if="loading"
-        class="icon home__icon"
-        icon="spinner"
-        spin
-      />
-    </b-container>
-    <div class="home__content" v-else>
+    <div class="home__content">
       <b-container fluid="lg">
         <div class="home__cards">
           <b-row class="mb-5">
@@ -60,16 +52,13 @@
                       spin
                     />
                   </div>
-                  <span v-else class="home-card__value">
-                    {{ getEscrowData().datasets[0].data[0].toString().slice(0, 6) }}%
-                  </span>
-<!--                  <line-chart-->
-<!--                    v-else-->
-<!--                    :height="60"-->
-<!--                    :propsOptions="options"-->
-<!--                    :chart-data="getEscrowData()"-->
-<!--                    class="home__chart"-->
-<!--                  />-->
+                  <line-chart
+                    v-else
+                    :height="60"
+                    :propsOptions="options"
+                    :chart-data="getEscrowData()"
+                    class="home__chart"
+                  />
                 </b-card-text>
               </b-card>
             </b-col>
@@ -87,16 +76,13 @@
                       spin
                     />
                   </div>
-                  <span v-else class="home-card__value">
-                    {{ getTransactionVolumeValue }}
-                  </span>
-<!--                  <line-chart-->
-<!--                    v-else-->
-<!--                    :height="60"-->
-<!--                    :propsOptions="options"-->
-<!--                    :chart-data="getTransactionVolumeData()"-->
-<!--                    class="home__chart"-->
-<!--                  />-->
+                  <line-chart
+                    v-else
+                    :height="60"
+                    :propsOptions="options"
+                    :chart-data="getTransactionVolumeData()"
+                    class="home__chart"
+                  />
                 </b-card-text>
               </b-card>
             </b-col>
@@ -237,7 +223,10 @@ export default {
   mixins: [getDatesInSeconds],
   data() {
     return {
-      loading: null,
+      loading: {
+        blocks: false,
+        operations: false,
+      },
       price: null,
       marketCup: null,
       tradingVolume: null,
@@ -474,5 +463,6 @@ export default {
   justify-content: center;
   min-height: 60px;
   font-size: 26px;
+  color: $color-primary;
 }
 </style>

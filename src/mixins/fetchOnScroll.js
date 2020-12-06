@@ -68,54 +68,20 @@ export default {
       window.removeEventListener('scroll', this.timeout);
       this.timeout = null;
     },
-    handleScrollToShowMore() {
-      const { showMoreButton } = this.$refs;
-
-      if (!showMoreButton) {
-        return;
-      }
-
-      const root = null;
-      const target = showMoreButton;
-      const rootMargin = '0px 0px -100px 0px';
-      const threshold = 1.0;
-
-      const options = { root, rootMargin, threshold };
-
-      const callback = (entries) => {
-        entries.forEach((entry) => {
-          if (entry.intersectionRatio > 0) {
-            const handleScroll = debounce(this.handleShowMore, 200);
-            handleScroll();
-          }
-        });
-      };
-
-      const observer = new IntersectionObserver(callback, options);
-
-      observer.observe(target);
-    },
   },
-  updated() {
+  created() {
     const {
       isShowMoreButtonDisabled,
       fetchOnScrollEnabled,
       setEventListenerOnScroll,
-      handleScrollToShowMore,
     } = this;
 
     if (isShowMoreButtonDisabled) {
       return;
     }
 
-    const { IntersectionObserver } = window;
-
-    if (!IntersectionObserver && fetchOnScrollEnabled) {
+    if (fetchOnScrollEnabled) {
       setEventListenerOnScroll();
-    }
-
-    if (IntersectionObserver && fetchOnScrollEnabled) {
-      handleScrollToShowMore();
     }
   },
   beforeDestroy() {

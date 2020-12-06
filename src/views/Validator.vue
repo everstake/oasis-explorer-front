@@ -484,9 +484,7 @@
                       </template>
                       <template #cell(delegate_since)="tableItems">
                         {{ tableItems.item.delegate_since | formatYear }}
-                        <div class="date-from-now">
-                          {{ tableItems.item.delegate_since | formatDaysAgo }}
-                        </div>
+                        - {{ tableItems.item.delegate_since | formatDaysAgo }}
                       </template>
                       <template #cell(hash)="tableItems">
                         {{ !tableItems.item.hash ? '-' : tableItems.item.hash }}
@@ -1086,7 +1084,7 @@ export default {
   }
 
   &__container {
-    max-height: 95vh;
+    max-height: 1000px;
     overflow-y: auto;
   }
 

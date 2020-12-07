@@ -147,7 +147,7 @@
                         params: { id: items.item.hash },
                       }"
                     >
-                      {{ items.item.hash }}
+                      {{ items.item.hash | trimHashFromTo(7, -7) }}
                     </router-link>
                     <span v-else>-</span>
                   </div>
@@ -159,7 +159,7 @@
                       v-else
                       :to="{ name: 'account', params: { id: items.item.from } }"
                     >
-                      {{ items.item.from }}
+                      {{ items.item.from | trimHashFromTo(6, -6) }}
                     </router-link>
                   </div>
                 </template>
@@ -169,7 +169,7 @@
                     v-else
                     :to="{ name: 'account', params: { id: items.item.to } }"
                   >
-                    {{ items.item.to }}
+                    {{ items.item.to | trimHashFromTo(6, -6) }}
                   </router-link>
                 </template>
                 <template #cell(proposer)="items">

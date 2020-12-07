@@ -107,7 +107,7 @@
                         v-else
                         :to="{ name: 'account', params: { id: items.item.to } }"
                       >
-                        {{ items.item.to | trimHashFromTo(7, -7) }}
+                        {{ items.item.to | trimHashFromTo(6, -6) }}
                       </router-link>
                     </div>
                   </template>
@@ -118,7 +118,7 @@
                         v-else
                         :to="{ name: 'account', params: { id: items.item.from } }"
                       >
-                        {{ items.item.from | trimHashFromTo(7, -7) }}
+                        {{ items.item.from | trimHashFromTo(6, -6) }}
                       </router-link>
                     </div>
                   </template>

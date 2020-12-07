@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     onUserScroll() {
+      if (!this.$refs.table) return;
       const { innerHeight } = window;
       const tableHeight = this.$refs.table.$el.getBoundingClientRect().bottom;
       if (this.$refs.table) {
@@ -38,12 +39,22 @@ export default {
     async handleShowMore() {
       if (this.loading) return;
 
+      if (this.items !== null && this.items.length < this.limit) {
+        return;
+      }
+
       this.loading = true;
       this.offset += 50;
       const data = await this.fetchData({ offset: this.offset });
       const isRequestSuccessful = data.status === 200;
       const isDataEmpty = Array.isArray(data.data) && data.data.length === 0;
+      const dataLengthLessThanLimit = Array.isArray(data.data) && data.data.length < this.limit;
       if (isDataEmpty) {
+        this.isShowMoreButtonDisabled = true;
+        this.loading = false;
+        return;
+      }
+      if (dataLengthLessThanLimit) {
         this.isShowMoreButtonDisabled = true;
         this.loading = false;
         return;
@@ -55,6 +66,7 @@ export default {
       } else {
         this.error = true;
       }
+
       this.loading = false;
     },
     setEventListenerOnScroll() {

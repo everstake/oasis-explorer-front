@@ -136,7 +136,7 @@
                     icon="spinner"
                     spin
                   />
-                  <span v-else>{{ circulatingSupply | formatAmount }} ROSE</span>
+                  <span v-else>{{ getCirculatingSupply }} ROSE</span>
                 </b-card-text>
               </b-card>
             </b-col>
@@ -364,6 +364,9 @@ export default {
     getMarketCup() {
       return numeral(this.marketCup).format('0,0');
     },
+    getCirculatingSupply() {
+      return numeral(this.circulatingSupply).format('0,0');
+    }
   },
   async created() {
     const data = await this.$api.getInfo();

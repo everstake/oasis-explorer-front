@@ -91,62 +91,57 @@
             <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
               <b-card class="card--home" title="Price">
                 <b-card-text>
-                  No data
+                  <font-awesome-icon
+                    v-if="!price"
+                    class="icon home__icon"
+                    icon="spinner"
+                    spin
+                  />
+                  <span v-else>{{ price }}</span>
                 </b-card-text>
               </b-card>
             </b-col>
             <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
               <b-card title="Market cap" class="card--home">
                 <b-card-text>
-                  No data
+                  <font-awesome-icon
+                    v-if="!marketCup"
+                    class="icon home__icon"
+                    icon="spinner"
+                    spin
+                  />
+                  <span v-else>{{ marketCup }}</span>
                 </b-card-text>
               </b-card>
             </b-col>
             <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
               <b-card class="card--home" title="Trading volume">
                 <b-card-text>
-                  No data
+                  <font-awesome-icon
+                    v-if="!tradingVolume"
+                    class="icon home__icon"
+                    icon="spinner"
+                    spin
+                  />
+                  <span v-else>{{ parseFloat(tradingVolume.toFixed(3)) }}</span>
                 </b-card-text>
               </b-card>
             </b-col>
             <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
               <b-card class="card--home" title="Circulating supply">
                 <b-card-text>
-                  No data
+                  <font-awesome-icon
+                    v-if="!circulatingSupply"
+                    class="icon home__icon"
+                    icon="spinner"
+                    spin
+                  />
+                  <span v-else>{{ circulatingSupply }}</span>
                 </b-card-text>
               </b-card>
             </b-col>
           </b-row>
         </div>
-        <b-row
-          class="home__section"
-          v-if="price || marketCup || tradingVolume || circulatingSupply"
-        >
-          <b-col v-if="price" cols="3">
-            <b-card title="Price" class="card--home">
-              <b-card-text> {{ data.price }} chart </b-card-text>
-            </b-card>
-          </b-col>
-          <b-col v-if="marketCup" cols="3">
-            <b-card title="Market cap" class="card--home">
-              <b-card-text> {{ data.marketCup }} chart </b-card-text>
-            </b-card>
-          </b-col>
-          <b-col v-if="tradingVolume" cols="3">
-            <b-card title="Trading volume" class="card--home">
-              <b-card-text>
-                {{ data.tradingVolume }}
-              </b-card-text>
-            </b-card>
-          </b-col>
-          <b-col v-if="circulatingSupply" cols="3">
-            <b-card title="Circulating supply" class="card--home">
-              <b-card-text>
-                {{ circulatingSupply }}
-              </b-card-text>
-            </b-card>
-          </b-col>
-        </b-row>
         <b-row class="home__section">
           <b-col class="home__col" cols="12" xs="12" sm="12" md="12" lg="6">
             <p class="home__title">Blocks list</p>
@@ -368,6 +363,10 @@ export default {
     const data = await this.$api.getInfo();
 
     this.topStakeWeight = data.data.top_escrow;
+    this.circulatingSupply = data.data.circulating_supply;
+    this.marketCup = data.data.market_cap;
+    this.price = data.data.price;
+    this.tradingVolume = data.data.volume_24h;
 
     this.setInfo(data.data);
   },

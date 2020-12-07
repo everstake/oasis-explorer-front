@@ -97,7 +97,7 @@
                     icon="spinner"
                     spin
                   />
-                  <span v-else>{{ price }}</span>
+                  <span v-else>{{ price }} $</span>
                 </b-card-text>
               </b-card>
             </b-col>
@@ -110,7 +110,7 @@
                     icon="spinner"
                     spin
                   />
-                  <span v-else>{{ marketCup }}</span>
+                  <span v-else>{{ getMarketCup }} $</span>
                 </b-card-text>
               </b-card>
             </b-col>
@@ -123,7 +123,7 @@
                     icon="spinner"
                     spin
                   />
-                  <span v-else>{{ parseFloat(tradingVolume.toFixed(3)) }}</span>
+                  <span v-else>{{ getTradingVolume }} $</span>
                 </b-card-text>
               </b-card>
             </b-col>
@@ -136,7 +136,7 @@
                     icon="spinner"
                     spin
                   />
-                  <span v-else>{{ circulatingSupply }}</span>
+                  <span v-else>{{ circulatingSupply | formatAmount }} ROSE</span>
                 </b-card-text>
               </b-card>
             </b-col>
@@ -357,7 +357,13 @@ export default {
       const value = this.getTransactionVolumeData().datasets[0].data[0];
       const formattedValue = numeral(Number(value) / 1000000000).format('0,0.[000000000]');
       return String(formattedValue).split('.')[0];
-    }
+    },
+    getTradingVolume() {
+      return numeral(this.tradingVolume).format('0,0');
+    },
+    getMarketCup() {
+      return numeral(this.marketCup).format('0,0');
+    },
   },
   async created() {
     const data = await this.$api.getInfo();

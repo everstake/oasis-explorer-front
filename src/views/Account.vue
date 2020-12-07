@@ -229,7 +229,7 @@
                               params: { id: tableItems.item.to },
                             }"
                         >
-                          {{ tableItems.item.to | trimHashFromTo(7, -7) }}
+                          {{ tableItems.item.to | trimHashFromTo(6, -6) }}
                         </router-link>
                       </div>
                     </template>
@@ -243,7 +243,7 @@
                               params: { id: tableItems.item.from },
                             }"
                         >
-                          {{ tableItems.item.from | trimHashFromTo(7, -7) }}
+                          {{ tableItems.item.from | trimHashFromTo(6, -6) }}
                         </router-link>
                       </div>
                     </template>

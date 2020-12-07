@@ -483,8 +483,10 @@
                         {{ tableItems.item.escrow_amount | formatAmount }}
                       </template>
                       <template #cell(delegate_since)="tableItems">
-                        {{ tableItems.item.delegate_since | formatYear }} -
-                        {{ tableItems.item.delegate_since | formatDaysAgo }}
+                        {{ tableItems.item.delegate_since | formatYear }}
+                        <span class="date-from-now">
+                          {{ tableItems.item.delegate_since | formatDaysAgo }}
+                        </span>
                       </template>
                       <template #cell(hash)="tableItems">
                         {{ !tableItems.item.hash
@@ -1222,6 +1224,12 @@ export default {
         color: $color-primary;
       }
     }
+  }
+  
+  & .date-from-now {
+    display: inline-block;
+    padding-left: 5px;
+    color: #999;
   }
 }
 </style>

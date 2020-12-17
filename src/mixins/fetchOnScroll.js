@@ -27,25 +27,35 @@ export default {
   },
   methods: {
     onUserScroll() {
+      if (!this.$refs.table) return;
+      const { innerHeight } = window;
+      const tableHeight = this.$refs.table.$el.getBoundingClientRect().bottom;
       if (this.$refs.table) {
-        const { innerHeight } = window;
-        const tableHeight = this.$refs.table.$el.getBoundingClientRect().bottom;
-        if (this.$refs.table) {
-          if (innerHeight > tableHeight) {
-            this.handleShowMore();
-          }
+        if (innerHeight > tableHeight) {
+          this.handleShowMore();
         }
       }
     },
     async handleShowMore() {
       if (this.loading) return;
 
+      if (this.items !== null && this.items.length < this.limit) {
+        this.isShowMoreButtonDisabled = true;
+        return;
+      }
+
       this.loading = true;
       this.offset += 50;
       const data = await this.fetchData({ offset: this.offset });
       const isRequestSuccessful = data.status === 200;
       const isDataEmpty = Array.isArray(data.data) && data.data.length === 0;
+      const dataLengthLessThanLimit = Array.isArray(data.data) && data.data.length < 10;
       if (isDataEmpty) {
+        this.isShowMoreButtonDisabled = true;
+        this.loading = false;
+        return;
+      }
+      if (dataLengthLessThanLimit) {
         this.isShowMoreButtonDisabled = true;
         this.loading = false;
         return;
@@ -57,10 +67,11 @@ export default {
       } else {
         this.error = true;
       }
+
       this.loading = false;
     },
     setEventListenerOnScroll() {
-      this.timeout = debounce(this.onUserScroll, 300);
+      this.timeout = debounce(this.onUserScroll, 100);
       window.addEventListener('scroll', this.timeout);
     },
     removeEventListenerOnScroll() {
@@ -70,42 +81,21 @@ export default {
       window.removeEventListener('scroll', this.timeout);
       this.timeout = null;
     },
-    handleScrollToShowMore() {
-      const { showMoreButton } = this.$refs;
-
-      if (!showMoreButton) {
-        return;
-      }
-
-      const root = null;
-      const target = showMoreButton;
-      const rootMargin = '0px 0px -100px 0px';
-      const threshold = 1.0;
-
-      const options = { root, rootMargin, threshold };
-
-      const callback = (entries) => {
-        entries.forEach((entry) => {
-          if (entry.intersectionRatio > 0) {
-            const handleScroll = debounce(this.handleShowMore, 200);
-            handleScroll();
-          }
-        });
-      };
-
-      const observer = new IntersectionObserver(callback, options);
-
-      observer.observe(target);
-    },
   },
-  updated() {
-    const { isShowMoreButtonDisabled, setEventListenerOnScroll } = this;
+  created() {
+    const {
+      isShowMoreButtonDisabled,
+      fetchOnScrollEnabled,
+      setEventListenerOnScroll,
+    } = this;
 
     if (isShowMoreButtonDisabled) {
       return;
     }
 
-    setEventListenerOnScroll();
+    if (fetchOnScrollEnabled) {
+      setEventListenerOnScroll();
+    }
   },
   beforeDestroy() {
     if (this.fetchOnScrollEnabled) {

@@ -472,7 +472,7 @@
                             params: { id: tableItems.item.hash },
                           }"
                         >
-                          {{ tableItems.item.hash }}
+                          {{ tableItems.item.hash | trimHashFromTo(3, -2) }}
                         </router-link>
                       </template>
                       <template #cell(account_id)="tableItems">
@@ -484,7 +484,7 @@
                         >
                           {{
                             tableItems.item.account_name ||
-                            tableItems.item.account_id
+                            tableItems.item.account_id | trimHashFromTo(7, -7)
                           }}
                         </router-link>
                       </template>
@@ -500,15 +500,17 @@
                       </template>
                       <template #cell(delegate_since)="tableItems">
                         {{ tableItems.item.delegate_since | formatYear }}
-                        <div class="date-from-now">
+                        <span class="date-from-now">
                           {{ tableItems.item.delegate_since | formatDaysAgo }}
-                        </div>
+                        </span>
                       </template>
                       <template #cell(hash)="tableItems">
-                        {{ !tableItems.item.hash ? '-' : tableItems.item.hash }}
+                        {{ !tableItems.item.hash
+                        ? '-'
+                        : tableItems.item.hash | trimHash }}
                       </template>
                       <template #cell(to)="tableItems">
-                        <div class="table__hash">
+                        <div>
                           <span v-if="!tableItems.item.to">-</span>
                           <span
                             v-else-if="
@@ -525,12 +527,12 @@
                               params: { id: tableItems.item.to },
                             }"
                           >
-                            {{ tableItems.item.to }}
+                            {{ tableItems.item.to | trimHashFromTo(5, -5) }}
                           </router-link>
                         </div>
                       </template>
-                      <template #cell(from)="tableItems" class="table__hash">
-                        <div class="table__hash">
+                      <template #cell(from)="tableItems">
+                        <div>
                           <span v-if="!tableItems.item.from">-</span>
                           <router-link
                             v-else
@@ -539,7 +541,7 @@
                               params: { id: tableItems.item.from },
                             }"
                           >
-                            {{ tableItems.item.from }}
+                            {{ tableItems.item.from | trimHashFromTo(5, -5) }}
                           </router-link>
                         </div>
                       </template>
@@ -568,13 +570,12 @@
                       </template>
                       <template #cell(hash)="tableItems">
                         <router-link
-                          class="table__hash"
                           :to="{
                             name: 'operation',
                             params: { id: tableItems.item.hash },
                           }"
                         >
-                          {{ tableItems.item.hash }}
+                          {{ tableItems.item.hash | trimHashFromTo(6, -6) }}
                         </router-link>
                       </template>
                       <template #cell(amount)="tableItems">
@@ -1102,7 +1103,7 @@ export default {
   }
 
   &__container {
-    max-height: 95vh;
+    max-height: 1000px;
     overflow-y: auto;
   }
 
@@ -1239,6 +1240,12 @@ export default {
         color: $color-primary;
       }
     }
+  }
+  
+  & .date-from-now {
+    display: inline-block;
+    padding-left: 5px;
+    color: #999;
   }
 }
 </style>

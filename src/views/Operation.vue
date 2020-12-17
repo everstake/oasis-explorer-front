@@ -95,7 +95,7 @@
                     {{ !items.item.hash ? '-' : items.item.hash }}
                   </template>
                   <template #cell(to)="items">
-                    <div class="table__hash">
+                    <div>
                       <span v-if="!items.item.to">-</span>
                       <span
                         v-else-if="items.item.to ===
@@ -107,18 +107,18 @@
                         v-else
                         :to="{ name: 'account', params: { id: items.item.to } }"
                       >
-                        {{ items.item.to }}
+                        {{ items.item.to | trimHashFromTo(6, -6) }}
                       </router-link>
                     </div>
                   </template>
-                  <template #cell(from)="items" class="table__hash">
-                    <div class="table__hash">
+                  <template #cell(from)="items">
+                    <div>
                       <span v-if="!items.item.from">-</span>
                       <router-link
                         v-else
                         :to="{ name: 'account', params: { id: items.item.from } }"
                       >
-                        {{ items.item.from }}
+                        {{ items.item.from | trimHashFromTo(6, -6) }}
                       </router-link>
                     </div>
                   </template>

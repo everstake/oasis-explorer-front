@@ -1,9 +1,6 @@
 html {
   min-width: 320px;
-
-  @media (max-width: 480px) {
-    overflow-x: hidden;
-  }
+  overflow-x: auto;
 }
 
 ::-webkit-scrollbar {
@@ -66,7 +63,6 @@ th, td {
 }
 
 th, td, th a, td a {
-  max-width: 150px;
   white-space: nowrap;
   overflow: hidden;
   text-align: left;

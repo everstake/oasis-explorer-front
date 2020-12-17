@@ -3,10 +3,6 @@ html {
   overflow-x: auto;
 }
 
-[class^='container-'] {
-  overflow: hidden;
-}
-
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -67,7 +63,6 @@ th, td {
 }
 
 th, td, th a, td a {
-  max-width: 150px;
   white-space: nowrap;
   overflow: hidden;
   text-align: left;

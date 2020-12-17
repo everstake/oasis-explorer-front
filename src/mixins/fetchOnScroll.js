@@ -40,6 +40,7 @@ export default {
       if (this.loading) return;
 
       if (this.items !== null && this.items.length < this.limit) {
+        this.isShowMoreButtonDisabled = true;
         return;
       }
 
@@ -48,7 +49,7 @@ export default {
       const data = await this.fetchData({ offset: this.offset });
       const isRequestSuccessful = data.status === 200;
       const isDataEmpty = Array.isArray(data.data) && data.data.length === 0;
-      const dataLengthLessThanLimit = Array.isArray(data.data) && data.data.length < this.limit;
+      const dataLengthLessThanLimit = Array.isArray(data.data) && data.data.length < 10;
       if (isDataEmpty) {
         this.isShowMoreButtonDisabled = true;
         this.loading = false;

@@ -54,6 +54,9 @@
         {{ String(items.item.day_uptime * 100).slice(0, 4) }}% /
         {{ String(items.item.total_uptime * 100).slice(0, 4) }}%
       </template>
+      <template #cell(fee)="items">
+        {{ items.item.fee }}%
+      </template>
       <template #cell(status)="items">
         <div
           class="validators-list__status text-center"

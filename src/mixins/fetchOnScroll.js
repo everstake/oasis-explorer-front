@@ -39,11 +39,6 @@ export default {
     async handleShowMore() {
       if (this.loading) return;
 
-      if (this.items !== null && this.items.length < this.limit) {
-        this.isShowMoreButtonDisabled = true;
-        return;
-      }
-
       this.loading = true;
       this.offset += 50;
       const data = await this.fetchData({ offset: this.offset });

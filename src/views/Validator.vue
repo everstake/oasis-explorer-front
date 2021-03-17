@@ -1016,6 +1016,24 @@ export default {
             borderWidth: 1,
             backgroundColor: this.palette[3],
           },
+          {
+            label: 'Delegations balance',
+            // eslint-disable-next-line camelcase
+            data: this.charts.stake.map(
+                ({ delegations_balance }) => delegations_balance,
+            ),
+            borderWidth: 1,
+            backgroundColor: this.palette[4],
+          },
+          {
+            label: 'Debonding delegations balance',
+            // eslint-disable-next-line camelcase
+            data: this.charts.stake.map(
+                ({ debonding_delegations_balance }) => debonding_delegations_balance,
+            ),
+            borderWidth: 1,
+            backgroundColor: this.palette[5],
+          },
         ],
         // eslint-disable-next-line max-len
         labels: this.charts.stake.map(({ timestamp }) => {
@@ -1110,7 +1128,7 @@ export default {
   &__shadow {
     height: 100%;
     box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
-    
+
     &:last-child {
       box-shadow: none;
     }
@@ -1241,7 +1259,7 @@ export default {
       }
     }
   }
-  
+
   & .date-from-now {
     display: inline-block;
     padding-left: 5px;

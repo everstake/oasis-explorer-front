@@ -596,7 +596,7 @@ export default {
 
       this.loading = false;
       return data.data;
-      
+
       this.loading = false;
     },
     async updateTableData(type) {
@@ -717,6 +717,24 @@ export default {
             borderWidth: 1,
             backgroundColor: this.palette[3],
           },
+          {
+            label: 'Delegations balance',
+            // eslint-disable-next-line camelcase
+            data: this.charts.stake.map(
+                ({ delegations_balance }) => delegations_balance,
+            ),
+            borderWidth: 1,
+            backgroundColor: this.palette[4],
+          },
+          {
+            label: 'Debonding delegations balance',
+            // eslint-disable-next-line camelcase
+            data: this.charts.stake.map(
+              ({ debonding_delegations_balance }) => debonding_delegations_balance,
+            ),
+            borderWidth: 1,
+            backgroundColor: this.palette[5],
+          },
         ],
         // eslint-disable-next-line max-len
         labels: this.charts.stake.map(({ timestamp }) => {
@@ -809,14 +827,14 @@ export default {
       padding-bottom: 20px;
       text-align: center;
     }
-    
+
     &__breadcrumbs {
       margin-bottom: 35px;
     }
-    
+
     &__section {
     }
-    
+
     &__card {
       height: calc(100% - 55px) !important;
       max-height: 700px;
@@ -824,44 +842,44 @@ export default {
       box-shadow: none;
       padding-bottom: 20px;
     }
-    
+
     &__container {
       max-height: 800px;
       overflow-y: auto;
     }
-    
+
     &__shadow {
       height: 100%;
       box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
-      
+
       &:last-child {
         box-shadow: none;
       }
     }
-    
+
     &__actions {
       margin-bottom: 15px;
-      
+
       &--desktop {
         @include from-768-down {
           display: none;
         }
-        
+
         @media (min-width: 769px) {
           display: block;
         }
       }
-      
+
       &--mobile {
         display: none;
         margin-top: 15px;
-        
+
         @include from-768-down {
           display: block;
         }
       }
     }
-    
+
     &__btn {
       width: 25%;
       padding: 7px 0;
@@ -874,91 +892,91 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-      
+
       &:first-child {
         border-top-left-radius: 6px;
         border-bottom-left-radius: 6px;
         border-left: 1px solid #4cd4a9;
       }
-      
+
       &:last-child {
         border-top-right-radius: 6px;
         border-bottom-right-radius: 6px;
         border-right: 1px solid #4cd4a9;
       }
-      
+
       &:focus,
       &:active {
         box-shadow: none !important;
       }
-      
+
       &:hover {
         background-color: rgb(76, 212, 169) !important;
         color: #fff !important;
       }
-      
+
       &--active {
         background-color: #4cd4a9 !important;
         color: #fff !important;
         pointer-events: none;
-        
+
         &:focus,
         &:hover {
           box-shadow: none !important;
         }
       }
     }
-    
+
     &__table {
     }
-    
+
     &__status {
       &--active {
         color: #28a745;
       }
-      
+
       &--inactive {
         color: #dc3545;
       }
     }
-    
+
     &-chart__header {
       & .card-header {
         margin-bottom: 20px;
       }
     }
-    
+
     &-chart {
       .card-header {
         padding: 14px 20px;
       }
     }
-    
+
     &__contacts {
       display: flex;
       justify-content: space-around;
       align-items: center;
       margin-top: 10px;
     }
-    
+
     &__name {
       font-size: 21px;
     }
-    
+
     &__contact .validator__icon {
       color: #999;
     }
-    
+
     &__contact {
       pointer-events: none;
-      
+
       & svg {
         margin: 0;
       }
-      
+
       &--active {
         pointer-events: auto;
-        
+
         & .validator__icon {
           color: $color-primary;
         }

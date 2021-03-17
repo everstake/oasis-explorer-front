@@ -36,6 +36,12 @@
       <template #cell(escrow_balance_share)="items">
         {{ items.item.escrow_balance_share | formatAmount }}
       </template>
+      <template #cell(delegations_balance)="items">
+        {{ items.item.delegations_balance | formatAmount }}
+      </template>
+      <template #cell(debonding_delegations_balance)="items">
+        {{ items.item.debonding_delegations_balance | formatAmount }}
+      </template>
       <template #cell(operations_number)="items">
         {{ items.item.operations_number }}
       </template>
@@ -109,6 +115,8 @@ export default {
         { key: 'general_balance', label: 'General balance', sortable: true },
         { key: 'escrow_balance', label: 'Escrow balance', sortable: true },
         { key: 'escrow_balance_share', label: 'Escrow share', sortable: true },
+        { key: 'delegations_balance', label: 'Delegations balance', sortable: true },
+        { key: 'debonding_delegations_balance', label: 'Debonding delegations balance', sortable: true },
         { key: 'operations_number', label: 'Ops number', sortable: true },
         { key: 'type', label: 'Type' },
         { key: 'created_at', label: 'Created at', sortable: true },

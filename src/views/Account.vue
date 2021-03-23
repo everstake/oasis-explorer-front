@@ -73,6 +73,16 @@
                         <p class="account__value">{{items.debonding_balance | formatAmount }}</p>
                       </div>
                       <div class="account__item">
+                        Delegations balance:
+                        <p class="account__value">{{items.delegations_balance | formatAmount }}</p>
+                      </div>
+                      <div class="account__item">
+                        Debonding delegations balance:
+                        <p class="account__value">
+                          {{items.debonding_delegations_balance | formatAmount }}
+                        </p>
+                      </div>
+                      <div class="account__item">
                         Nonce:
                         <p class="account__value">{{items.nonce }}</p>
                       </div>
@@ -361,7 +371,7 @@
                           <div class="stats__section">
                             <b-card
                               class="validator-chart__header"
-                              header="Stake change"
+                              header="Account balance"
                             >
                               <b-card-text class="stats__content account__stats">
                                 <LineChart
@@ -685,8 +695,8 @@ export default {
             label: 'Total balance',
             /* eslint-disable */
             data: this.charts.stake.map(
-              ({ general_balance, escrow_balance }) => {
-                return general_balance + escrow_balance;
+              ({ general_balance, escrow_balance, self_stake_balance, debonding_balance }) => {
+                return general_balance + escrow_balance + self_stake_balance + debonding_balance;
               },
             ),
             borderWidth: 1,

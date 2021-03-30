@@ -288,9 +288,15 @@
                 <b-card-text class="block__content">
                   <div class="block__header">Total balance</div>
                   {{
-                    (items.general_balance + items.escrow_balance)
-                      | formatAmount
+                    (items.general_balance +
+                        items.escrow_balance
+                        + items.debonding_balance)
+                        | formatAmount
                   }}
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div class="block__header">General balance</div>
+                  {{ items.general_balance | formatAmount }}
                 </b-card-text>
                 <b-card-text class="block__content">
                   <div class="block__header">Escrow balance</div>

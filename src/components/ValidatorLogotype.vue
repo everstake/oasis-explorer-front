@@ -1,7 +1,7 @@
 <template>
   <v-lazy-image
     :src-placeholder="placeholderSrc"
-    :src="hasError ? placeholderSrc : logoSrc"
+    :src="logoSrc"
     :alt="`${accountName} logotype`"
     :class="['logotype', { 'logotype--black': isLogoBlack }]"
     @error="onError"
@@ -35,6 +35,10 @@ export default {
   },
   computed: {
     logoSrc() {
+      if (this.hasError) {
+        return this.placeholderSrc;
+      }
+
       if (this.accountName.toLowerCase() === 'everstake') {
         return everstakeIcon;
       }
@@ -45,7 +49,7 @@ export default {
         return this.src;
       }
 
-      return this.placeholder;
+      return this.placeholderSrc;
     },
     isLogoBlack() {
       if (this.hasError) {

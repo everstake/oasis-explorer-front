@@ -20,9 +20,10 @@
           :to="{ name: 'validator', params: { id: data.item.account_id } }"
         >
           <span v-if="data.item.media_info && data.item.media_info.logotype">
-            <AccountLogotype
+            <ValidatorLogotype
               :src="data.item.media_info.logotype"
               :accountName="data.item.account_name"
+              class="validators-list__logo"
             />
           </span>
           <img
@@ -124,7 +125,7 @@
 
 <script>
 import TableLoader from '@/components/TableLoader.vue';
-import AccountLogotype from '@/components/AccountLogotype.vue';
+import ValidatorLogotype from '@/components/ValidatorLogotype.vue';
 import fetchList from '@/mixins/fetchList';
 import fetchOnScroll from '@/mixins/fetchOnScroll';
 
@@ -132,7 +133,7 @@ export default {
   name: 'ValidatorsList',
   components: {
     TableLoader,
-    AccountLogotype,
+    ValidatorLogotype,
   },
   mixins: [fetchList, fetchOnScroll],
   props: {

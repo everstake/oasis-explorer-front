@@ -5,8 +5,7 @@
     :alt="`${accountName} logotype`"
     :class="['logotype', { 'logotype--black': isLogoBlack }]"
     @error="onError"
-  >
-  </v-lazy-image>
+  />
 </template>
 
 <script>
@@ -20,11 +19,11 @@ export default {
   props: {
     src: {
       type: String,
-      require: true,
+      required: true,
     },
     accountName: {
       type: String,
-      require: true,
+      required: true,
     },
   },
   data() {

@@ -83,12 +83,6 @@
           {{ items.item.node_address }}
         </router-link>
       </template>
-      <template #cell(delegations_balance)="items">
-        {{ items.item.delegations_balance | formatAmount }}
-      </template>
-      <template #cell(debonding_delegations_balance)="items">
-        {{ items.item.debonding_delegations_balance | formatAmount }}
-      </template>
       <template #cell(validate_since)="items">
         {{ items.item.validate_since | formatYear }}
         <div class="date-from-now">
@@ -167,8 +161,6 @@ export default {
         { key: 'blocks_count', label: 'Proposals', sortable: true },
         { key: 'signatures_count', label: 'Signatures', sortable: true },
         { key: 'fee', label: 'Fee', sortable: true },
-        { key: 'delegations_balance', label: 'Delegations balance', sortable: true },
-        { key: 'debonding_delegations_balance', label: 'Debonding delegations balance', sortable: true },
         {
           key: 'status',
           label: 'Status',

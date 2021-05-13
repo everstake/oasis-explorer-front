@@ -7,7 +7,6 @@ import {
   NavbarPlugin,
   BreadcrumbPlugin,
   ButtonPlugin,
-  SpinnerPlugin,
   CardPlugin,
   FormPlugin,
   FormCheckboxPlugin,
@@ -24,7 +23,6 @@ Vue.use(DropdownPlugin);
 Vue.use(NavbarPlugin);
 Vue.use(BreadcrumbPlugin);
 Vue.use(ButtonPlugin);
-Vue.use(SpinnerPlugin);
 Vue.use(CardPlugin);
 Vue.use(FormPlugin);
 Vue.use(FormCheckboxPlugin);

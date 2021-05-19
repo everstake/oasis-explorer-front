@@ -3,7 +3,7 @@
     :src-placeholder="placeholderSrc"
     :src="logoSrc"
     :alt="`${accountName} logotype`"
-    :class="['logotype', { 'logotype--black': isLogoBlack }]"
+    :class="['logotype', { 'logotype--bg-black': isLogoWhite }]"
     @error="onError"
   />
 </template>
@@ -50,7 +50,7 @@ export default {
 
       return this.placeholderSrc;
     },
-    isLogoBlack() {
+    isLogoWhite() {
       if (this.hasError) {
         return false;
       }
@@ -71,7 +71,7 @@ export default {
 
 <style lang="scss" scoped>
 .logotype {
-  &--black {
+  &--bg-black {
     padding: 10px;
     background-color: #000;
   }

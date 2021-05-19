@@ -2,7 +2,7 @@
   <div class="validators">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
     <b-container fluid="lg">
-      <ValidatorsList ref="ValidatorsList" />
+      <ValidatorsList />
     </b-container>
   </div>
 </template>

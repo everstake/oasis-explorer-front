@@ -3,23 +3,14 @@
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
     <b-container fluid="lg">
-      <b-row v-if="loading && items === null">
+      <b-row v-if="loading && !block">
         <b-col cols="12">
           <div class="text-center block__loading">
             <font-awesome-icon class="icon block__icon" icon="spinner" spin />
           </div>
         </b-col>
       </b-row>
-      <b-row
-        v-else-if="!loading && (Array.isArray(items) && items.length === 0)"
-      >
-        <b-col cols="12">
-          <div class="text-center block__empty">
-            No data
-          </div>
-        </b-col>
-      </b-row>
-      <b-row v-else>
+      <b-row v-else-if="block">
         <b-col class="block__col" cols="12" md="4">
           <div class="block__section">
             <b-card header="General information">
@@ -39,7 +30,7 @@
                   >
                     <font-awesome-icon icon="chevron-left" class="ml-1" />
                   </div>
-                  {{ items[0].level }}
+                  {{ block.level }}
                   <div
                     :disabled="Number($route.params.id) === height"
                     @click="
@@ -58,16 +49,16 @@
               <b-card-text class="block__content">
                 <div class="block__header">Block hash</div>
                 <div
-                  @click="copyToClipboard(items[0].hash)"
+                  @click="copyToClipboard(block.hash)"
                   class="block__copy"
                 >
-                  <span :ref="items[0].hash">
-                    {{ items[0].hash }}
+                  <span :ref="block.hash">
+                    {{ block.hash }}
                   </span>
                   <font-awesome-icon
                     :icon="['fas', 'copy']"
                     :class="{
-                      'icon--success': isHashCopied(items[0].hash),
+                      'icon--success': isHashCopied(block.hash),
                     }"
                     class="icon icon-copy delegator-card__icon"
                   />
@@ -75,7 +66,7 @@
               </b-card-text>
               <b-card-text class="block__content">
                 <div class="block__header">Epoch</div>
-                {{ items[0].epoch }}
+                {{ block.epoch }}
               </b-card-text>
               <b-card-text class="block__content">
                 <div class="block__header">
@@ -83,15 +74,15 @@
                 </div>
                 <div
                   class="block__copy"
-                  @click="copyToClipboard(items[0].proposer)"
+                  @click="copyToClipboard(block.proposer)"
                 >
-                  <span :ref="items[0].proposer">
-                    {{ items[0].proposer }}
+                  <span :ref="block.proposer">
+                    {{ block.proposer }}
                   </span>
                   <font-awesome-icon
                     :icon="['fas', 'copy']"
                     :class="{
-                      'icon--success': isHashCopied(items[0].proposer),
+                      'icon--success': isHashCopied(block.proposer),
                     }"
                     class="icon icon-copy delegator-card__icon"
                   />
@@ -99,99 +90,95 @@
               </b-card-text>
               <b-card-text
                 class="block__content"
-                v-if="items[0].number_of_signatures"
+                v-if="block.number_of_signatures"
               >
                 <div class="block__header">Signatures</div>
-                {{ items[0].number_of_signatures }}
+                {{ block.number_of_signatures }}
               </b-card-text>
-              <b-card-text class="block__content" v-if="items[0].number_of_txs">
+              <b-card-text class="block__content" v-if="block.number_of_txs">
                 <div class="block__header">Operations</div>
-                {{ items[0].number_of_txs }}
+                {{ block.number_of_txs }}
               </b-card-text>
               <b-card-text class="block__content">
                 <div class="block__header">Date</div>
-                {{ items[0].timestamp | formatDate }}
+                {{ block.timestamp | formatDate }}
                 <div class="block__time-ago">
-                  ({{ items[0].timestamp | formatDaysAgo }})
+                  ({{ block.timestamp | formatDaysAgo }})
                 </div>
               </b-card-text>
             </b-card>
           </div>
         </b-col>
         <b-col cols="12" md="8">
-          <div class="block__section block__section--table">
-            <b-card>
-              <b-table
-                id="my-table"
-                :busy="loading && items === null"
-                :responsive="true"
-                show-empty
-                :fields="fields"
-                :items="transactions"
-                class="table table--border table-list"
-                borderless
-                no-border-collapse
-              >
-                <template #table-busy>
-                  <TableLoader />
-                </template>
-                <template #cell(fees)="items">
-                  {{ !items.item.fees ? '-' : items.item.fees }}
-                </template>
-                <template #cell(hash)="items">
-                  <div class="table__hash">
-                    <router-link
-                      v-if="items.item.hash"
-                      :to="{
-                        name: 'operation',
-                        params: { id: items.item.hash },
-                      }"
-                    >
-                      {{ items.item.hash | trimHashFromTo(7, -7) }}
-                    </router-link>
-                    <span v-else>-</span>
-                  </div>
-                </template>
-                <template #cell(from)="items" class="table__hash--large">
-                  <div class="table__hash--large">
-                    <span v-if="!items.item.from">-</span>
-                    <router-link
-                      v-else
-                      :to="{ name: 'account', params: { id: items.item.from } }"
-                    >
-                      {{ items.item.from | trimHashFromTo(6, -6) }}
-                    </router-link>
-                  </div>
-                </template>
-                <template #cell(to)="items">
-                  <span v-if="!items.item.to">-</span>
-                  <router-link
-                    v-else
-                    :to="{ name: 'account', params: { id: items.item.to } }"
-                  >
-                    {{ items.item.to | trimHashFromTo(6, -6) }}
-                  </router-link>
-                </template>
-                <template #cell(proposer)="items">
-                  {{ !items.item.proposer ? '-' : items.item.proposer }}
-                </template>
-                <template #cell(timestamp)="items">
-                  {{ items.item.timestamp | formatDate }}
-                </template>
-                <template #cell(amount)="items">
-                  {{ items.item.amount | formatAmount }}
-                </template>
-                <template #cell(gas_used)="items">
-                  {{ !items.item.gas_used ? '-' : items.item.gas_used }}
-                </template>
-              </b-table>
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="items.length"
-                :per-page="perPage"
-                aria-controls="my-table"
-              ></b-pagination>
-            </b-card>
+          <b-card
+            class="block__card"
+            no-body
+          >
+            <CommonTable
+              requestName="getTransactions"
+              :fields="fields"
+              :fetchParams="fetchParams"
+            >
+              <template #cell(fees)="{ item: { fees } }">
+                {{ fees || '-' }}
+              </template>
+
+              <template #cell(hash)="{ item: { hash } }">
+                <router-link
+                  v-if="hash"
+                  :to="{ name: 'operation', params: { id: hash } }"
+                >
+                  {{ hash | trimHashFromTo(7, -7) }}
+                </router-link>
+
+                <span v-else>-</span>
+              </template>
+
+              <template #cell(from)="{ item: { from }}">
+                <router-link
+                  v-if="from"
+                  :to="{ name: 'account', params: { id: from } }"
+                >
+                  {{ from | trimHashFromTo(6, -6) }}
+                </router-link>
+
+                <span v-else>-</span>
+              </template>
+
+              <template #cell(to)="{ item: { to }}">
+                <router-link
+                  v-if="to"
+                  :to="{ name: 'account', params: { id: to } }"
+                >
+                  {{ to | trimHashFromTo(6, -6) }}
+                </router-link>
+
+                <span v-else>-</span>
+              </template>
+
+              <template #cell(proposer)="{ item: { proposer } }">
+                {{ proposer || '-' }}
+              </template>
+
+              <template #cell(timestamp)="{ item: { timestamp } }">
+                {{ timestamp | formatDate }}
+              </template>
+
+              <template #cell(amount)="{ item: { amount } }">
+                {{ amount | formatAmount }}
+              </template>
+
+              <template #cell(gas_used)="{ item: { gas_used } }">
+                {{ gas_used || '-' }}
+              </template>
+            </CommonTable>
+          </b-card>
+        </b-col>
+      </b-row>
+      <b-row v-else>
+        <b-col cols="12">
+          <div class="text-center block__empty">
+            No data
           </div>
         </b-col>
       </b-row>
@@ -201,47 +188,32 @@
 
 <script>
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import TableLoader from '@/components/TableLoader.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 import { mapState, mapMutations } from 'vuex';
-/* eslint-disable */
+import CommonTable from '../components/CommonTable/CommonTable.vue';
 
 export default {
   name: 'Block',
   components: {
     Breadcrumbs,
-    TableLoader,
+    CommonTable,
   },
-  mixins: [copyToClipboard],
+  mixins: [
+    copyToClipboard,
+  ],
   data() {
     return {
-      level: null,
-      id: null,
-      transactions: null,
-      response: {
-        epoch: 0,
-        fees: 0,
-        gas_used: 0,
-        hash: null,
-        level: 0,
-        number_of_txs: 0,
-        numbet_of_signatures: 0,
-        proposer: null,
-        timestamp: 0,
-      },
-      loading: null,
-      limit: 50,
-      items: null,
+      loading: false,
+      block: null,
       fields: [
-        { key: 'hash', label: 'Hash' },
+        { key: 'hash', label: 'Hash', class: 'cell-s' },
         { key: 'from', label: 'From' },
         { key: 'to', label: 'To' },
         { key: 'amount', label: 'Amount' },
         { key: 'type', label: 'Type' },
         { key: 'timestamp', label: 'Date' },
       ],
-      currentPage: 1,
-      perPage: 5,
+      fetchParams: {},
       breadcrumbs: [
         {
           toRouteName: 'home',
@@ -262,22 +234,63 @@ export default {
     ...mapMutations(['setInfo']),
     onNavigation(position, disabled) {
       if (disabled) {
-        return false;
-      }
-
-      const { id } = this.$route.params;
-
-      if (position === 'prev') {
-        this.$router.push({
-          name: 'block',
-          params: { id: id > 0 ? id - 1 : 0 },
-        });
         return;
       }
 
-      if (position === 'next') {
-        this.$router.push({ name: 'block', params: { id: Number(id) + 1 } });
+      const { id } = this.$route.params;
+      const params = { id };
+
+      switch (position) {
+        case 'prev':
+          params.id = id > 0 ? id - 1 : 0;
+          break;
+        case 'next':
+          params.id = Number(id) + 1;
+          break;
+        default:
       }
+
+      this.$router.push({
+        name: 'block',
+        params,
+      });
+    },
+    setFetchParams() {
+      const params = {};
+
+      const { id } = this.$route.params;
+
+      if (Number.isInteger(Number(id))) {
+        params.block_level = id;
+      } else {
+        params.block_id = id;
+      }
+
+      this.fetchParams = params;
+    },
+    async fetch() {
+      this.loading = true;
+
+      await Promise.all([
+        this.height || this.fetchInfo(),
+        this.fetchBlock(),
+      ]);
+
+      this.loading = false;
+    },
+    async fetchInfo() {
+      const response = await this.$api.getInfo();
+
+      this.setInfo(response.data);
+    },
+    async fetchBlock() {
+      this.block = null;
+
+      const response = await this.$api.getBlocks({
+        ...this.fetchParams,
+      });
+
+      [this.block] = response.data;
     },
   },
   computed: {
@@ -287,38 +300,8 @@ export default {
     $route: {
       immediate: true,
       async handler() {
-        this.items = null;
-        this.loading = true;
-        const options = {};
-
-        if (this.height === null) {
-          const data = await this.$api.getInfo();
-
-          this.setInfo(data.data);
-        }
-
-        if (Number.isInteger(Number(this.$route.params.id))) {
-          options.block_level = this.$route.params.id;
-        } else {
-          options.block_id = this.$route.params.id;
-        }
-
-        const data = await this.$api.getBlocks({
-          ...options,
-        });
-
-        const transactions = await this.$api.getTransactions({
-          ...options,
-          limit: 20,
-        });
-
-        this.transactions = transactions.data;
-
-        if (data.status !== 200) {
-          this.$router.replace({ name: '404' });
-        }
-        this.items = data.data;
-        this.loading = false;
+        this.setFetchParams();
+        this.fetch();
       },
     },
   },
@@ -326,6 +309,13 @@ export default {
 </script>
 
 <style lang="scss">
+.block {
+  &__card {
+    height: 100%;
+    overflow: hidden;
+  }
+}
+
 .card__block-next,
 .card__block-prev {
   cursor: pointer;

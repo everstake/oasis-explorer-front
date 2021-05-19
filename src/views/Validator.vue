@@ -6,730 +6,497 @@
     />
 
     <b-container fluid="lg">
-      <b-row v-if="loading && items === null">
+      <b-row v-if="loading && !validator">
         <b-col cols="12">
           <div class="text-center block__loading">
             <font-awesome-icon class="icon block__icon" icon="spinner" spin />
           </div>
         </b-col>
       </b-row>
-      <b-row
-        v-else-if="
-        !loading
-        && (Array.isArray(items)
-        && (Array.isArray(tableItems))
-        && items.length === 0)"
-      >
+
+      <b-row v-else-if="validator">
+        <b-col cols="4">
+          <div class="validator__section transaction__section">
+            <b-card class="validator__info" header="Validator information">
+              <b-card-text class="block__content block__logotype">
+                <ValidatorLogotype
+                  v-if="validator.media_info && validator.media_info.logotype"
+                  :src="validator.media_info.logotype"
+                  :accountName="validator.account_name"
+                  class="block__logo"
+                />
+                <img
+                  v-else
+                  class="block__logo"
+                  src="../assets/images/logo-oasis.svg"
+                  alt="Oasis logotype"
+                >
+              </b-card-text>
+              <b-card-text v-if="validator.account_name" class="block__content">
+                <span class="validator__name">{{ validator.account_name }}</span>
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div v-if="validator.media_info" class="validator__contacts">
+                  <a
+                    :class="['validator__contact', {
+                      'validator__contact--active': validator.media_info.website_link,
+                    }]"
+                    :href="validator.media_info.website_link || '#'"
+                    target="_blank"
+                  >
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fa', iconName: 'globe' }"
+                    />
+                  </a>
+                  <a
+                    class="validator__contact"
+                    :class="{
+                      'validator__contact--active':
+                        validator.media_info.email_address,
+                    }"
+                    :href="validator.media_info.email_address
+                      ? `mailto:${validator.media_info.email_address}`
+                      : '#'
+                    "
+                  >
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fa', iconName: 'envelope' }"
+                    />
+                  </a>
+                  <a
+                    class="validator__contact"
+                    :class="{
+                      'validator__contact--active': validator.media_info.tg_chat,
+                    }"
+                    :href="validator.media_info.tg_chat
+                      ? validator.media_info.tg_chat
+                      : '#'
+                    "
+                    target="_blank"
+                  >
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'telegram' }"
+                    />
+                  </a>
+                  <a
+                    class="validator__contact"
+                    :class="{
+                      'validator__contact--active': validator.media_info.twitter_acc,
+                    }"
+                    :href="validator.media_info.twitter_acc
+                      ? validator.media_info.twitter_acc
+                      : '#'
+                    "
+                    target="_blank"
+                  >
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'twitter' }"
+                    />
+                  </a>
+                  <a
+                    class="validator__contact"
+                    :class="{
+                      'validator__contact--active': validator.media_info.facebook_acc,
+                    }"
+                    :href="validator.media_info.facebook_acc
+                      ? validator.media_info.facebook_acc
+                      : '#'
+                    "
+                    target="_blank"
+                  >
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'facebook' }"
+                    />
+                  </a>
+                  <a
+                    class="validator__contact"
+                    :class="{
+                      'validator__contact--active': validator.media_info.medium_link,
+                    }"
+                    :href="validator.media_info.medium_link
+                      ? validator.media_info.medium_link
+                      : '#'
+                    "
+                    target="_blank"
+                  >
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'medium' }"
+                    />
+                  </a>
+                </div>
+                <div v-else class="validator__contacts">
+                  <a class="validator__contact" href="#" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fa', iconName: 'globe' }"
+                    />
+                  </a>
+                  <a class="validator__contact" href="#">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fa', iconName: 'envelope' }"
+                    />
+                  </a>
+                  <a class="validator__contact" href="#" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'telegram' }"
+                    />
+                  </a>
+                  <a class="validator__contact" href="#" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'twitter' }"
+                    />
+                  </a>
+                  <a class="validator__contact" href="#" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'facebook' }"
+                    />
+                  </a>
+                  <a class="validator__contact" href="#" target="_blank">
+                    <font-awesome-icon
+                      class="validator__icon"
+                      :icon="{ prefix: 'fab', iconName: 'medium' }"
+                    />
+                  </a>
+                </div>
+                <div class="validator-note">
+                  If you wish to add your validator info, contact us at inbox@everstake.one
+                </div>
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Address</div>
+                <div
+                  @click="copyToClipboard(validator.account_id)"
+                  class="block__copy"
+                >
+                  <span :ref="validator.account_id">
+                    {{ validator.account_id }}
+                  </span>
+                  <font-awesome-icon
+                    :icon="['fas', 'copy']"
+                    :class="{
+                      'icon--success': isHashCopied(validator.account_id),
+                    }"
+                    class="icon icon-copy delegator-card__icon"
+                  />
+                </div>
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Signatures / Proposals</div>
+                {{ validator.signatures_count }} / {{ validator.blocks_count }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Uptime</div>
+                {{ String(validator.total_uptime * 100).slice(0, 4) }}%
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Total balance</div>
+                {{ validator.general_balance + (
+                  validator.escrow_balance + validator.debonding_balance
+                ) | formatAmount }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">General balance</div>
+                {{ validator.general_balance | formatAmount }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Escrow balance</div>
+                {{ validator.escrow_balance | formatAmount }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Escrow shares</div>
+                {{ validator.escrow_shares | formatAmount }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Unbonding balance</div>
+                {{ validator.debonding_balance | formatAmount }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Delegations balance</div>
+                {{ validator.delegations_balance | formatAmount }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">Debonding delegations balance</div>
+                {{ validator.debonding_delegations_balance | formatAmount }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header">
+                  Delegators
+                </div>
+                {{ validator.depositors_count }}
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div
+                  v-if="validator.status"
+                  :class="{
+                    'validator__status--active': validator.status === 'active',
+                    'validator__status--inactive': validator.status === 'inactive',
+                  }"
+                >
+                  <div class="block__header">Status</div>
+                  <font-awesome-icon
+                    v-if="validator.status === 'active'"
+                    icon="check-circle"
+                  />
+                  <font-awesome-icon
+                    v-else-if="validator.status === 'inactive'"
+                    icon="times-circle"
+                  />
+                </div>
+              </b-card-text>
+              <b-card-text class="block__content">
+                <div class="block__header" v-if="validator.validate_since">
+                  Registered
+                </div>
+                {{ validator.validate_since | formatDate }}
+                <div class="date-from-now">
+                  ({{ validator.validate_since | formatDaysAgo }})
+                </div>
+              </b-card-text>
+            </b-card>
+          </div>
+        </b-col>
+
+        <b-col cols="8" md="8">
+          <div class="validator__cards-wrapper">
+            <b-card
+              class="validator__actions validator__actions--desktop"
+              no-body
+            >
+              <b-btn
+                v-for="tab in tabs"
+                :key="tab.key"
+                :class="['validator__btn', {
+                  'validator__btn--active': activeTab === tab,
+                }]"
+                @click="onClickTab(tab)"
+              >
+                {{ tab.label }}
+              </b-btn>
+            </b-card>
+
+            <b-card
+              v-if="activeTab.key !== 'charts'"
+              class="validator__card"
+              no-body
+            >
+              <CommonTable
+                v-if="activeTab.key === 'rewards'"
+                headVariant="dark"
+                requestName="getValidatorRewardsStat"
+                :fields="rewardsFields"
+                :fetchParams="fetchParams"
+              >
+                <template #cell(total_reward)="{ item: { total_reward } }">
+                  {{ total_reward | formatAmount }}
+                </template>
+
+                <template #cell(day_reward)="{ item: { day_reward } }">
+                  {{ day_reward | formatAmount }}
+                </template>
+
+                <template #cell(week_reward)="{ item: { week_reward } }">
+                  {{ week_reward | formatAmount }}
+                </template>
+
+                <template #cell(month_reward)="{ item: { month_reward } }">
+                  {{ month_reward | formatAmount }}
+                </template>
+              </CommonTable>
+              <CommonTable
+                :requestName="requestName"
+                :fetchParams="fetchParams"
+                :fields="fields"
+              >
+                <template #cell(level)="{ item: { level } }">
+                  <router-link
+                    :to="{ name: 'block', params: { id: level } }"
+                  >
+                    {{ level }}
+                  </router-link>
+                </template>
+
+                <template #cell(block_level)="{ item: { block_level }}">
+                  <router-link
+                    :to="{
+                      name: 'block',
+                      params: { id: block_level },
+                    }"
+                  >
+                    {{ block_level }}
+                  </router-link>
+                </template>
+
+                <template #cell(hash)="{ item: { hash } }">
+                  <router-link
+                    :to="{ name: 'operation', params: { id: hash } }"
+                  >
+                    {{ hash | trimHashFromTo(6, -6) }}
+                  </router-link>
+                </template>
+
+                <template #cell(account_id)="{ item: { account_id, account_name } }">
+                  <router-link
+                    :to="{ name: 'account', params: { id: account_id } }"
+                  >
+                    {{ account_name || account_id | trimHashFromTo(7, -7) }}
+                  </router-link>
+                </template>
+
+                <template
+                  #cell(escrow_amount)="{
+                    item: { escrow_amount, reclaim_escrow_amount }
+                  }"
+                >
+                  <span v-if="escrow_amount">
+                    {{ escrow_amount | formatAmount }}
+                  </span>
+
+                  <span v-else-if="reclaim_escrow_amount">
+                    {{ reclaim_escrow_amount | formatAmount }}
+                  </span>
+                </template>
+
+                <template #cell(delegate_since)="{ item: { delegate_since }}">
+                  {{ delegate_since | formatYear }}
+
+                  <span class="common-table__format-days-ago">
+                    {{ delegate_since | formatDaysAgo }}
+                  </span>
+                </template>
+
+                <template #cell(to)="{ item: { to } }">
+                  <div>
+                    <span v-if="to === $constants.SYSTEM_ACCOUNT_ID">
+                      System Account
+                    </span>
+
+                    <router-link
+                      v-else-if="to"
+                      :to="{ name: 'account', params: { id: to } }"
+                    >
+                      {{ to | trimHashFromTo(5, -5) }}
+                    </router-link>
+
+                    <span v-else>-</span>
+                  </div>
+                </template>
+
+                <template #cell(from)="{ item: { from } }">
+                  <div>
+                    <router-link
+                      v-if="from"
+                      :to="{ name: 'account', params: { id: from } }"
+                    >
+                      {{ from | trimHashFromTo(5, -5) }}
+                    </router-link>
+
+                    <span v-else>-</span>
+                  </div>
+                </template>
+
+                <template #cell(proposer)="{ item: { proposer } }">
+                  {{ proposer || '-' }}
+                </template>
+
+                <template #cell(timestamp)="{ item: { timestamp } }">
+                  {{ timestamp | formatDate }}
+                </template>
+
+                <template #cell(created_at)="{ item: { created_at } }">
+                  {{ created_at | formatDate }}
+                </template>
+
+                <template #cell(amount)="{ item: { amount } }">
+                  {{ amount | formatAmount }}
+                </template>
+
+                <template #cell(storage)="{ item: { storage } }">
+                  {{ storage || '-' }}
+                </template>
+
+                <template #cell(gas_used)="{ item: { gas_used } }">
+                  {{ gas_used || '-' }}
+                </template>
+
+                <template #cell(fees)="{ item: { fees }}">
+                  {{ fees || '-' }}
+                </template>
+              </CommonTable>
+            </b-card>
+
+            <b-card
+              v-else
+              class="validator__card"
+              no-body
+            >
+              <div
+                v-if="loading"
+                class="text-center account__loading"
+              >
+                <font-awesome-icon
+                  class="icon account__icon"
+                  icon="spinner"
+                  spin
+                />
+              </div>
+              <div v-else>
+                <b-card
+                  class="validator__chart-card"
+                  header="Uptime"
+                >
+                  <b-card-text class="stats__content">
+                    <LineChart
+                      :chart-data="getUptimeChartData"
+                      :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                      :y-axes-begin-at-zero="false"
+                      :yTicksCallback="uptimeTicksCallback"
+                      :tooltipsLabelCallback="uptimeTooltipsCallback"
+                    />
+                  </b-card-text>
+                </b-card>
+                <b-card
+                  class="validator__chart-card"
+                  header="Account balance"
+                >
+                  <b-card-text class="stats__content">
+                    <LineChart
+                      :chart-data="getStakeChartData"
+                      :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
+                      :y-axes-begin-at-zero="false"
+                      :yTicksCallback="chartsTicksCallback"
+                    />
+                  </b-card-text>
+                </b-card>
+              </div>
+            </b-card>
+          </div>
+        </b-col>
+      </b-row>
+
+      <b-row v-else>
         <b-col cols="12">
           <div class="text-center transaction__empty">
             No data
           </div>
         </b-col>
       </b-row>
-      <div v-else>
-        <b-row>
-          <b-col offset="4" cols="12" md="8">
-            <div class="validator__actions validator__actions--desktop">
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'transfers',
-                }"
-                @click="updateTableData('transfers')"
-              >
-                Transfers
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active':
-                    activeTab === 'addescrow/reclaimescrow',
-                }"
-                @click="updateTableData('addescrow/reclaimescrow')"
-              >
-                Escrow events
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'other',
-                }"
-                @click="updateTableData('other')"
-              >
-                Other ops
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'delegators',
-                }"
-                @click="updateTableData('delegators')"
-              >
-                Delegators
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'charts',
-                }"
-                @click="updateTableData('charts')"
-              >
-                Charts
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'rewards',
-                }"
-                @click="updateTableData('rewards')"
-              >
-                Rewards
-              </b-btn>
-            </div>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col cols="12" md="4">
-            <div class="validator__section transaction__section">
-              <b-card class="validator__info" header="Validator information">
-                <b-card-text class="block__content block__logotype">
-                  <ValidatorLogotype
-                    v-if="items.media_info && items.media_info.logotype"
-                    :src="items.media_info.logotype"
-                    :accountName="items.account_name"
-                    class="block__logo"
-                  />
-                  <img
-                    v-else
-                    class="block__logo"
-                    src="../assets/images/logo-oasis.svg"
-                    alt="Oasis logotype"
-                  />
-                </b-card-text>
-                <b-card-text v-if="items.account_name" class="block__content">
-                  <span class="validator__name">{{ items.account_name }}</span>
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div
-                    v-if="items.media_info"
-                    class="validator__contacts"
-                  >
-                    <a
-                      class="validator__contact"
-                      :class="{
-                        'validator__contact--active':
-                          items.media_info.website_link,
-                      }"
-                      :href="
-                        items.media_info.website_link
-                          ? items.media_info.website_link
-                          : '#'
-                      "
-                      target="_blank"
-                    >
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fa', iconName: 'globe' }"
-                      />
-                    </a>
-                    <a
-                      class="validator__contact"
-                      :class="{
-                        'validator__contact--active':
-                          items.media_info.email_address,
-                      }"
-                      :href="
-                        items.media_info.email_address
-                          ? `mailto:${items.media_info.email_address}`
-                          : '#'
-                      "
-                    >
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fa', iconName: 'envelope' }"
-                      />
-                    </a>
-                    <a
-                      class="validator__contact"
-                      :class="{
-                        'validator__contact--active': items.media_info.tg_chat,
-                      }"
-                      :href="
-                        items.media_info.tg_chat
-                          ? items.media_info.tg_chat
-                          : '#'
-                      "
-                      target="_blank"
-                    >
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fab', iconName: 'telegram' }"
-                      />
-                    </a>
-                    <a
-                      class="validator__contact"
-                      :class="{
-                        'validator__contact--active':
-                          items.media_info.twitter_acc,
-                      }"
-                      :href="
-                        items.media_info.twitter_acc
-                          ? items.media_info.twitter_acc
-                          : '#'
-                      "
-                      target="_blank"
-                    >
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fab', iconName: 'twitter' }"
-                      />
-                    </a>
-                    <a
-                      class="validator__contact"
-                      :class="{
-                        'validator__contact--active':
-                          items.media_info.facebook_acc,
-                      }"
-                      :href="
-                        items.media_info.facebook_acc
-                          ? items.media_info.facebook_acc
-                          : '#'
-                      "
-                      target="_blank"
-                    >
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fab', iconName: 'facebook' }"
-                      />
-                    </a>
-                    <a
-                      class="validator__contact"
-                      :class="{
-                        'validator__contact--active':
-                          items.media_info.medium_link,
-                      }"
-                      :href="
-                        items.media_info.medium_link
-                          ? items.media_info.medium_link
-                          : '#'
-                      "
-                      target="_blank"
-                    >
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fab', iconName: 'medium' }"
-                      />
-                    </a>
-                  </div>
-                  <div v-else class="validator__contacts">
-                    <a class="validator__contact" href="#" target="_blank">
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fa', iconName: 'globe' }"
-                      />
-                    </a>
-                    <a class="validator__contact" href="#">
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fa', iconName: 'envelope' }"
-                      />
-                    </a>
-                    <a class="validator__contact" href="#" target="_blank">
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fab', iconName: 'telegram' }"
-                      />
-                    </a>
-                    <a class="validator__contact" href="#" target="_blank">
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fab', iconName: 'twitter' }"
-                      />
-                    </a>
-                    <a class="validator__contact" href="#" target="_blank">
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fab', iconName: 'facebook' }"
-                      />
-                    </a>
-                    <a class="validator__contact" href="#" target="_blank">
-                      <font-awesome-icon
-                        class="validator__icon"
-                        :icon="{ prefix: 'fab', iconName: 'medium' }"
-                      />
-                    </a>
-                  </div>
-                  <div class="validator-note">
-                    If you wish to add your validator info, contact us at inbox@everstake.one
-                  </div>
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Address</div>
-                  <div
-                    @click="copyToClipboard(items.account_id)"
-                    class="block__copy"
-                  >
-                    <span :ref="items.account_id">
-                      {{ items.account_id }}
-                    </span>
-                    <font-awesome-icon
-                      :icon="['fas', 'copy']"
-                      :class="{
-                        'icon--success': isHashCopied(items.account_id),
-                      }"
-                      class="icon icon-copy delegator-card__icon"
-                    />
-                  </div>
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Signatures / Proposals</div>
-                  {{ items.signatures_count }} / {{ items.blocks_count }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Uptime</div>
-                  {{ String(items.total_uptime * 100).slice(0, 4) }}%
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Total balance</div>
-                  {{
-                    (items.general_balance +
-                        items.escrow_balance
-                        + items.debonding_balance)
-                        | formatAmount
-                  }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">General balance</div>
-                  {{ items.general_balance | formatAmount }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Escrow balance</div>
-                  {{ items.escrow_balance | formatAmount }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Escrow shares</div>
-                  {{ items.escrow_shares | formatAmount }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Unbonding balance</div>
-                  {{ items.debonding_balance | formatAmount }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Delegations balance</div>
-                  {{ items.delegations_balance | formatAmount }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">Debonding delegations balance</div>
-                  {{ items.debonding_delegations_balance | formatAmount }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header">
-                    Delegators
-                  </div>
-                  {{ items.depositors_count }}
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div
-                    v-if="items.status"
-                    :class="{
-                      'validator__status--active': items.status === 'active',
-                      'validator__status--inactive':
-                        items.status === 'inactive',
-                    }"
-                  >
-                    <div class="block__header">Status</div>
-                    <font-awesome-icon
-                      v-if="items.status === 'active'"
-                      icon="check-circle"
-                    />
-                    <font-awesome-icon
-                      v-else-if="items.status === 'inactive'"
-                      icon="times-circle"
-                    />
-                  </div>
-                </b-card-text>
-                <b-card-text class="block__content">
-                  <div class="block__header" v-if="items.validate_since">
-                    Registered
-                  </div>
-                  {{ items.validate_since | formatDate }}
-                  <div class="date-from-now">
-                    ({{ items.validate_since | formatDaysAgo }})
-                  </div>
-                </b-card-text>
-              </b-card>
-            </div>
-          </b-col>
-          <b-col cols="12" md="8">
-            <div class="validator__actions validator__actions--mobile">
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'transfers',
-                }"
-                @click="updateTableData('transfers')"
-              >
-                Transfers
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active':
-                    activeTab === 'addescrow/reclaimescrow',
-                }"
-                @click="updateTableData('addescrow/reclaimescrow')"
-              >
-                Escrow events
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'other',
-                }"
-                @click="updateTableData('other')"
-              >
-                Other ops
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'delegators',
-                }"
-                @click="updateTableData('delegators')"
-              >
-                Delegators
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'charts',
-                }"
-                @click="updateTableData('charts')"
-              >
-                Charts
-              </b-btn>
-              <b-btn
-                class="validator__btn"
-                :class="{
-                  'validator__btn--active': activeTab === 'rewards',
-                }"
-                @click="updateTableData('rewards')"
-              >
-                Rewards
-              </b-btn>
-            </div>
-            <div class="block__section">
-              <div class="block__section block__section--table">
-                <b-card class="validator__card">
-                  <div
-                    v-if="activeTab !== 'charts'"
-                    class="validator__container validator__shadow"
-                  >
-                    <b-table
-                      v-if="activeTab === 'rewards' && getRewardsItems !== null"
-                      :busy="loading && tableItems === null"
-                      :responsive="true"
-                      :fields="getRewardsFields"
-                      :items="getRewardsItems"
-                      class="table table--border table-list validator__table table__rewards"
-                      borderless
-                      no-border-collapse
-                    >
-                      <template #cell(total_reward)="tableItems">
-                        {{ tableItems.item.total_reward | formatAmount }}
-                      </template>
-                      <template #cell(day_reward)="tableItems">
-                        {{ tableItems.item.day_reward | formatAmount }}
-                      </template>
-                      <template #cell(week_reward)="tableItems">
-                        {{ tableItems.item.week_reward | formatAmount }}
-                      </template>
-                      <template #cell(month_reward)="tableItems">
-                        {{ tableItems.item.month_reward | formatAmount }}
-                      </template>
-                    </b-table>
-                    <b-table
-                      ref="table"
-                      id="my-table"
-                      :busy="loading && tableItems === null"
-                      :responsive="true"
-                      show-empty
-                      :fields="getTableFields"
-                      :items="tableItems"
-                      class="table table--border table-list validator__table"
-                      borderless
-                      no-border-collapse
-                    >
-                      <template #table-busy>
-                        <TableLoader />
-                      </template>
-                      <template #cell(height)="tableItems">
-                        <router-link
-                          :to="{
-                            name: 'block',
-                            params: { id: tableItems.item.level },
-                          }"
-                        >
-                          {{ tableItems.item.level }}
-                        </router-link>
-                      </template>
-                      <template #cell(block_level)="tableItems">
-                        <router-link
-                          :to="{
-                            name: 'block',
-                            params: { id: tableItems.item.block_level },
-                          }"
-                        >
-                          {{ tableItems.item.block_level }}
-                        </router-link>
-                      </template>
-                      <template #cell(hash)="tableItems">
-                        <router-link
-                          :to="{
-                            name: 'transaction',
-                            params: { id: tableItems.item.hash },
-                          }"
-                        >
-                          {{ tableItems.item.hash | trimHashFromTo(3, -2) }}
-                        </router-link>
-                      </template>
-                      <template #cell(account_id)="tableItems">
-                        <router-link
-                          :to="{
-                            name: 'account',
-                            params: { id: tableItems.item.account_id },
-                          }"
-                        >
-                          {{
-                            tableItems.item.account_name ||
-                            tableItems.item.account_id | trimHashFromTo(7, -7)
-                          }}
-                        </router-link>
-                      </template>
-                      <template #cell(escrow_amount)="tableItems">
-                        <span v-if="tableItems.item.escrow_amount">
-                          {{ tableItems.item.escrow_amount | formatAmount }}
-                        </span>
-                        <span v-else-if="tableItems.item.reclaim_escrow_amount">
-                          {{
-                            tableItems.item.reclaim_escrow_amount | formatAmount
-                          }}
-                        </span>
-                      </template>
-                      <template #cell(delegate_since)="tableItems">
-                        {{ tableItems.item.delegate_since | formatYear }}
-                        <span class="date-from-now">
-                          {{ tableItems.item.delegate_since | formatDaysAgo }}
-                        </span>
-                      </template>
-                      <template #cell(hash)="tableItems">
-                        {{ !tableItems.item.hash
-                        ? '-'
-                        : tableItems.item.hash | trimHash }}
-                      </template>
-                      <template #cell(to)="tableItems">
-                        <div>
-                          <span v-if="!tableItems.item.to">-</span>
-                          <span
-                            v-else-if="
-                              tableItems.item.to ===
-                              'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
-                            "
-                          >
-                            System Account
-                          </span>
-                          <router-link
-                            v-else
-                            :to="{
-                              name: 'account',
-                              params: { id: tableItems.item.to },
-                            }"
-                          >
-                            {{ tableItems.item.to | trimHashFromTo(5, -5) }}
-                          </router-link>
-                        </div>
-                      </template>
-                      <template #cell(from)="tableItems">
-                        <div>
-                          <span v-if="!tableItems.item.from">-</span>
-                          <router-link
-                            v-else
-                            :to="{
-                              name: 'account',
-                              params: { id: tableItems.item.from },
-                            }"
-                          >
-                            {{ tableItems.item.from | trimHashFromTo(5, -5) }}
-                          </router-link>
-                        </div>
-                      </template>
-                      <template #cell(proposer)="tableItems">
-                        {{
-                          !tableItems.item.proposer
-                            ? '-'
-                            : tableItems.item.proposer
-                        }}
-                      </template>
-                      <template #cell(timestamp)="tableItems">
-                        {{ tableItems.item.timestamp | formatDate }}
-                      </template>
-                      <template #cell(created_at)="tableItems">
-                        {{ tableItems.item.created_at | formatDate }}
-                      </template>
-                      <template #cell(level)="tableItems">
-                        <router-link
-                          :to="{
-                            name: 'block',
-                            params: { id: tableItems.item.level },
-                          }"
-                        >
-                          {{ tableItems.item.level }}
-                        </router-link>
-                      </template>
-                      <template #cell(hash)="tableItems">
-                        <router-link
-                          :to="{
-                            name: 'operation',
-                            params: { id: tableItems.item.hash },
-                          }"
-                        >
-                          {{ tableItems.item.hash | trimHashFromTo(6, -6) }}
-                        </router-link>
-                      </template>
-                      <template #cell(amount)="tableItems">
-                        {{ tableItems.item.amount | formatAmount }}
-                      </template>
-                      <template #cell(storage)="tableItems">
-                        {{
-                          !tableItems.item.storage
-                            ? '-'
-                            : tableItems.item.storage
-                        }}
-                      </template>
-                      <template #cell(gas_used)="tableItems">
-                        {{
-                          !tableItems.item.gas_used
-                            ? '-'
-                            : tableItems.item.gas_used
-                        }}
-                      </template>
-                      <template #cell(fees)="tableItems">
-                        {{ !tableItems.item.fees ? '-' : tableItems.item.fees }}
-                      </template>
-                    </b-table>
-                    <div
-                      v-if="fetchOnScrollEnabled"
-                      class="validator-list__actions"
-                    >
-                      <b-button
-                        @click="handleShowMore"
-                        variant="outline-primary"
-                        class="blocks-list__button font-weight-bold"
-                        :class="{
-                          'blocks-list__button--loading': loading,
-                        }"
-                        :disabled="loading || isShowMoreButtonDisabled"
-                      >
-                        <span v-if="loading" disabled>
-                          Loading
-                          <font-awesome-icon
-                            class="blocks-list__icon"
-                            icon="sync-alt"
-                            :spin="loading"
-                          />
-                        </span>
-                        <span v-else ref="showMoreButton">
-                          Show more
-                          <font-awesome-icon
-                            class="blocks-list__icon"
-                            icon="arrow-circle-down"
-                            :spin="loading"
-                          />
-                        </span>
-                      </b-button>
-                    </div>
-                  </div>
-                  <div v-else class="validator-chart">
-                    <div>
-                      <b-row v-if="loading && items === null">
-                        <b-col cols="12">
-                          <div class="text-center account__loading">
-                            <font-awesome-icon
-                              class="icon account__icon"
-                              icon="spinner"
-                              spin
-                            />
-                          </div>
-                        </b-col>
-                      </b-row>
-                      <b-row
-                        v-else-if="!loading && (Array.isArray(items) && items.length === 0)"
-                      >
-                        <b-col cols="12">
-                          <div class="text-center block__empty">
-                            No data
-                          </div>
-                        </b-col>
-                      </b-row>
-                      <div class="stats__charts" v-else>
-                        <b-row class="stats__information mb-5">
-                          <b-col cols="12">
-                            <div class="stats__section">
-                              <b-card
-                                class="validator-chart__header"
-                                header="Uptime"
-                              >
-                                <b-card-text class="stats__content">
-                                  <LineChart
-                                    :chart-data="getUptimeChartData"
-                                    :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
-                                    :y-axes-begin-at-zero="false"
-                                    :yTicksCallback="uptimeTicksCallback"
-                                    :tooltipsLabelCallback="
-                                      uptimeTooltipsCallback
-                                    "
-                                  />
-                                </b-card-text>
-                              </b-card>
-                            </div>
-                          </b-col>
-                        </b-row>
-                        <b-row>
-                          <b-col cols="12">
-                            <div class="stats__section">
-                              <b-card
-                                class="validator-chart__header"
-                                header="Account balance"
-                              >
-                                <b-card-text class="stats__content">
-                                  <LineChart
-                                    :chart-data="getStakeChartData"
-                                    :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
-                                    :y-axes-begin-at-zero="false"
-                                    :yTicksCallback="chartsTicksCallback"
-                                  />
-                                </b-card-text>
-                              </b-card>
-                            </div>
-                          </b-col>
-                        </b-row>
-                      </div>
-                    </div>
-                  </div>
-                </b-card>
-              </div>
-            </div>
-          </b-col>
-        </b-row>
-      </div>
     </b-container>
   </div>
 </template>
 
 <script>
-/*eslint-disable*/
+/* eslint-disable camelcase */
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import TableLoader from '@/components/TableLoader.vue';
 import ValidatorLogotype from '@/components/ValidatorLogotype.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
@@ -737,24 +504,35 @@ import numeral from 'numeral';
 import { state } from '@/store';
 import dayjs from 'dayjs';
 import LineChart from '@/components/charts/LineChart.vue';
-import fetchOnScroll from '@/mixins/fetchOnScroll';
 import uuid from '@/mixins/uuid';
+import CommonTable from '../components/CommonTable/CommonTable.vue';
+
+const tabs = [
+  { key: 'transfers', label: 'Transfers' },
+  { key: 'addescrow/reclaimescrow', label: 'Escrow events' },
+  { key: 'other', label: 'Other ops' },
+  { key: 'delegators', label: 'Delegators' },
+  { key: 'charts', label: 'Charts' },
+  { key: 'rewards', label: 'Rewards' },
+];
 
 export default {
   name: 'Validator',
   components: {
     Breadcrumbs,
-    TableLoader,
     LineChart,
     ValidatorLogotype,
+    CommonTable,
   },
-  mixins: [copyToClipboard, getDatesInSeconds, fetchOnScroll, uuid],
+  mixins: [
+    copyToClipboard,
+    getDatesInSeconds,
+    uuid,
+  ],
   data() {
     return {
-      loading: null,
-      limit: 10,
-      offset: 0,
-      items: null,
+      loading: true,
+      validator: null,
       delegators: [],
       breadcrumbs: [
         {
@@ -770,9 +548,15 @@ export default {
           active: true,
         },
       ],
-      currentPage: 1,
-      activeTab: 'transfers',
-      tableItems: [],
+      rewardsFields: [
+        { key: 'total_reward', label: 'Total rewards' },
+        { key: 'day_reward', label: 'Daily rewards' },
+        { key: 'week_reward', label: 'Weekly rewards' },
+        { key: 'month_reward', label: 'Monthly rewards' },
+      ],
+      tabs,
+      activeTab: tabs[0],
+      requestName: 'getTransactions',
       charts: {
         uptime: null,
         stake: null,
@@ -798,25 +582,77 @@ export default {
     $route: {
       immediate: true,
       async handler() {
-        this.loading = true;
-
-        const data = await this.$api.getValidator({
-          limit: this.limit,
-          id: this.$route.params.id,
-        });
-
-        if (data.status !== 200) {
-          this.$router.replace({ name: '404' });
-        }
-        this.items = data.data;
-
-        this.updateTableData('transfers');
-
-        this.loading = false;
+        await this.fetch('validator');
       },
+    },
+    activeTab({ key }) {
+      switch (key) {
+        case 'delegators':
+          this.requestName = 'getValidatorDelegators';
+          break;
+        case 'rewards':
+          this.requestName = 'getValidatorRewards';
+          break;
+        case 'charts':
+          this.fetch('chart-stake');
+          break;
+        case 'other':
+        case 'addescrow/reclaimescrow':
+        case 'transfers':
+        default:
+          this.requestName = 'getTransactions';
+      }
     },
   },
   methods: {
+    onClickTab(tab) {
+      this.activeTab = tab;
+    },
+    async fetch(dataType) {
+      this.loading = true;
+
+      switch (dataType) {
+        case 'validator':
+          await this.fetchValidator();
+          break;
+        case 'chart-stake':
+          await this.fetchChartStake();
+          break;
+        default:
+      }
+
+      this.loading = false;
+    },
+    async fetchChartStake() {
+      const [uptimeChart, stakeChart] = await Promise.all([
+        await this.$api.getChartUptime({
+          limit: 10,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
+          frame: 'D',
+          id: this.$route.params.id,
+        }),
+        await this.$api.getChartStake({
+          limit: 10,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
+          frame: 'D',
+          id: this.$route.params.id,
+        }),
+      ]);
+
+      this.charts.uptime = uptimeChart.data;
+      this.charts.stake = stakeChart.data;
+    },
+    async fetchValidator() {
+      this.validator = null;
+
+      const request = await this.$api.getValidator({
+        id: this.$route.params.id,
+      });
+
+      this.validator = request.data;
+    },
     chartsTicksCallback(label) {
       if (label > 1) {
         return numeral(label / 1000000000).format('0,0.[000000000]');
@@ -838,155 +674,100 @@ export default {
         }
       }
     },
-    async handleShowMore() {
-      this.offset += 10;
-      const { activeTab } = this;
-      this.tableItems = [
-        ...this.tableItems,
-        ...(await this.fetchData(activeTab)),
-      ];
-    },
-    setActiveTab(tabName) {
-      this.activeTab = tabName;
-    },
-    async updateTableData(type) {
-      this.offset = 0;
-      this.tableItems = await this.fetchData(type);
-      this.setActiveTab(type);
-    },
-    async fetchData(type) {
-      this.loading = true;
-      let data = null;
-      let uptimeChart = null;
-      let stakeChart = null;
-      const requestOptions = {
-        limit: this.limit,
-        offset: this.offset,
-      };
+  },
+  computed: {
+    fetchParams() {
+      const { id } = this.$route.params;
 
-      if (type === 'charts') {
-        uptimeChart = await this.$api.getChartUptime({
-          limit: this.limit,
-          from: this.datesInSeconds.monthAgo,
-          to: this.datesInSeconds.today,
-          frame: 'D',
-          id: this.$route.params.id,
-        });
-
-        stakeChart = await this.$api.getChartStake({
-          limit: this.limit,
-          from: this.datesInSeconds.monthAgo,
-          to: this.datesInSeconds.today,
-          frame: 'D',
-          id: this.$route.params.id,
-        });
-
-        this.charts.uptime = uptimeChart.data;
-        this.charts.stake = stakeChart.data;
-      }
-
-      switch (type) {
-        case 'transfers':
-          data = await this.$api.getTransactions({
-            ...requestOptions,
-            operation_kind: 'transfer',
-            account_id: this.$route.params.id,
-          });
-          break;
-        case 'delegators':
-          data = await this.$api.getValidatorDelegators({
-            ...requestOptions,
-            id: this.$route.params.id,
-          });
-          break;
+      switch (this.activeTab.key) {
         case 'addescrow/reclaimescrow':
-          data = await this.$api.getTransactions({
-            ...requestOptions,
+          return {
             operation_kind: ['addescrow', 'reclaimescrow'],
-            account_id: this.$route.params.id,
-          });
-          break;
+            account_id: id,
+          };
         case 'other':
-          data = await this.$api.getTransactions({
-            ...requestOptions,
+          return {
             operation_kind: [
               'registernode',
               'registerentity',
               'amendcommissionschedule',
               'registerruntime',
             ],
-            account_id: this.$route.params.id,
-          });
-          break;
+            account_id: id,
+          };
+        case 'delegators':
+          return { id };
         case 'rewards':
-          let stats;
-          stats = await this.$api.getValidatorRewardsStat({
-            limit: this.limit,
-            offset: this.offset,
-            id: this.$route.params.id,
-          });
-          this.getRewardsItems = [
-            {
-              ...stats.data,
-            },
-          ];
-          data = await this.$api.getValidatorRewards({
-            limit: this.limit,
-            offset: this.offset,
-            id: this.$route.params.id,
-          });
-          break;
+          return { id };
+        case 'transfers':
         default:
-          data = await this.$api.getTransactions({
-            ...requestOptions,
-            operation_kind: 'transfers',
-            account_id: this.$route.params.id,
-          });
+          return {
+            operation_kind: 'transfer',
+            account_id: id,
+          };
       }
-
-      if (
-        Array.isArray(data.data) &&
-        (data.data.length === 0 || data.data.length < this.limit)
-      ) {
-        this.isShowMoreButtonDisabled = true;
-      } else if (Array.isArray(data.data) && data.data.length > 0) {
-        this.isShowMoreButtonDisabled = false;
-      }
-
-      this.loading = false;
-      return data.data;
     },
-  },
-  computed: {
-    getRewardsFields() {
-      return [
-        { key: 'total_reward', label: 'Total rewards' },
-        { key: 'day_reward', label: 'Daily rewards' },
-        { key: 'week_reward', label: 'Weekly rewards' },
-        { key: 'month_reward', label: 'Monthly rewards' },
-      ];
+    fields() {
+      switch (this.activeTab.key) {
+        case 'addescrow/reclaimescrow':
+          return [
+            { key: 'level', label: 'Height' },
+            { key: 'hash', label: 'Operation hash' },
+            { key: 'type', label: 'Type' },
+            { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
+            { key: 'timestamp', label: 'Date', sortable: true },
+          ];
+        case 'other':
+          return [
+            { key: 'level', label: 'Height' },
+            { key: 'hash', label: 'Hash' },
+            { key: 'amount', label: 'Amount', sortable: true },
+            { key: 'from', label: 'From' },
+            { key: 'to', label: 'To' },
+            { key: 'nonce', label: 'Nonce' },
+            { key: 'type', label: 'Type' },
+            { key: 'timestamp', label: 'Date', sortable: true },
+          ];
+        case 'delegators':
+          return [
+            { key: 'account_id', label: 'Account' },
+            { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
+            { key: 'delegate_since', label: 'Delegate since', sortable: true },
+          ];
+        case 'rewards':
+          return [
+            { key: 'block_level', label: 'Height' },
+            { key: 'epoch', label: 'Epoch' },
+            { key: 'amount', label: 'Amount', sortable: true },
+            { key: 'created_at', label: 'Date', sortable: true },
+          ];
+        case 'transfers':
+        default:
+          return [
+            { key: 'level', label: 'Height' },
+            { key: 'hash', label: 'Transaction hash' },
+            { key: 'from', label: 'From' },
+            { key: 'to', label: 'To' },
+            { key: 'amount', label: 'Amount', sortable: true },
+            { key: 'timestamp', label: 'Date', sortable: true },
+          ];
+      }
     },
     getUptimeChartData() {
       return {
-        datasets: [
-          {
-            label: 'Uptime',
-            // eslint-disable-next-line camelcase
-            data: this.charts.uptime.map(({ uptime }) =>
-              (uptime * 100).toFixed(2),
-            ),
-            borderWidth: 1,
-            backgroundColor: this.palette[0],
-          },
-        ],
-        // eslint-disable-next-line max-len
-        labels: this.charts.uptime.map(({ timestamp }) => {
-          if (state.dateFormat === this.$constants.DATE_FORMAT) {
-            return dayjs.unix(timestamp).format('DD.MM.YYYY');
-          }
-
-          return dayjs.unix(timestamp).format('MM.DD.YYYY');
-        }),
+        datasets: [{
+          label: 'Uptime',
+          data: this.charts.uptime.map(
+            ({ uptime }) => (uptime * 100).toFixed(2),
+          ),
+          borderWidth: 1,
+          backgroundColor: this.palette[0],
+        }],
+        labels: this.charts.uptime.map(
+          state.dateFormat === this.$constants.DATE_FORMAT
+            ? ({ timestamp }) => dayjs.unix(timestamp).format('DD.MM.YYYY')
+            : ({ timestamp }) => dayjs.unix(timestamp).format('MM.DD.YYYY'),
+        ),
       };
     },
     getStakeChartData() {
@@ -994,25 +775,25 @@ export default {
         datasets: [
           {
             label: 'Total balance',
-            /* eslint-disable */
-            data: this.charts.stake.map(
-              ({ general_balance, escrow_balance, self_stake_balance, debonding_balance }) => {
-                return general_balance + escrow_balance + self_stake_balance + debonding_balance;
-              },
-            ),
+            data: this.charts.stake.map(({
+              general_balance,
+              escrow_balance,
+              self_stake_balance,
+              debonding_balance,
+            }) => (
+              general_balance + escrow_balance + self_stake_balance + debonding_balance
+            )),
             borderWidth: 1,
             backgroundColor: this.palette[0],
           },
           {
             label: 'Escrow balance',
-            // eslint-disable-next-line camelcase
             data: this.charts.stake.map(({ escrow_balance }) => escrow_balance),
             borderWidth: 1,
             backgroundColor: this.palette[1],
           },
           {
             label: 'Debonding balance',
-            // eslint-disable-next-line camelcase
             data: this.charts.stake.map(
               ({ debonding_balance }) => debonding_balance,
             ),
@@ -1021,7 +802,6 @@ export default {
           },
           {
             label: 'Self stake balance',
-            // eslint-disable-next-line camelcase
             data: this.charts.stake.map(
               ({ self_stake_balance }) => self_stake_balance,
             ),
@@ -1030,24 +810,21 @@ export default {
           },
           {
             label: 'Delegations balance',
-            // eslint-disable-next-line camelcase
             data: this.charts.stake.map(
-                ({ delegations_balance }) => delegations_balance,
+              ({ delegations_balance }) => delegations_balance,
             ),
             borderWidth: 1,
             backgroundColor: this.palette[4],
           },
           {
             label: 'Debonding delegations balance',
-            // eslint-disable-next-line camelcase
             data: this.charts.stake.map(
-                ({ debonding_delegations_balance }) => debonding_delegations_balance,
+              ({ debonding_delegations_balance }) => debonding_delegations_balance,
             ),
             borderWidth: 1,
             backgroundColor: this.palette[5],
           },
         ],
-        // eslint-disable-next-line max-len
         labels: this.charts.stake.map(({ timestamp }) => {
           if (state.dateFormat === this.$constants.DATE_FORMAT) {
             return dayjs.unix(timestamp).format('DD.MM.YYYY');
@@ -1057,78 +834,28 @@ export default {
         }),
       };
     },
-    getTableFields() {
-      if (this.activeTab === 'transfers') {
-        return [
-          { key: 'level', label: 'Height' },
-          { key: 'hash', label: 'Transaction hash' },
-          { key: 'from', label: 'From' },
-          { key: 'to', label: 'To' },
-          { key: 'amount', label: 'Amount', sortable: true },
-          { key: 'timestamp', label: 'Date', sortable: true },
-        ];
-      }
-
-      if (this.activeTab === 'addescrow/reclaimescrow') {
-        return [
-          { key: 'level', label: 'Height' },
-          { key: 'hash', label: 'Operation hash' },
-          { key: 'type', label: 'Type' },
-          { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
-          { key: 'timestamp', label: 'Date', sortable: true },
-        ];
-      }
-
-      if (this.activeTab === 'delegators') {
-        return [
-          { key: 'account_id', label: 'Account' },
-          { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
-          { key: 'delegate_since', label: 'Delegate since', sortable: true },
-        ];
-      }
-
-      if (this.activeTab === 'other') {
-        return [
-          { key: 'level', label: 'Height' },
-          { key: 'hash', label: 'Hash' },
-          { key: 'amount', label: 'Amount', sortable: true },
-          { key: 'from', label: 'From' },
-          { key: 'to', label: 'To' },
-          { key: 'nonce', label: 'Nonce' },
-          { key: 'type', label: 'Type' },
-          { key: 'timestamp', label: 'Date', sortable: true },
-        ];
-      }
-
-      if (this.activeTab === 'rewards') {
-        return [
-          { key: 'block_level', label: 'Height' },
-          { key: 'epoch', label: 'Epoch' },
-          { key: 'amount', label: 'Amount', sortable: true },
-          { key: 'created_at', label: 'Date', sortable: true },
-        ];
-      }
-
-      return [];
-    },
   },
 };
 </script>
 
 <style lang="scss">
 .validator {
-  &-list__actions {
-    text-align: center;
-  }
-
   &__breadcrumbs {
     margin-bottom: 35px;
   }
 
-  &__section {
+  &__cards-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   &__card {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  &__chart-card {
     box-shadow: none;
   }
 
@@ -1170,7 +897,7 @@ export default {
   }
 
   &__btn {
-    width: 16.6%;
+    width: calc(100% / 6);
     padding: 7px 0;
     border-left: none;
     border-radius: 0;
@@ -1216,25 +943,6 @@ export default {
     }
   }
 
-  &__table {
-  }
-
-  &__status {
-    &--active {
-      color: #28a745;
-    }
-
-    &--inactive {
-      color: #dc3545;
-    }
-  }
-
-  &-chart__header {
-    & .card-header {
-      margin-bottom: 20px;
-    }
-  }
-
   &-chart {
     .card-header {
       padding: 14px 20px;
@@ -1270,12 +978,6 @@ export default {
         color: $color-primary;
       }
     }
-  }
-
-  & .date-from-now {
-    display: inline-block;
-    padding-left: 5px;
-    color: #999;
   }
 
   &-note {

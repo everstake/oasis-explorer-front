@@ -100,142 +100,101 @@
         </div>
       </div>
     </div>
-    <b-table
-      ref="table"
-      :busy="loading && items === null"
-      :responsive="true"
-      show-empty
-      :items="items"
+    <CommonTable
+      class="transactions-list__table"
+      requestName="getTransactions"
       :fields="fields"
-      class="table table--border transactions-list__table"
-      :class="{
-        'transactions-list__table--disabled': dropdownIsBusy,
-      }"
-      :disabled="dropdownIsBusy"
-      borderless
-      no-border-collapse
+      :isFetchOnScrollEnabled="isFetchOnScrollEnabled"
+      :fetchParams="fetchParams"
     >
-      <template #table-busy>
-        <TableLoader />
-      </template>
-      <template #cell(level)="items">
-        <router-link :to="{ name: 'block', params: { id: items.item.level } }">
-          {{ items.item.level }}
-        </router-link>
-      </template>
-      <template #cell(hash)="items">
+      <template #cell(level)="{ item: { level }}">
         <router-link
-          :to="{ name: 'operation', params: { id: items.item.hash } }"
+          :to="{ name: 'block', params: { id: level } }"
         >
-          {{ items.item.hash | trimHash }}
+          {{ level }}
         </router-link>
       </template>
-      <template #cell(from)="items">
-        <span v-if="!items.item.from">-</span>
+
+      <template #cell(hash)="{ item: { hash }}">
         <router-link
-          v-else
-          :to="{ name: 'account', params: { id: items.item.from } }"
+          :to="{ name: 'operation', params: { id: hash } }"
         >
-          {{ items.item.from | trimHash }}
+          {{ hash | trimHash }}
         </router-link>
       </template>
-      <template #cell(to)="items">
-        <span v-if="!items.item.to">-</span>
-        <span
-          v-else-if="
-            items.item.to === 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
-          "
+
+      <template #cell(from)="{ item: { from }}">
+        <router-link
+          v-if="from"
+          :to="{ name: 'account', params: { id: from } }"
         >
+          {{ from | trimHash }}
+        </router-link>
+
+        <span v-else>-</span>
+      </template>
+
+      <template #cell(to)="{ item: { to }}">
+        <span v-if="to === $constants.SYSTEM_ACCOUNT_ID">
           System Account
         </span>
+
         <router-link
-          v-else
-          :to="{ name: 'account', params: { id: items.item.to } }"
+          v-else-if="to"
+          :to="{ name: 'account', params: { id: to } }"
         >
-          {{ items.item.to | trimHash }}
+          {{ to | trimHash }}
         </router-link>
+
+        <span v-else>-</span>
       </template>
-      <template #cell(fees)="items">
-        {{ !items.item.fees ? '-' : items.item.fees }}
+
+      <template #cell(fees)="{ item: { fees }}">
+        {{ fees || '-' }}
       </template>
-      <template #cell(amount)="items">
-        <span v-if="items.item.escrow_amount">
-          {{ items.item.escrow_amount | formatAmount }}
+
+      <template
+        #cell(amount)="{
+          item: { amount, escrow_amount, reclaim_escrow_amount }
+        }"
+      >
+        <span v-if="escrow_amount">
+          {{ escrow_amount | formatAmount }}
         </span>
-        <span v-else-if="items.item.reclaim_escrow_amount">
-          {{ items.item.reclaim_escrow_amount | formatAmount }}
+
+        <span v-else-if="reclaim_escrow_amount">
+          {{ reclaim_escrow_amount | formatAmount }}
         </span>
+
         <span v-else>
-          {{ items.item.amount | formatAmount }}
+          {{ amount | formatAmount }}
         </span>
       </template>
-      <template #cell(nonce)="items">
-        {{ items.item.nonce }}
-      </template>
-      <template #cell(timestamp)="items">
-        {{ items.item.timestamp | formatDate }}
-        <div class="date-from-now">
-          {{ items.item.timestamp | formatDaysAgo }}
+
+      <template #cell(timestamp)="{ item: { timestamp }}">
+        {{ timestamp | formatDate }}
+
+        <div class="common-table__format-days-ago">
+          {{ timestamp | formatDaysAgo }}
         </div>
       </template>
-    </b-table>
-    <div v-if="fetchOnScrollEnabled && items !== null" class="list__actions">
-      <b-button
-        @click="handleShowMore"
-        variant="outline-primary"
-        class="list__button font-weight-bold"
-        :class="{
-          'list__button--loading': loading,
-        }"
-        :disabled="loading || isShowMoreButtonDisabled"
-      >
-        <span v-if="error">
-          Something went wrong, click to retry
-        </span>
-        <span v-else-if="loading" disabled>
-          Loading
-          <font-awesome-icon
-            class="list__icon"
-            icon="sync-alt"
-            :spin="loading"
-          />
-        </span>
-        <span v-else ref="showMoreButton">
-          Show more
-          <font-awesome-icon
-            class="list__icon"
-            icon="arrow-circle-down"
-            :spin="loading"
-          />
-        </span>
-      </b-button>
-    </div>
+    </CommonTable>
   </div>
 </template>
 
 <script>
-import TableLoader from '@/components/TableLoader.vue';
+import CommonTable from '@/components/CommonTable/CommonTable.vue';
 import DateRangePicker from 'vue-daterange-picker-light';
 import { mapState } from 'vuex';
 import dayjs from 'dayjs';
-import fetchOnScroll from '@/mixins/fetchOnScroll';
-import fetchList from '@/mixins/fetchList';
-
-// eslint-disable-next-line no-unused-expressions
-import(/* webpackPreload: true */ '@/assets/styles/operationsList.scss');
 
 export default {
   name: 'OperationsList',
   components: {
-    TableLoader,
     DateRangePicker,
+    CommonTable,
   },
-  mixins: [fetchOnScroll, fetchList],
   props: {
-    filters: {
-      type: Boolean,
-      default: false,
-    },
     fields: {
       type: Array,
       default: () => [
@@ -249,6 +208,20 @@ export default {
         { key: 'timestamp', label: 'Date', sortable: true },
       ],
     },
+    filters: {
+      type: Boolean,
+      default: false,
+    },
+    listFetchParams: {
+      type: Object,
+      required: false,
+      default: () => ({}),
+    },
+    isFetchOnScrollEnabled: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
   },
   data() {
     return {
@@ -259,32 +232,21 @@ export default {
       operations: ['transfer', 'addescrow', 'reclaimescrow', 'other'],
       otherOperations: ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
       dropdownIsBusy: false,
+      fetchParams: {},
     };
   },
   watch: {
     operations: {
       deep: true,
       async handler() {
-        this.offset = 0;
         this.dropdownIsBusy = true;
-        let data;
 
         if (this.isDatePickerSelected) {
           const from = +this.dateRange.startDate / 1000;
           const to = +this.dateRange.endDate / 1000;
-          data = await this.fetchData({ from, to });
+          this.setFetchParams({ from, to });
         } else {
-          data = await this.fetchData();
-        }
-
-        if (data.status !== 200) {
-          this.error = true;
-        } else if (Array.isArray(data.data) && data.data.length === 0) {
-          this.isShowMoreButtonDisabled = true;
-        } else {
-          this.isShowMoreButtonDisabled = false;
-          this.error = false;
-          this.items = data.data;
+          this.setFetchParams();
         }
 
         this.dropdownIsBusy = false;
@@ -306,7 +268,6 @@ export default {
     async clearFilters() {
       this.dateRange.startDate = null;
       this.dateRange.endDate = null;
-      this.offset = 0;
       this.operations = ['transfer', 'addescrow', 'reclaimescrow', 'other'];
     },
     async handleCalendarUpdate(val) {
@@ -321,29 +282,14 @@ export default {
         to = +this.dateRange.endDate / 1000;
       }
 
-      const data = await this.fetchData({ from, to });
-      const isRequestSuccessful = data.status === 200;
-
-      if (isRequestSuccessful) {
-        if (Array.isArray(data.data) && data.data.length === 0) {
-          this.items = [];
-          this.isShowMoreButtonDisabled = true;
-        } else {
-          this.isShowMoreButtonDisabled = false;
-          this.error = false;
-          this.offset = 0;
-          this.items = data.data;
-        }
-      } else {
-        this.error = true;
-      }
+      this.setFetchParams({ from, to });
 
       this.dropdownIsBusy = false;
     },
-    fetchData(params = {}) {
+    setFetchParams(params = {}) {
       const options = {
         ...params,
-        limit: this.handleShowMore,
+        ...this.listFetchParams,
         operation_kind: this.operations,
       };
 
@@ -351,18 +297,16 @@ export default {
         (operation) => operation === 'other',
       );
 
-      if (isOperationOtherSelected) {
-        const otherOperationIndex = this.operations.findIndex(
-          (operation) => operation === 'other',
-        );
+      const otherOperationIndex = this.operations.findIndex(
+        (operation) => operation === 'other',
+      );
 
-        if (otherOperationIndex >= 0) {
-          options.operation_kind = [
-            ...this.operations.slice(0, otherOperationIndex),
-            ...this.otherOperations,
-            ...this.operations.slice(otherOperationIndex + 1),
-          ];
-        }
+      if (isOperationOtherSelected && otherOperationIndex >= 0) {
+        options.operation_kind = [
+          ...this.operations.slice(0, otherOperationIndex),
+          ...this.otherOperations,
+          ...this.operations.slice(otherOperationIndex + 1),
+        ];
       }
 
       if (this.isDatePickerSelected) {
@@ -373,7 +317,7 @@ export default {
         options.to = to;
       }
 
-      return this.$api.getTransactions(options);
+      this.fetchParams = options;
     },
   },
   computed: {
@@ -404,30 +348,167 @@ export default {
     },
   },
   created() {
-    const options = {
-      limit: this.getRequestLimit,
-      operation_kind: this.operations,
-    };
-
-    const isOperationOtherSelected = this.operations.some(
-      (operation) => operation === 'other',
-    );
-
-    if (isOperationOtherSelected) {
-      const otherOperationIndex = this.operations.findIndex(
-        (operation) => operation === 'other',
-      );
-
-      if (otherOperationIndex >= 0) {
-        options.operation_kind = [
-          ...this.operations.slice(0, otherOperationIndex),
-          ...this.otherOperations,
-          ...this.operations.slice(otherOperationIndex + 1),
-        ];
-      }
-    }
-
-    this.fetchList('getTransactions', options);
+    this.setFetchParams();
   },
 };
 </script>
+
+<style lang="scss">
+.transactions-list {
+  &__actions {
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  &__icon {
+    margin-left: 10px;
+
+    @include from-480-down {
+      display: none;
+    }
+  }
+
+  &__date {
+    margin-left: 10px;
+    font-weight: 700;
+    color: $color-white;
+  }
+
+  &__filter {
+    margin-bottom: 10px;
+    font-family: $open-sans;
+    font-size: 16px;
+  }
+
+  &__reset {
+    margin-right: 10px;
+    & .btn-secondary {
+      background-color: $color-primary !important;
+      border-color: $color-primary !important;
+    }
+  }
+
+  &__btn {
+    &:focus,
+    &:active,
+    &:hover,
+    &:active:focus {
+      box-shadow: none !important;
+    }
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__title {
+    margin-bottom: 5px;
+    font-family: $open-sans;
+    font-size: 16px;
+    color: $color-gray-666;
+  }
+
+  &__calendar {
+    margin-right: 10px;
+    text-align: center;
+    background-color: $color-primary;
+    border-radius: 4px;
+  }
+
+  &__label {
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  &__icon {
+    margin-left: 5px;
+  }
+
+  &__table {
+    position: relative;
+
+    &--disabled {
+      & a {
+        pointer-events: none;
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: block;
+        background-color: $color-primary-transparent-01;
+      }
+    }
+  }
+
+  &__table {
+    box-shadow: $box-shadow-table;
+    margin-bottom: 16px;
+  }
+}
+
+.transactions-dropdown {
+  &__content {
+    min-width: 150px;
+    font-size: 15px;
+
+    & form {
+      padding: 0.25rem 0.7rem;
+    }
+
+    & form:focus {
+      outline: none !important;
+    }
+
+    & label {
+      margin-bottom: 0;
+      padding-left: 0.5rem;
+    }
+
+    & .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+      background-color: green!important;
+    }
+
+    & .custom-checkbox .custom-control-input:checked:focus ~ .custom-control-label::before {
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 255, 0, 0.25)
+    }
+
+    & .custom-checkbox .custom-control-input:focus ~ .custom-control-label::before {
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 0, 0, 0.25)
+    }
+
+    & .custom-checkbox .custom-control-input:active ~ .custom-control-label::before {
+      background-color: #C8FFC8;
+    }
+  }
+
+  & .btn-secondary {
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    background-color: $color-primary !important;
+    border: 2px solid $color-primary !important;
+    font-weight: bold;
+    border-radius: 4px;
+  }
+
+  &--disabled:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    background-color: $color-primary-transparent-01;
+    pointer-events: none;
+  }
+}
+</style>

@@ -41,31 +41,6 @@
     text-align: center;
   }
 
-  &__section {
-    height: 100%;
-
-    &--table {
-      & .table {
-        box-shadow: none;
-      }
-
-      & .card-body {
-        display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-        padding: 0;
-      }
-
-      & .pagination {
-        margin: 20px;
-      }
-    }
-
-    & .card {
-      height: 100%;
-    }
-  }
-
   &__content {
     margin-bottom: 10px;
     padding: 5px 0;
@@ -101,11 +76,5 @@
     padding: 50px 0;
     font-size: 24px;
     color: $color-primary;
-  }
-
-  &__col {
-    @include from-768-down {
-      margin-bottom: 50px;
-    }
   }
 }

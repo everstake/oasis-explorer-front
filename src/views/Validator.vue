@@ -93,14 +93,11 @@
             <div class="validator__section transaction__section">
               <b-card class="validator__info" header="Validator information">
                 <b-card-text class="block__content block__logotype">
-                  <img
+                  <ValidatorLogotype
                     v-if="items.media_info && items.media_info.logotype"
-                    class="block__logo"
-                    :class="{
-                      'block__logotype--white': filterWhiteColorLogotypes,
-                    }"
                     :src="items.media_info.logotype"
-                    :alt="`${items.account_name} logotype`"
+                    :accountName="items.account_name"
+                    class="block__logo"
                   />
                   <img
                     v-else
@@ -733,6 +730,7 @@
 /*eslint-disable*/
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
+import ValidatorLogotype from '@/components/ValidatorLogotype.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 import numeral from 'numeral';
@@ -748,6 +746,7 @@ export default {
     Breadcrumbs,
     TableLoader,
     LineChart,
+    ValidatorLogotype,
   },
   mixins: [copyToClipboard, getDatesInSeconds, fetchOnScroll, uuid],
   data() {
@@ -966,14 +965,6 @@ export default {
         { key: 'week_reward', label: 'Weekly rewards' },
         { key: 'month_reward', label: 'Monthly rewards' },
       ];
-    },
-    filterWhiteColorLogotypes() {
-      const { account_name: accountName } = this.items;
-      const whiteLogotypes = ['everstake', 'witval', 'forbole'];
-
-      return whiteLogotypes.find(
-        (logoName) => accountName.toLowerCase() === logoName,
-      );
     },
     getUptimeChartData() {
       return {

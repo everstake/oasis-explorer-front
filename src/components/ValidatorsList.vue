@@ -20,16 +20,9 @@
           :to="{ name: 'validator', params: { id: data.item.account_id } }"
         >
           <span v-if="data.item.media_info && data.item.media_info.logotype">
-            <v-lazy-image
-              v-if="data.item.media_info.logotype"
-              :src-placeholder="require('../assets/images/logo-oasis.svg')"
-              :src="getValidatorLogo(data.item)"
-              :alt="`${data.item.account_name} logotype`"
-              :class="{
-                'block__logotype--white': filterWhiteColorLogotypes(
-                  data.item.account_name,
-                ),
-              }"
+            <ValidatorLogotype
+              :src="data.item.media_info.logotype"
+              :accountName="data.item.account_name"
               class="validators-list__logo"
             />
           </span>
@@ -126,18 +119,15 @@
 
 <script>
 import TableLoader from '@/components/TableLoader.vue';
+import ValidatorLogotype from '@/components/ValidatorLogotype.vue';
 import fetchList from '@/mixins/fetchList';
 import fetchOnScroll from '@/mixins/fetchOnScroll';
-import everstakeIcon from '@/assets/images/icon-everstake.png';
-import VLazyImage from 'v-lazy-image';
-
-const oasisLogo = require('../assets/images/logo-oasis.svg');
 
 export default {
   name: 'ValidatorsList',
   components: {
     TableLoader,
-    VLazyImage,
+    ValidatorLogotype,
   },
   mixins: [fetchList, fetchOnScroll],
   props: {
@@ -178,25 +168,6 @@ export default {
         limit: this.getRequestLimit,
       });
     },
-    filterWhiteColorLogotypes(accountName) {
-      const whiteLogotypes = ['witval', 'forbole'];
-
-      return whiteLogotypes.find(
-        (logoName) => accountName.toLowerCase() === logoName,
-      );
-    },
-    getValidatorLogo(validator) {
-      const name = validator.account_name.toLowerCase();
-      const isHttps = new URL(validator.media_info.logotype).protocol === 'https:';
-
-      if (name === 'everstake') return everstakeIcon;
-
-      if (isHttps) {
-        return validator.media_info.logotype;
-      }
-
-      return oasisLogo;
-    },
   },
   async created() {
     this.fetchList('getValidators', { limit: this.getRequestLimit });
@@ -206,7 +177,6 @@ export default {
 
 <style lang="scss">
 @import '~@/assets/styles/list';
-
 .validators-list {
   &__status {
     font-weight: 600;

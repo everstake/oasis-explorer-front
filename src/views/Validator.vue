@@ -93,14 +93,11 @@
             <div class="validator__section transaction__section">
               <b-card class="validator__info" header="Validator information">
                 <b-card-text class="block__content block__logotype">
-                  <img
+                  <ValidatorLogotype
                     v-if="items.media_info && items.media_info.logotype"
-                    class="block__logo"
-                    :class="{
-                      'block__logotype--white': filterWhiteColorLogotypes,
-                    }"
                     :src="items.media_info.logotype"
-                    :alt="`${items.account_name} logotype`"
+                    :accountName="items.account_name"
+                    class="block__logo"
                   />
                   <img
                     v-else
@@ -111,8 +108,12 @@
                 </b-card-text>
                 <b-card-text v-if="items.account_name" class="block__content">
                   <span class="validator__name">{{ items.account_name }}</span>
-
-                  <div v-if="items.media_info" class="validator__contacts">
+                </b-card-text>
+                <b-card-text class="block__content">
+                  <div
+                    v-if="items.media_info"
+                    class="validator__contacts"
+                  >
                     <a
                       class="validator__contact"
                       :class="{
@@ -257,6 +258,9 @@
                         :icon="{ prefix: 'fab', iconName: 'medium' }"
                       />
                     </a>
+                  </div>
+                  <div class="validator-note">
+                    If you wish to add your validator info, contact us at inbox@everstake.one
                   </div>
                 </b-card-text>
                 <b-card-text class="block__content">
@@ -726,6 +730,7 @@
 /*eslint-disable*/
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import TableLoader from '@/components/TableLoader.vue';
+import ValidatorLogotype from '@/components/ValidatorLogotype.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 import numeral from 'numeral';
@@ -741,6 +746,7 @@ export default {
     Breadcrumbs,
     TableLoader,
     LineChart,
+    ValidatorLogotype,
   },
   mixins: [copyToClipboard, getDatesInSeconds, fetchOnScroll, uuid],
   data() {
@@ -959,14 +965,6 @@ export default {
         { key: 'week_reward', label: 'Weekly rewards' },
         { key: 'month_reward', label: 'Monthly rewards' },
       ];
-    },
-    filterWhiteColorLogotypes() {
-      const { account_name: accountName } = this.items;
-      const whiteLogotypes = ['everstake', 'witval', 'forbole'];
-
-      return whiteLogotypes.find(
-        (logoName) => accountName.toLowerCase() === logoName,
-      );
     },
     getUptimeChartData() {
       return {
@@ -1278,6 +1276,16 @@ export default {
     display: inline-block;
     padding-left: 5px;
     color: #999;
+  }
+
+  &-note {
+    margin-top: 5px;
+    padding: 5px 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4dd4a9;
+    border-radius: 4px;
   }
 }
 </style>

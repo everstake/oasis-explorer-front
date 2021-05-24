@@ -1,7 +1,7 @@
 <template>
   <div
     class="common-table"
-    :style="{ maxHeight }"
+    :style="{ maxHeight, height }"
   >
     <b-table
       ref="table"
@@ -35,26 +35,18 @@
       </template>
     </b-table>
 
-    <div class="common-table__table-status">
-      <div v-if="loading">
-        Loading
-        <font-awesome-icon
-          size="1x"
-          icon="spinner"
-          spin
-        />
-      </div>
-      <div
-        v-if="error"
-        class="common-table__try-again"
+    <div
+      v-show="loading || error"
+      :class="['common-table__status-wrapper', {
+        'common-table__status-wrapper--empty-table': items.length === 0,
+      }]"
+    >
+      <TableStatus
+        class="common-table__status"
+        :loading="loading"
+        :error="error"
         @click="fetch"
-      >
-        Something went wrong, try again
-        <font-awesome-icon
-          size="1x"
-          icon="sync"
-        />
-      </div>
+      />
     </div>
   </div>
 </template>
@@ -62,9 +54,16 @@
 <script>
 import debounce from 'lodash/debounce';
 import api from '@/services/api.service';
+import {
+  DEFAULT_LIMIT,
+  START_OFFSET,
+  DEFAULT_HEIGHT,
+} from '@/components/CommonTable/constants';
+import TableStatus from './TableStatus.vue';
 
 export default {
   name: 'CommonTable',
+  components: { TableStatus },
   props: {
     fields: {
       type: Array,
@@ -87,10 +86,15 @@ export default {
       required: false,
       default: true,
     },
+    height: {
+      type: String,
+      required: false,
+      default: DEFAULT_HEIGHT,
+    },
     maxHeight: {
       type: String,
       required: false,
-      default: '80vh',
+      default: DEFAULT_HEIGHT,
     },
     headVariant: {
       type: String,
@@ -104,17 +108,19 @@ export default {
       loading: false,
       error: false,
       hasTableAllData: false,
-      offset: 0,
+      offset: START_OFFSET,
     };
   },
   watch: {
-    fetchParams() {
-      this.items = [];
-      this.fetch();
+    fetchParams: {
+      immediate: true,
+      handler() {
+        this.items = [];
+        this.fetch();
+      },
     },
   },
   created() {
-    this.fetch();
     this.onScroll = debounce(this.onScroll, 100);
   },
   mounted() {
@@ -137,8 +143,8 @@ export default {
         concat = false,
       } = options;
 
-      const limit = this.fetchParams.limit || 50;
-      const offset = concat ? this.offset + limit : 0;
+      const limit = this.fetchParams.limit || DEFAULT_LIMIT;
+      const offset = concat ? this.offset + limit : START_OFFSET;
 
       try {
         const response = await this.$api[this.requestName]({
@@ -161,6 +167,7 @@ export default {
         this.hasTableAllData = data.length < limit;
       } catch (e) {
         this.error = true;
+        console.error(e);
       }
 
       this.loading = false;
@@ -196,32 +203,33 @@ export default {
 
 <style lang="scss">
 .common-table {
+  position: relative;
   display: flex;
   flex-direction: column;
-
-  padding-bottom: 16px;
 
   font-family: $open-sans;
   font-size: 16px;
 
   &__table-wrapper {
+    margin: 0;
     padding-bottom: 4px;
   }
 
-  &__table-status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
+  &__status-wrapper {
+    position: absolute;
+    padding: 8px 0;
 
-    flex-shrink: 0;
-    height: 24px;
+    bottom: 12px;
+    left: 0;
+    right: 0;
 
-    color: $color-primary;
+    &--empty-table {
+      position: static;
+    }
   }
 
-  &__try-again {
-    cursor: pointer;
+  &__status {
+    margin: auto;
   }
 
   th {
@@ -229,11 +237,11 @@ export default {
     background: $color-primary;
 
     &:first-child {
-      border-top-left-radius: 8px;
+      border-top-left-radius: 6px;
     }
 
     &:last-child {
-      border-top-right-radius: 8px;
+      border-top-right-radius: 6px;
     }
   }
 

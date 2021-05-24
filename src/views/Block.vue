@@ -1,5 +1,5 @@
 <template>
-  <div class="block" :key="$route.params.id">
+  <div :key="$route.params.id">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
     <b-container fluid="lg">
@@ -11,113 +11,111 @@
         </b-col>
       </b-row>
       <b-row v-else-if="block">
-        <b-col class="block__col" cols="12" md="4">
-          <div class="block__section">
-            <b-card header="General information">
-              <b-card-text class="block__content">
-                <div class="block__header">Block height</div>
-                <div class="block__navigation">
-                  <div
-                    :disabled="Number($route.params.id) === 0"
-                    @click="
-                      onNavigation('prev', Number($route.params.id) === 0)
-                    "
-                    :class="{
-                      'card__block-prev--disabled':
-                        Number($route.params.id) === 0,
-                    }"
-                    class="card__block-prev"
-                  >
-                    <font-awesome-icon icon="chevron-left" class="ml-1" />
-                  </div>
-                  {{ block.level }}
-                  <div
-                    :disabled="Number($route.params.id) === height"
-                    @click="
-                      onNavigation('next', Number($route.params.id) === height)
-                    "
-                    :class="{
-                      'card__block-prev--disabled':
-                        Number($route.params.id) === height,
-                    }"
-                    class="card__block-next"
-                  >
-                    <font-awesome-icon icon="chevron-right" class="mr-1" />
-                  </div>
-                </div>
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Block hash</div>
+        <b-col cols="12" md="4">
+          <b-card header="General information">
+            <b-card-text class="block__content">
+              <div class="block__header">Block height</div>
+              <div class="block__navigation">
                 <div
-                  @click="copyToClipboard(block.hash)"
-                  class="block__copy"
+                  :disabled="Number($route.params.id) === 0"
+                  @click="
+                    onNavigation('prev', Number($route.params.id) === 0)
+                  "
+                  :class="{
+                    'card__block-prev--disabled':
+                      Number($route.params.id) === 0,
+                  }"
+                  class="card__block-prev"
                 >
-                  <span :ref="block.hash">
-                    {{ block.hash }}
-                  </span>
-                  <font-awesome-icon
-                    :icon="['fas', 'copy']"
-                    :class="{
-                      'icon--success': isHashCopied(block.hash),
-                    }"
-                    class="icon icon-copy delegator-card__icon"
-                  />
+                  <font-awesome-icon icon="chevron-left" class="ml-1" />
                 </div>
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Epoch</div>
-                {{ block.epoch }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">
-                  Proposer
-                </div>
+                {{ block.level }}
                 <div
-                  class="block__copy"
-                  @click="copyToClipboard(block.proposer)"
+                  :disabled="Number($route.params.id) === height"
+                  @click="
+                    onNavigation('next', Number($route.params.id) === height)
+                  "
+                  :class="{
+                    'card__block-prev--disabled':
+                      Number($route.params.id) === height,
+                  }"
+                  class="card__block-next"
                 >
-                  <span :ref="block.proposer">
-                    {{ block.proposer }}
-                  </span>
-                  <font-awesome-icon
-                    :icon="['fas', 'copy']"
-                    :class="{
-                      'icon--success': isHashCopied(block.proposer),
-                    }"
-                    class="icon icon-copy delegator-card__icon"
-                  />
+                  <font-awesome-icon icon="chevron-right" class="mr-1" />
                 </div>
-              </b-card-text>
-              <b-card-text
-                class="block__content"
-                v-if="block.number_of_signatures"
+              </div>
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">Block hash</div>
+              <div
+                @click="copyToClipboard(block.hash)"
+                class="block__copy"
               >
-                <div class="block__header">Signatures</div>
-                {{ block.number_of_signatures }}
-              </b-card-text>
-              <b-card-text class="block__content" v-if="block.number_of_txs">
-                <div class="block__header">Operations</div>
-                {{ block.number_of_txs }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Date</div>
-                {{ block.timestamp | formatDate }}
-                <div class="block__time-ago">
-                  ({{ block.timestamp | formatDaysAgo }})
-                </div>
-              </b-card-text>
-            </b-card>
-          </div>
+                <span :ref="block.hash">
+                  {{ block.hash }}
+                </span>
+                <font-awesome-icon
+                  :icon="['fas', 'copy']"
+                  :class="{
+                    'icon--success': isHashCopied(block.hash),
+                  }"
+                  class="icon icon-copy delegator-card__icon"
+                />
+              </div>
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">Epoch</div>
+              {{ block.epoch }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Proposer
+              </div>
+              <div
+                class="block__copy"
+                @click="copyToClipboard(block.proposer)"
+              >
+                <span :ref="block.proposer">
+                  {{ block.proposer }}
+                </span>
+                <font-awesome-icon
+                  :icon="['fas', 'copy']"
+                  :class="{
+                    'icon--success': isHashCopied(block.proposer),
+                  }"
+                  class="icon icon-copy delegator-card__icon"
+                />
+              </div>
+            </b-card-text>
+            <b-card-text
+              class="block__content"
+              v-if="block.number_of_signatures"
+            >
+              <div class="block__header">Signatures</div>
+              {{ block.number_of_signatures }}
+            </b-card-text>
+            <b-card-text class="block__content" v-if="block.number_of_txs">
+              <div class="block__header">Operations</div>
+              {{ block.number_of_txs }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">Date</div>
+              {{ block.timestamp | formatDate }}
+              <div class="block__time-ago">
+                ({{ block.timestamp | formatDaysAgo }})
+              </div>
+            </b-card-text>
+          </b-card>
         </b-col>
         <b-col cols="12" md="8">
           <b-card
-            class="block__card"
             no-body
           >
             <CommonTable
               requestName="getTransactions"
               :fields="fields"
               :fetchParams="fetchParams"
+              height="min-content"
             >
               <template #cell(fees)="{ item: { fees } }">
                 {{ fees || '-' }}
@@ -271,15 +269,24 @@ export default {
     async fetch() {
       this.loading = true;
 
-      await Promise.all([
-        this.height || this.fetchInfo(),
-        this.fetchBlock(),
-      ]);
+      try {
+        await Promise.all([
+          this.height || this.fetchInfo(),
+          this.fetchBlock(),
+        ]);
+      } catch (e) {
+        this.$router.push({ name: '404' });
+        console.error(e);
+      }
 
       this.loading = false;
     },
     async fetchInfo() {
       const response = await this.$api.getInfo();
+
+      if (response.status !== 200) {
+        throw new Error(response);
+      }
 
       this.setInfo(response.data);
     },
@@ -289,6 +296,10 @@ export default {
       const response = await this.$api.getBlocks({
         ...this.fetchParams,
       });
+
+      if (response.status !== 200) {
+        throw new Error(response);
+      }
 
       [this.block] = response.data;
     },
@@ -309,13 +320,6 @@ export default {
 </script>
 
 <style lang="scss">
-.block {
-  &__card {
-    height: 100%;
-    overflow: hidden;
-  }
-}
-
 .card__block-next,
 .card__block-prev {
   cursor: pointer;

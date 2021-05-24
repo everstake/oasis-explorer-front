@@ -16,7 +16,6 @@
 
       <b-row v-else-if="validator">
         <b-col cols="4">
-          <div class="validator__section transaction__section">
             <b-card class="validator__info" header="Validator information">
               <b-card-text class="block__content block__logotype">
                 <ValidatorLogotype
@@ -263,7 +262,6 @@
                 </div>
               </b-card-text>
             </b-card>
-          </div>
         </b-col>
 
         <b-col cols="8" md="8">
@@ -286,7 +284,6 @@
 
             <b-card
               v-if="activeTab.key !== 'charts'"
-              class="validator__card"
               no-body
             >
               <CommonTable
@@ -295,6 +292,7 @@
                 requestName="getValidatorRewardsStat"
                 :fields="rewardsFields"
                 :fetchParams="fetchParams"
+                height="min-content"
               >
                 <template #cell(total_reward)="{ item: { total_reward } }">
                   {{ total_reward | formatAmount }}
@@ -316,6 +314,7 @@
                 :requestName="requestName"
                 :fetchParams="fetchParams"
                 :fields="fields"
+                height="min-content"
               >
                 <template #cell(level)="{ item: { level } }">
                   <router-link
@@ -436,7 +435,6 @@
 
             <b-card
               v-else
-              class="validator__card"
               no-body
             >
               <div
@@ -611,14 +609,19 @@ export default {
     async fetch(dataType) {
       this.loading = true;
 
-      switch (dataType) {
-        case 'validator':
-          await this.fetchValidator();
-          break;
-        case 'chart-stake':
-          await this.fetchChartStake();
-          break;
-        default:
+      try {
+        switch (dataType) {
+          case 'validator':
+            await this.fetchValidator();
+            break;
+          case 'chart-stake':
+            await this.fetchChartStake();
+            break;
+          default:
+        }
+      } catch (e) {
+        this.$router.push({ name: '404' });
+        console.error(e);
       }
 
       this.loading = false;
@@ -641,17 +644,25 @@ export default {
         }),
       ]);
 
+      if (uptimeChart.status !== 200 || stakeChart.status !== 200) {
+        throw new Error({ uptimeChart, stakeChart });
+      }
+
       this.charts.uptime = uptimeChart.data;
       this.charts.stake = stakeChart.data;
     },
     async fetchValidator() {
       this.validator = null;
 
-      const request = await this.$api.getValidator({
+      const response = await this.$api.getValidator({
         id: this.$route.params.id,
       });
 
-      this.validator = request.data;
+      if (response.status !== 200) {
+        throw new Error(response);
+      }
+
+      this.validator = response.data;
     },
     chartsTicksCallback(label) {
       if (label > 1) {
@@ -847,12 +858,6 @@ export default {
   &__cards-wrapper {
     display: flex;
     flex-direction: column;
-    height: 100%;
-  }
-
-  &__card {
-    height: 100%;
-    overflow: hidden;
   }
 
   &__chart-card {
@@ -989,6 +994,11 @@ export default {
     color: #4dd4a9;
     border-radius: 4px;
   }
+}
+
+.date-from-now {
+  font-size: 14px;
+  color: #999;
 }
 </style>
 

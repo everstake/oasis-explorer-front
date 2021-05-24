@@ -1,5 +1,5 @@
 <template>
-  <div class="account" :key="$route.params.id">
+  <div :key="$route.params.id">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
     <b-container fluid="lg">
@@ -13,86 +13,84 @@
 
       <b-row class="account__information" v-else-if="account">
         <b-col cols="4">
-          <div class="account__section">
-            <b-card
-              header="Account information"
-            >
-              <b-card-text class="account__content">
-                <b-row>
-                  <b-col cols="12">
-                    <div class="account__container">
-                      <div class="account__item">
-                        Address:
-                        <p class="account__value">{{ account.address }}</p>
-                      </div>
-                      <div class="account__item" v-if="account.entity_address">
-                        Entity address:
-                        <p class="account__value">
-                          <router-link
-                            v-if="account.entity_address !== $route.params.id"
-                            :to="{ name: 'account', params: { id: account.entity_address } }"
-                          >
-                            {{ account.entity_address }}
-                          </router-link>
-                          <span v-else>
-                            {{ account.entity_address }}
-                          </span>
-                        </p>
-                      </div>
-                      <div class="account__item">
-                        Type:
-                        <p class="account__value">{{account.type }}</p>
-                      </div>
+          <b-card
+            header="Account information"
+          >
+            <b-card-text class="account__content">
+              <b-row>
+                <b-col cols="12">
+                  <div class="account__container">
+                    <div class="account__item">
+                      Address:
+                      <p class="account__value">{{ account.address }}</p>
                     </div>
-                  </b-col>
-                  <b-col cols="12">
-                    <div class="account__container">
-                      <div class="account__item">
-                        Total balance:
-                        <p class="account__value">{{account.total_balance | formatAmount }}</p>
-                      </div>
-                      <div class="account__item">
-                        Liquid balance:
-                        <p class="account__value">{{ account.liquid_balance | formatAmount }}</p>
-                      </div>
-                      <div class="account__item">
-                        Escrow balance:
-                        <p class="account__value">{{account.escrow_balance | formatAmount }}</p>
-                      </div>
-                      <div class="account__item">
-                        Debonding balance:
-                        <p class="account__value">{{account.debonding_balance | formatAmount }}</p>
-                      </div>
-                      <div class="account__item">
-                        Delegations balance:
-                        <p class="account__value">
-                          {{account.delegations_balance | formatAmount }}
-                        </p>
-                      </div>
-                      <div class="account__item">
-                        Debonding delegations balance:
-                        <p class="account__value">
-                          {{account.debonding_delegations_balance | formatAmount }}
-                        </p>
-                      </div>
-                      <div class="account__item">
-                        Nonce:
-                        <p class="account__value">{{account.nonce }}</p>
-                      </div>
-                      <div class="account__item">
-                        Last active:
-                        <p class="account__value">{{account.last_active | formatUTCDaysAgo }}</p>
-                      </div>
-                      <div class="account__item">
-                        Created at:
-                        <p class="account__value">{{account.created_at | formatUTCDate }}</p>
-                      </div>
+                    <div class="account__item" v-if="account.entity_address">
+                      Entity address:
+                      <p class="account__value">
+                        <router-link
+                          v-if="account.entity_address !== $route.params.id"
+                          :to="{ name: 'account', params: { id: account.entity_address } }"
+                        >
+                          {{ account.entity_address }}
+                        </router-link>
+                        <span v-else>
+                          {{ account.entity_address }}
+                        </span>
+                      </p>
                     </div>
-                 </b-col>
-                </b-row>
-              </b-card-text>
-            </b-card>
-          </div>
+                    <div class="account__item">
+                      Type:
+                      <p class="account__value">{{account.type }}</p>
+                    </div>
+                  </div>
+                </b-col>
+                <b-col cols="12">
+                  <div class="account__container">
+                    <div class="account__item">
+                      Total balance:
+                      <p class="account__value">{{account.total_balance | formatAmount }}</p>
+                    </div>
+                    <div class="account__item">
+                      Liquid balance:
+                      <p class="account__value">{{ account.liquid_balance | formatAmount }}</p>
+                    </div>
+                    <div class="account__item">
+                      Escrow balance:
+                      <p class="account__value">{{account.escrow_balance | formatAmount }}</p>
+                    </div>
+                    <div class="account__item">
+                      Debonding balance:
+                      <p class="account__value">{{account.debonding_balance | formatAmount }}</p>
+                    </div>
+                    <div class="account__item">
+                      Delegations balance:
+                      <p class="account__value">
+                        {{account.delegations_balance | formatAmount }}
+                      </p>
+                    </div>
+                    <div class="account__item">
+                      Debonding delegations balance:
+                      <p class="account__value">
+                        {{account.debonding_delegations_balance | formatAmount }}
+                      </p>
+                    </div>
+                    <div class="account__item">
+                      Nonce:
+                      <p class="account__value">{{account.nonce }}</p>
+                    </div>
+                    <div class="account__item">
+                      Last active:
+                      <p class="account__value">{{account.last_active | formatUTCDaysAgo }}</p>
+                    </div>
+                    <div class="account__item">
+                      Created at:
+                      <p class="account__value">{{account.created_at | formatUTCDate }}</p>
+                    </div>
+                  </div>
+                </b-col>
+              </b-row>
+            </b-card-text>
+          </b-card>
         </b-col>
 
         <b-col cols="8" md="8">
@@ -115,14 +113,13 @@
 
             <b-card
               v-if="activeTab.key !== 'charts'"
-              class="account__card"
               no-body
             >
               <CommonTable
                 requestName="getTransactions"
                 :fields="fields"
                 :fetchParams="fetchParams"
-                maxHeight="80vh"
+                height="min-content"
               >
                 <template #cell(block_level)="{ item: { block_level }}">
                   <router-link
@@ -226,7 +223,6 @@
 
             <b-card
               v-else
-              class="account__card"
               header="Account balance"
             >
               <div
@@ -420,20 +416,29 @@ export default {
     async fetchAccount() {
       this.account = null;
 
-      const response = await this.$api.getAccount({
-        id: this.$route.params.id,
-      });
+      try {
+        const response = await this.$api.getAccount({
+          id: this.$route.params.id,
+        });
 
-      const unixEpoch = '1970-01-01T00:00:00Z';
-      const mainnetStart = '2020-11-18T16:01:00Z';
-      const { created_at, last_active } = response.data;
+        if (response.status !== 200) {
+          throw new Error(response);
+        }
 
-      if (created_at === unixEpoch && last_active === unixEpoch) {
-        response.data.created_at = mainnetStart;
-        response.data.last_active = mainnetStart;
+        const unixEpoch = '1970-01-01T00:00:00Z';
+        const mainnetStart = '2020-11-18T16:01:00Z';
+        const { created_at, last_active } = response.data;
+
+        if (created_at === unixEpoch && last_active === unixEpoch) {
+          response.data.created_at = mainnetStart;
+          response.data.last_active = mainnetStart;
+        }
+
+        this.account = response.data;
+      } catch (e) {
+        this.$router.push({ name: '404' });
+        console.error(e);
       }
-
-      this.account = response.data;
     },
     async fetchChartStake() {
       const response = await this.$api.getChartStake({
@@ -629,12 +634,6 @@ export default {
     &__cards-wrapper {
       display: flex;
       flex-direction: column;
-      height: 100%;
-    }
-
-    &__card {
-      height: 100%;
-      overflow: hidden;
     }
 
     &__container {

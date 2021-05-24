@@ -74,6 +74,10 @@
       </router-link>
     </template>
 
+    <template #cell(fee)="{ item: { fee }}">
+      {{ fee }}%
+    </template>
+
     <template #cell(validate_since)="{ item: { validate_since } }">
       {{ validate_since | formatYear }}
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="transaction">
+  <div>
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
     <b-container fluid="lg">
@@ -12,69 +12,67 @@
       </b-row>
       <b-row v-if="transaction">
         <b-col cols="12" md="4">
-          <div class="transaction__section">
-            <b-card
-              header="Operation information"
-            >
-              <b-card-text class="block__content">
-                <div class="block__header">Block height</div>
-                <router-link
-                  :to="{ name: 'block', params: { id: transaction.level } }"
+          <b-card
+            header="Operation information"
+          >
+            <b-card-text class="block__content">
+              <div class="block__header">Block height</div>
+              <router-link
+                :to="{ name: 'block', params: { id: transaction.level } }"
+              >
+                {{ transaction.level }}
+              </router-link>
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">Operation hash</div>
+              <div
+                @click="copyToClipboard(transaction.hash)"
+                class="block__copy"
+              >
+                <span
+                  :ref="transaction.hash"
                 >
-                  {{ transaction.level }}
-                </router-link>
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Operation hash</div>
-                <div
-                  @click="copyToClipboard(transaction.hash)"
-                  class="block__copy"
-                >
-                  <span
-                    :ref="transaction.hash"
-                  >
-                    {{ transaction.hash }}
-                  </span>
-                  <font-awesome-icon
-                    :icon="['fas', 'copy']"
-                    :class="{
-                      'icon--success': isHashCopied(transaction.hash)
-                    }"
-                    class="icon icon-copy delegator-card__icon"
-                  />
-                </div>
-              </b-card-text>
-              <b-card-text v-if="transaction.epoch" class="block__content">
-                <div class="block__header">Epoch</div>
-                {{ transaction.epoch }}
-              </b-card-text>
-              <b-card-text v-if="transaction.nonce" class="block__content">
-                <div class="block__header">Nonce</div>
-                {{ transaction.nonce }}
-              </b-card-text>
-              <b-card-text v-if="transaction.type" class="block__content">
-                <div class="block__header">Type</div>
-                {{ transaction.type }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Date</div>
-                {{ transaction.timestamp | formatDate }}
-                <div class="block__time-ago">
-                  ({{ transaction.timestamp | formatDaysAgo }})
-                </div>
-              </b-card-text>
-            </b-card>
-          </div>
+                  {{ transaction.hash }}
+                </span>
+                <font-awesome-icon
+                  :icon="['fas', 'copy']"
+                  :class="{
+                    'icon--success': isHashCopied(transaction.hash)
+                  }"
+                  class="icon icon-copy delegator-card__icon"
+                />
+              </div>
+            </b-card-text>
+            <b-card-text v-if="transaction.epoch" class="block__content">
+              <div class="block__header">Epoch</div>
+              {{ transaction.epoch }}
+            </b-card-text>
+            <b-card-text v-if="transaction.nonce" class="block__content">
+              <div class="block__header">Nonce</div>
+              {{ transaction.nonce }}
+            </b-card-text>
+            <b-card-text v-if="transaction.type" class="block__content">
+              <div class="block__header">Type</div>
+              {{ transaction.type }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">Date</div>
+              {{ transaction.timestamp | formatDate }}
+              <div class="block__time-ago">
+                ({{ transaction.timestamp | formatDaysAgo }})
+              </div>
+            </b-card-text>
+          </b-card>
         </b-col>
         <b-col cols="12" md="8">
           <b-card
-            class="transaction__card"
             no-body
           >
             <CommonTable
               requestName="getTransactions"
               :fields="fields"
               :fetchParams="fetchParams"
+              height="min-content"
             >
               <template #cell(hash)="{ item: { hash } }">
                 {{ hash || '-' }}
@@ -205,11 +203,20 @@ export default {
     async fetch() {
       this.loading = true;
 
-      const request = await this.$api.getTransactions({
-        ...this.fetchParams,
-      });
+      try {
+        const response = await this.$api.getTransactions({
+          ...this.fetchParams,
+        });
 
-      [this.transaction] = request.data;
+        if (response.status !== 200) {
+          throw new Error(response);
+        }
+
+        [this.transaction] = response.data;
+      } catch (e) {
+        this.$router.push({ name: '404' });
+        console.error(e);
+      }
 
       this.loading = false;
     },
@@ -220,12 +227,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-.transaction {
-  &__card {
-    height: 100%;
-    overflow: hidden;
-  }
-}
-</style>

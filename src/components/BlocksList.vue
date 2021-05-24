@@ -64,7 +64,7 @@ export default {
           key: 'number_of_txs',
           label: '# of Ops',
           sortable: true,
-          class: 'cell-s-center',
+          class: 'cell-center',
         },
         { key: 'epoch', label: 'Epoch' },
         { key: 'fees', label: 'Fees' },
@@ -87,7 +87,6 @@ export default {
 
 <style lang="scss">
 .blocks-list {
-  height: 80vh;
   box-shadow: $box-shadow-table;
   margin-bottom: 16px;
 }

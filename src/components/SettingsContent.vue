@@ -33,7 +33,6 @@
               <span v-if="loading" disabled>
                 Saving
                 <font-awesome-icon
-                  class="blocks-list__icon"
                   icon="sync-alt"
                   :spin="loading"
                 />
@@ -41,7 +40,6 @@
               <span v-else-if="!loading && isFormSaved">
                 Saved
                 <font-awesome-icon
-                  class="blocks-list__icon"
                   icon="check-circle"
                 />
               </span>

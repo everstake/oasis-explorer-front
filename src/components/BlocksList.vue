@@ -1,101 +1,59 @@
 <template>
-  <div class="blocks-list">
-    <b-table
-      ref="table"
-      :busy="loading && items === null"
-      :responsive="true"
-      show-empty
-      :fields="fields"
-      :items="items"
-      class="table table--border table-list"
-      borderless
-      no-border-collapse
-    >
-      <template #table-busy>
-        <TableLoader />
-      </template>
-      <template #cell(level)="items">
-        <router-link :to="{ name: 'block', params: { id: items.item.level } }">
-          {{ items.item.level }}
-        </router-link>
-      </template>
-      <template #cell(hash)="items">
-        <router-link
-          :to="{ name: 'block', params: { id: items.item.hash } }"
-        >
-          {{ items.item.hash | trimHash }}
-        </router-link>
-      </template>
-      <template #cell(fees)="items">
-        {{ !items.item.fees ? '-' : items.item.fees }}
-      </template>
-      <template #cell(timestamp)="items">
-        {{ items.item.timestamp | formatDate }}
-        <div class="date-from-now">
-          {{ items.item.timestamp | formatDaysAgo }}
-        </div>
-      </template>
-      <template #cell(number_of_txs)="items">
-        <div class="text-center table__hash">
-          {{ items.item.number_of_txs ? items.item.number_of_txs : '-' }}
-        </div>
-      </template>
-      <template #cell(number_of_signatures)="items">
-        {{
-          items.item.number_of_signatures
-            ? items.item.number_of_signatures
-            : '-'
-        }}
-      </template>
-    </b-table>
-    <div v-if="fetchOnScrollEnabled && items !== null" class="list-actions">
-      <b-button
-        @click="handleShowMore"
-        variant="outline-primary"
-        class="list__button font-weight-bold"
-        :class="{
-          'transactions-list__button--loading': loading,
-        }"
-        :disabled="loading || isShowMoreButtonDisabled"
+  <CommonTable
+    class="blocks-list"
+    requestName="getBlocks"
+    :fields="fields"
+    :fetchParams="listFetchParams"
+    :isFetchOnScrollEnabled="isFetchOnScrollEnabled"
+    :height="height"
+  >
+    <template #cell(level)="{ item: { level } }">
+      <router-link
+        :to="{ name: 'block', params: { id: level } }"
       >
-        <span v-if="error">
-          Something went wrong, click to retry
-        </span>
-        <span v-else-if="loading" disabled>
-          Loading
-          <font-awesome-icon
-            class="list__icon"
-            icon="sync-alt"
-            :spin="loading"
-          />
-        </span>
-        <span v-else ref="showMoreButton">
-          Show more
-          <font-awesome-icon
-            class="list__icon"
-            icon="arrow-circle-down"
-            :spin="loading"
-          />
-        </span>
-      </b-button>
-    </div>
-  </div>
+        {{ level }}
+      </router-link>
+    </template>
+
+    <template #cell(hash)="{ item: { hash } }">
+      <router-link
+        :to="{ name: 'block', params: { id: hash } }"
+      >
+        {{ hash | trimHash }}
+      </router-link>
+    </template>
+
+    <template #cell(number_of_signatures)="{ item: { number_of_signatures } }">
+      {{ number_of_signatures || '-' }}
+    </template>
+
+    <template #cell(number_of_txs)="{ item: { number_of_txs } }">
+      {{ number_of_txs || '-' }}
+    </template>
+
+    <template #cell(fees)="{ item: { fees } }">
+      {{ fees || '-' }}
+    </template>
+
+    <template #cell(timestamp)="{ item: { timestamp } }">
+      {{ timestamp | formatDate }}
+
+      <div class="common-table__format-days-ago">
+        {{ timestamp | formatDaysAgo }}
+      </div>
+    </template>
+  </CommonTable>
 </template>
 
 <script>
-import TableLoader from '@/components/TableLoader.vue';
-import fetchList from '@/mixins/fetchList';
-import fetchOnScroll from '@/mixins/fetchOnScroll';
-
-// eslint-disable-next-line no-unused-expressions
-import(/* webpackPreload: true */ '@/assets/styles/blocksList.scss');
+import CommonTable from '@/components/CommonTable/CommonTable.vue';
+import { DEFAULT_HEIGHT } from '@/components/CommonTable/constants';
 
 export default {
   name: 'BlocksList',
   components: {
-    TableLoader,
+    CommonTable,
   },
-  mixins: [fetchList, fetchOnScroll],
   props: {
     fields: {
       type: Array,
@@ -104,24 +62,39 @@ export default {
         { key: 'hash', label: 'Block hash' },
         { key: 'proposer', label: 'Proposer' },
         { key: 'number_of_signatures', label: 'Signatures' },
-        { key: 'number_of_txs', label: '# of Ops', sortable: true },
+        {
+          key: 'number_of_txs',
+          label: '# of Ops',
+          sortable: true,
+          class: 'cell-center',
+        },
         { key: 'epoch', label: 'Epoch' },
         { key: 'fees', label: 'Fees' },
         { key: 'timestamp', label: 'Date', sortable: true },
       ],
     },
-  },
-  methods: {
-    fetchData(params = {}) {
-      return this.$api.getBlocks({ ...params, limit: this.getRequestLimit });
+    listFetchParams: {
+      type: Object,
+      required: false,
+      default: () => ({}),
     },
-  },
-  created() {
-    this.fetchList('getBlocks', { limit: this.getRequestLimit });
+    isFetchOnScrollEnabled: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    height: {
+      type: String,
+      required: false,
+      default: DEFAULT_HEIGHT,
+    },
   },
 };
 </script>
 
 <style lang="scss">
-@import '~@/assets/styles/list.scss';
+.blocks-list {
+  box-shadow: $box-shadow-table;
+  margin-bottom: 16px;
+}
 </style>

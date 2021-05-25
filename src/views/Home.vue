@@ -146,15 +146,16 @@
           <b-col class="home__col" cols="12" xs="12" sm="12" md="12" lg="6">
             <p class="home__title">Blocks list</p>
             <BlocksList
-              :rows="10"
-              :fetchOnScrollEnabled="false"
+              :listFetchParams="listFetchParams"
+              :isFetchOnScrollEnabled="false"
               :fields="[
                 { key: 'level', label: 'Height' },
                 { key: 'hash', label: 'Hash' },
-                { key: 'number_of_txs', label: '# of Ops' },
+                { key: 'number_of_txs', label: '# of Ops', class: 'cell-s-center' },
                 { key: 'timestamp', label: 'Date' },
               ]"
               class="table-list"
+              height="820px"
             />
             <b-button
               to="/blocks"
@@ -167,8 +168,8 @@
           <b-col class="home__col" cols="12" xs="12" sm="12" md="12" lg="6">
             <p class="home__title">Operations list</p>
             <OperationsList
-              :rows="10"
-              :fetchOnScrollEnabled="false"
+              :listFetchParams="listFetchParams"
+              :isFetchOnScrollEnabled="false"
               :fields="[
                 { key: 'level', label: 'Height' },
                 { key: 'hash', label: 'Hash' },
@@ -177,6 +178,7 @@
               ]"
               :filters="false"
               class="table-list"
+              height="820px"
             />
             <b-button
               to="/operations"
@@ -193,18 +195,14 @@
 </template>
 
 <script>
-/*eslint-disable*/
 import dayjs from 'dayjs';
 import { mapMutations, mapState } from 'vuex';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 import numeral from 'numeral';
 
-const LineChart = () =>
-  import(/* webpackPreload: true */ '@/components/charts/LineChart.vue');
-const BlocksList = () =>
-  import(/* webpackPreload: true */ '@/components/BlocksList.vue');
-const OperationsList = () =>
-  import(/* webpackPreload: true */ '@/components/OperationsList.vue');
+const LineChart = () => import(/* webpackPreload: true */ '@/components/charts/LineChart.vue');
+const BlocksList = () => import(/* webpackPreload: true */ '@/components/BlocksList.vue');
+const OperationsList = () => import(/* webpackPreload: true */ '@/components/OperationsList.vue');
 
 export default {
   name: 'Home',
@@ -266,6 +264,7 @@ export default {
         },
       },
       chartsAreFetched: false,
+      listFetchParams: { limit: 10 },
     };
   },
   methods: {

@@ -3,7 +3,7 @@
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
     <b-container fluid="lg">
-      <BlocksList ref="blocksList" />
+      <BlocksList />
     </b-container>
   </div>
 </template>

@@ -2,11 +2,10 @@
   <div class="table-status">
     <div
       v-if="loading"
-      class="table-status__inner"
+      class="table-status__loading"
     >
-      Loading
       <font-awesome-icon
-        size="1x"
+        size="2x"
         icon="spinner"
         spin
       />
@@ -14,7 +13,7 @@
 
     <div
       v-if="error"
-      class="table-status__inner table-status__inner--pointer"
+      class="table-status__error"
       @click="$emit('click')"
     >
       Something went wrong, try again
@@ -43,21 +42,23 @@ export default {
 
 <style lang="scss">
 .table-status {
-  width: max-content;
-  padding: 8px;
+  &__loading {
+    color: $color-primary
+  }
 
-  border-radius: 8px;
-  background-color: $color-primary;
-  color: $color-white;
-
-  &__inner {
+  &__error {
     display: flex;
     align-items: center;
     gap: 4px;
 
-    &--pointer {
-      cursor: pointer;
-    }
+    width: max-content;
+    padding: 8px;
+
+    border-radius: 8px;
+    background-color: $color-primary;
+    color: $color-white;
+
+    cursor: pointer;
   }
 }
 </style>

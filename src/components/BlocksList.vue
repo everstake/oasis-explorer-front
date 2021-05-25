@@ -5,6 +5,7 @@
     :fields="fields"
     :fetchParams="listFetchParams"
     :isFetchOnScrollEnabled="isFetchOnScrollEnabled"
+    :height="height"
   >
     <template #cell(level)="{ item: { level } }">
       <router-link
@@ -46,6 +47,7 @@
 
 <script>
 import CommonTable from '@/components/CommonTable/CommonTable.vue';
+import { DEFAULT_HEIGHT } from '@/components/CommonTable/constants';
 
 export default {
   name: 'BlocksList',
@@ -80,6 +82,11 @@ export default {
       type: Boolean,
       required: false,
       default: true,
+    },
+    height: {
+      type: String,
+      required: false,
+      default: DEFAULT_HEIGHT,
     },
   },
 };

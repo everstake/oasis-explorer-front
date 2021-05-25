@@ -106,6 +106,7 @@
       :fields="fields"
       :isFetchOnScrollEnabled="isFetchOnScrollEnabled"
       :fetchParams="fetchParams"
+      :height="height"
     >
       <template #cell(level)="{ item: { level }}">
         <router-link
@@ -187,6 +188,7 @@ import CommonTable from '@/components/CommonTable/CommonTable.vue';
 import DateRangePicker from 'vue-daterange-picker-light';
 import { mapState } from 'vuex';
 import dayjs from 'dayjs';
+import { DEFAULT_HEIGHT } from '@/components/CommonTable/constants';
 
 export default {
   name: 'OperationsList',
@@ -221,6 +223,11 @@ export default {
       type: Boolean,
       required: false,
       default: true,
+    },
+    height: {
+      type: String,
+      required: false,
+      default: DEFAULT_HEIGHT,
     },
   },
   data() {

@@ -42,7 +42,6 @@
       }]"
     >
       <TableStatus
-        class="common-table__status"
         :loading="loading"
         :error="error"
         @click="fetch"
@@ -168,9 +167,9 @@ export default {
       } catch (e) {
         this.error = true;
         console.error(e);
+      } finally {
+        this.loading = false;
       }
-
-      this.loading = false;
     },
     fetchSorted({ sortBy, sortDesc }) {
       const params = {
@@ -217,7 +216,10 @@ export default {
 
   &__status-wrapper {
     position: absolute;
-    padding: 8px 0;
+    display: flex;
+    justify-content: center;
+
+    padding: 32px 0;
 
     bottom: 12px;
     left: 0;
@@ -228,8 +230,10 @@ export default {
     }
   }
 
-  &__status {
-    margin: auto;
+  [aria-busy="true"] {
+    tbody {
+      opacity: 0.3;
+    }
   }
 
   th {

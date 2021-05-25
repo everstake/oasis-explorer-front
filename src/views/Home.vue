@@ -155,6 +155,7 @@
                 { key: 'timestamp', label: 'Date' },
               ]"
               class="table-list"
+              height="820px"
             />
             <b-button
               to="/blocks"
@@ -177,6 +178,7 @@
               ]"
               :filters="false"
               class="table-list"
+              height="820px"
             />
             <b-button
               to="/operations"

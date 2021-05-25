@@ -1,8 +1,8 @@
 <template>
-  <div :key="$route.params.id">
+  <div class="block" :key="$route.params.id">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
 
-    <b-container fluid="lg">
+    <b-container class="block__container" fluid="lg">
       <b-row v-if="loading && !block">
         <b-col cols="12">
           <div class="text-center block__loading">
@@ -277,9 +277,9 @@ export default {
       } catch (e) {
         this.$router.push({ name: '404' });
         console.error(e);
+      } finally {
+        this.loading = false;
       }
-
-      this.loading = false;
     },
     async fetchInfo() {
       const response = await this.$api.getInfo();
@@ -320,6 +320,10 @@ export default {
 </script>
 
 <style lang="scss">
+  .block__container {
+    margin-bottom: 52px;
+  }
+
 .card__block-next,
 .card__block-prev {
   cursor: pointer;

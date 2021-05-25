@@ -310,6 +310,7 @@
                   {{ month_reward | formatAmount }}
                 </template>
               </CommonTable>
+
               <CommonTable
                 :requestName="requestName"
                 :fetchParams="fetchParams"
@@ -433,10 +434,7 @@
               </CommonTable>
             </b-card>
 
-            <b-card
-              v-else
-              no-body
-            >
+            <div v-else>
               <div
                 v-if="loading"
                 class="text-center account__loading"
@@ -476,7 +474,7 @@
                   </b-card-text>
                 </b-card>
               </div>
-            </b-card>
+            </div>
           </div>
         </b-col>
       </b-row>
@@ -622,9 +620,9 @@ export default {
       } catch (e) {
         this.$router.push({ name: '404' });
         console.error(e);
+      } finally {
+        this.loading = false;
       }
-
-      this.loading = false;
     },
     async fetchChartStake() {
       const [uptimeChart, stakeChart] = await Promise.all([
@@ -850,6 +848,10 @@ export default {
 </script>
 
 <style lang="scss">
+.card:not(:last-child) {
+  margin-bottom: 15px;
+}
+
 .validator {
   &__breadcrumbs {
     margin-bottom: 35px;
@@ -879,8 +881,6 @@ export default {
   }
 
   &__actions {
-    margin-bottom: 15px;
-
     &--desktop {
       @include from-768-down {
         display: none;

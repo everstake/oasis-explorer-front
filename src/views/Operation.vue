@@ -216,9 +216,9 @@ export default {
       } catch (e) {
         this.$router.push({ name: '404' });
         console.error(e);
+      } finally {
+        this.loading = false;
       }
-
-      this.loading = false;
     },
   },
   async created() {

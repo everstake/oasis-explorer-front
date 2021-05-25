@@ -2,7 +2,7 @@
   <div class="transactions">
     <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
     <b-container fluid="lg">
-      <OperationsList ref="operationsList" :filters="true" />
+      <OperationsList :filters="true" />
     </b-container>
   </div>
 </template>

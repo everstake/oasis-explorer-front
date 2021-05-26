@@ -51,6 +51,14 @@
               <div class="block__header">Nonce</div>
               {{ transaction.nonce }}
             </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Status
+              </div>
+              <StatusIcon
+                :status="transaction.status"
+              />
+            </b-card-text>
             <b-card-text v-if="transaction.type" class="block__content">
               <div class="block__header">Type</div>
               {{ transaction.type }}
@@ -149,12 +157,14 @@
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import CommonTable from '@/components/CommonTable/CommonTable.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
+import StatusIcon from '@/components/StatusIcon.vue';
 
 export default {
   name: 'Operation',
   components: {
     Breadcrumbs,
     CommonTable,
+    StatusIcon,
   },
   mixins: [copyToClipboard],
   data() {

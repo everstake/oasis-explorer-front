@@ -234,23 +234,12 @@
                 {{ validator.depositors_count }}
               </b-card-text>
               <b-card-text class="block__content">
-                <div
-                  v-if="validator.status"
-                  :class="{
-                    'validator__status--active': validator.status === 'active',
-                    'validator__status--inactive': validator.status === 'inactive',
-                  }"
-                >
-                  <div class="block__header">Status</div>
-                  <font-awesome-icon
-                    v-if="validator.status === 'active'"
-                    icon="check-circle"
-                  />
-                  <font-awesome-icon
-                    v-else-if="validator.status === 'inactive'"
-                    icon="times-circle"
-                  />
+                <div class="block__header">
+                  Status
                 </div>
+                <StatusIcon
+                  :status="validator.status === 'active'"
+                />
               </b-card-text>
               <b-card-text class="block__content">
                 <div class="block__header" v-if="validator.validate_since">
@@ -501,6 +490,7 @@ import { state } from '@/store';
 import dayjs from 'dayjs';
 import LineChart from '@/components/charts/LineChart.vue';
 import uuid from '@/mixins/uuid';
+import StatusIcon from '@/components/StatusIcon.vue';
 import CommonTable from '../components/CommonTable/CommonTable.vue';
 
 const tabs = [
@@ -519,6 +509,7 @@ export default {
     LineChart,
     ValidatorLogotype,
     CommonTable,
+    StatusIcon,
   },
   mixins: [
     copyToClipboard,

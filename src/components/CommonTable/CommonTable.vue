@@ -273,20 +273,6 @@ export default {
     }
   }
 
-  &__status {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &--active {
-      color: #28a745;
-    }
-
-    &--inactive {
-      color: #dc3545;
-    }
-  }
-
   &__format-days-ago {
     font-size: 14px;
     color: #999;

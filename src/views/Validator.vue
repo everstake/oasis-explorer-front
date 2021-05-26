@@ -669,32 +669,32 @@ export default {
             { key: 'level', label: 'Height' },
             { key: 'hash', label: 'Operation hash' },
             { key: 'type', label: 'Type' },
-            { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
-            { key: 'timestamp', label: 'Date', sortable: true },
+            { key: 'escrow_amount', label: 'Escrow amount' },
+            { key: 'timestamp', label: 'Date' },
           ];
         case 'other':
           return [
             { key: 'level', label: 'Height' },
             { key: 'hash', label: 'Hash' },
-            { key: 'amount', label: 'Amount', sortable: true },
+            { key: 'amount', label: 'Amount' },
             { key: 'from', label: 'From' },
             { key: 'to', label: 'To' },
             { key: 'nonce', label: 'Nonce' },
             { key: 'type', label: 'Type' },
-            { key: 'timestamp', label: 'Date', sortable: true },
+            { key: 'timestamp', label: 'Date' },
           ];
         case 'delegators':
           return [
             { key: 'account_id', label: 'Account' },
-            { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
-            { key: 'delegate_since', label: 'Delegate since', sortable: true },
+            { key: 'escrow_amount', label: 'Escrow amount' },
+            { key: 'delegate_since', label: 'Delegate since' },
           ];
         case 'rewards':
           return [
             { key: 'block_level', label: 'Height' },
             { key: 'epoch', label: 'Epoch' },
-            { key: 'amount', label: 'Amount', sortable: true },
-            { key: 'created_at', label: 'Date', sortable: true },
+            { key: 'amount', label: 'Amount' },
+            { key: 'created_at', label: 'Date' },
           ];
         case 'transfers':
         default:
@@ -703,8 +703,8 @@ export default {
             { key: 'hash', label: 'Transaction hash' },
             { key: 'from', label: 'From' },
             { key: 'to', label: 'To' },
-            { key: 'amount', label: 'Amount', sortable: true },
-            { key: 'timestamp', label: 'Date', sortable: true },
+            { key: 'amount', label: 'Amount' },
+            { key: 'timestamp', label: 'Date' },
           ];
       }
     },

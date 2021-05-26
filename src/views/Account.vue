@@ -545,16 +545,16 @@ export default {
             { key: 'level', label: 'Height' },
             { key: 'hash', label: 'Operation hash' },
             { key: 'type', label: 'Type' },
-            { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
-            { key: 'timestamp', label: 'Date', sortable: true },
+            { key: 'escrow_amount', label: 'Escrow amount' },
+            { key: 'timestamp', label: 'Date' },
           ];
         case 'other':
           return [
             { key: 'level', label: 'Height' },
             { key: 'hash', label: 'Operation hash' },
             { key: 'type', label: 'Type' },
-            { key: 'escrow_amount', label: 'Escrow amount', sortable: true },
-            { key: 'timestamp', label: 'Date', sortable: true },
+            { key: 'escrow_amount', label: 'Escrow amount' },
+            { key: 'timestamp', label: 'Date' },
           ];
         case 'transfers':
         default:
@@ -563,8 +563,8 @@ export default {
             { key: 'hash', label: 'Transaction hash' },
             { key: 'from', label: 'From' },
             { key: 'to', label: 'To' },
-            { key: 'amount', label: 'Amount', sortable: true },
-            { key: 'timestamp', label: 'Date', sortable: true },
+            { key: 'amount', label: 'Amount' },
+            { key: 'timestamp', label: 'Date' },
           ];
       }
     },

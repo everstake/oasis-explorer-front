@@ -1,18 +1,34 @@
 <template>
   <div class="search">
-    <div v-if="!isSearchVisible" @click="showSearch()" class="search__icon">
-      <font-awesome-icon class="icon search__icon" :icon="['fas', 'search']" />
+    <div
+      v-if="!isSearchVisible"
+      class="search__icon"
+      @click="showSearch()"
+    >
+      <font-awesome-icon
+        class="icon search__icon"
+        :icon="['fas', 'search']"
+      />
     </div>
-    <div v-else class="search__form">
-      <div @click="hideSearch()" class="search__close">
-        <font-awesome-icon class="icon social__icon" :icon="['fas', 'times']" />
+    <div
+      v-else
+      class="search__form"
+    >
+      <div
+        class="search__close"
+        @click="hideSearch()"
+      >
+        <font-awesome-icon
+          class="icon social__icon"
+          :icon="['fas', 'times']"
+        />
       </div>
       <SearchContent
         :loading="loading"
         :autofocus="true"
-        @handleSubmit="handleSubmit"
         class="search-content search--height-100-vh"
         :search="search"
+        @handleSubmit="handleSubmit"
       />
     </div>
   </div>

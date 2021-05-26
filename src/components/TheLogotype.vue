@@ -1,11 +1,14 @@
 <template>
   <div class="logo">
-    <router-link class="logo__link" :to="{ name: 'home' }">
+    <router-link
+      class="logo__link"
+      :to="{ name: 'home' }"
+    >
       <img
         class="logo__img"
         src="../assets/images/logo.svg"
         alt="Oasis logotype"
-      />
+      >
     </router-link>
     <span class="logo__note">
       by
@@ -13,7 +16,7 @@
         class="logo__everstake"
         src="../assets/images/logo-everstake.svg"
         alt="Everstake logotype"
-      />
+      >
     </span>
   </div>
 </template>

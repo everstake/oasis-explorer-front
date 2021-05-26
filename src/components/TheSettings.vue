@@ -2,27 +2,33 @@
   <div class="settings">
     <div
       v-if="!isSettingsVisible"
-       @click="showSearch()"
       class="settings__icon"
+      @click="showSearch()"
     >
-      <font-awesome-icon class="icon settings__icon" :icon="['fas', 'cog']" />
+      <font-awesome-icon
+        class="icon settings__icon"
+        :icon="['fas', 'cog']"
+      />
     </div>
     <div
-        v-else
-        class="settings__form"
+      v-else
+      class="settings__form"
+    >
+      <div
+        class="settings__close"
+        @click="hideSearch()"
       >
-        <div
-          @click="hideSearch()"
-          class="settings__close"
-        >
-          <font-awesome-icon class="icon social__icon" :icon="['fas', 'times']" />
-        </div>
-        <SettingsContent
-          :loading="loading"
-          :autofocus="true"
-          @handleSubmit="handleSubmit"
-          class="settings--height-100-vh"
+        <font-awesome-icon
+          class="icon social__icon"
+          :icon="['fas', 'times']"
         />
+      </div>
+      <SettingsContent
+        :loading="loading"
+        :autofocus="true"
+        class="settings--height-100-vh"
+        @handleSubmit="handleSubmit"
+      />
     </div>
   </div>
 </template>
@@ -43,6 +49,18 @@ export default {
       loading: null,
     };
   },
+  watch: {
+    $route() {
+      this.hideSearch();
+    },
+  },
+  updated() {
+    if (this.isSettingsVisible) {
+      document.title = 'Settings | Oasis Monitor';
+    } else {
+      document.title = this.$route.meta.title;
+    }
+  },
   methods: {
     showSearch() {
       this.isSettingsVisible = true;
@@ -61,18 +79,6 @@ export default {
         this.loading = false;
       }, 200);
     },
-  },
-  watch: {
-    $route() {
-      this.hideSearch();
-    },
-  },
-  updated() {
-    if (this.isSettingsVisible) {
-      document.title = 'Settings | Oasis Monitor';
-    } else {
-      document.title = this.$route.meta.title;
-    }
   },
 };
 </script>

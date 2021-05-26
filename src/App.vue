@@ -1,12 +1,19 @@
 <template>
-  <div id="app" class="page" ref="page">
+  <div
+    id="app"
+    ref="page"
+    class="page"
+  >
     <TheHeader class="page__header" />
 
     <main class="page__main">
       <router-view />
     </main>
 
-    <notifications position="top left" class="page__notifications" />
+    <notifications
+      position="top left"
+      class="page__notifications"
+    />
 
     <TheFooter class="page__footer" />
   </div>

@@ -9,251 +9,316 @@
       <b-row v-if="loading && !validator">
         <b-col cols="12">
           <div class="text-center block__loading">
-            <font-awesome-icon class="icon block__icon" icon="spinner" spin />
+            <font-awesome-icon
+              class="icon block__icon"
+              icon="spinner"
+              spin
+            />
           </div>
         </b-col>
       </b-row>
 
       <b-row v-else-if="validator">
         <b-col cols="4">
-            <b-card class="validator__info" header="Validator information">
-              <b-card-text class="block__content block__logotype">
-                <ValidatorLogotype
-                  v-if="validator.media_info && validator.media_info.logotype"
-                  :src="validator.media_info.logotype"
-                  :accountName="validator.account_name"
-                  class="block__logo"
-                />
-                <img
-                  v-else
-                  class="block__logo"
-                  src="../assets/images/logo-oasis.svg"
-                  alt="Oasis logotype"
+          <b-card
+            class="validator__info"
+            header="Validator information"
+          >
+            <b-card-text class="block__content block__logotype">
+              <ValidatorLogotype
+                v-if="validator.media_info && validator.media_info.logotype"
+                :src="validator.media_info.logotype"
+                :account-name="validator.account_name"
+                class="block__logo"
+              />
+              <img
+                v-else
+                class="block__logo"
+                src="../assets/images/logo-oasis.svg"
+                alt="Oasis logotype"
+              >
+            </b-card-text>
+            <b-card-text
+              v-if="validator.account_name"
+              class="block__content"
+            >
+              <span class="validator__name">{{ validator.account_name }}</span>
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div
+                v-if="validator.media_info"
+                class="validator__contacts"
+              >
+                <a
+                  :class="['validator__contact', {
+                    'validator__contact--active': validator.media_info.website_link,
+                  }]"
+                  :href="validator.media_info.website_link || '#'"
+                  target="_blank"
                 >
-              </b-card-text>
-              <b-card-text v-if="validator.account_name" class="block__content">
-                <span class="validator__name">{{ validator.account_name }}</span>
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div v-if="validator.media_info" class="validator__contacts">
-                  <a
-                    :class="['validator__contact', {
-                      'validator__contact--active': validator.media_info.website_link,
-                    }]"
-                    :href="validator.media_info.website_link || '#'"
-                    target="_blank"
-                  >
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fa', iconName: 'globe' }"
-                    />
-                  </a>
-                  <a
-                    class="validator__contact"
-                    :class="{
-                      'validator__contact--active':
-                        validator.media_info.email_address,
-                    }"
-                    :href="validator.media_info.email_address
-                      ? `mailto:${validator.media_info.email_address}`
-                      : '#'
-                    "
-                  >
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fa', iconName: 'envelope' }"
-                    />
-                  </a>
-                  <a
-                    class="validator__contact"
-                    :class="{
-                      'validator__contact--active': validator.media_info.tg_chat,
-                    }"
-                    :href="validator.media_info.tg_chat
-                      ? validator.media_info.tg_chat
-                      : '#'
-                    "
-                    target="_blank"
-                  >
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'telegram' }"
-                    />
-                  </a>
-                  <a
-                    class="validator__contact"
-                    :class="{
-                      'validator__contact--active': validator.media_info.twitter_acc,
-                    }"
-                    :href="validator.media_info.twitter_acc
-                      ? validator.media_info.twitter_acc
-                      : '#'
-                    "
-                    target="_blank"
-                  >
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'twitter' }"
-                    />
-                  </a>
-                  <a
-                    class="validator__contact"
-                    :class="{
-                      'validator__contact--active': validator.media_info.facebook_acc,
-                    }"
-                    :href="validator.media_info.facebook_acc
-                      ? validator.media_info.facebook_acc
-                      : '#'
-                    "
-                    target="_blank"
-                  >
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'facebook' }"
-                    />
-                  </a>
-                  <a
-                    class="validator__contact"
-                    :class="{
-                      'validator__contact--active': validator.media_info.medium_link,
-                    }"
-                    :href="validator.media_info.medium_link
-                      ? validator.media_info.medium_link
-                      : '#'
-                    "
-                    target="_blank"
-                  >
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'medium' }"
-                    />
-                  </a>
-                </div>
-                <div v-else class="validator__contacts">
-                  <a class="validator__contact" href="#" target="_blank">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fa', iconName: 'globe' }"
-                    />
-                  </a>
-                  <a class="validator__contact" href="#">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fa', iconName: 'envelope' }"
-                    />
-                  </a>
-                  <a class="validator__contact" href="#" target="_blank">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'telegram' }"
-                    />
-                  </a>
-                  <a class="validator__contact" href="#" target="_blank">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'twitter' }"
-                    />
-                  </a>
-                  <a class="validator__contact" href="#" target="_blank">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'facebook' }"
-                    />
-                  </a>
-                  <a class="validator__contact" href="#" target="_blank">
-                    <font-awesome-icon
-                      class="validator__icon"
-                      :icon="{ prefix: 'fab', iconName: 'medium' }"
-                    />
-                  </a>
-                </div>
-                <div class="validator-note">
-                  If you wish to add your validator info, contact us at inbox@everstake.one
-                </div>
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Address</div>
-                <div
-                  @click="copyToClipboard(validator.account_id)"
-                  class="block__copy"
-                >
-                  <span :ref="validator.account_id">
-                    {{ validator.account_id }}
-                  </span>
                   <font-awesome-icon
-                    :icon="['fas', 'copy']"
-                    :class="{
-                      'icon--success': isHashCopied(validator.account_id),
-                    }"
-                    class="icon icon-copy delegator-card__icon"
+                    class="validator__icon"
+                    :icon="{ prefix: 'fa', iconName: 'globe' }"
                   />
-                </div>
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Signatures / Proposals</div>
-                {{ validator.signatures_count }} / {{ validator.blocks_count }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Uptime</div>
-                {{ String(validator.total_uptime * 100).slice(0, 4) }}%
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Total balance</div>
-                {{ validator.general_balance + (
-                  validator.escrow_balance + validator.debonding_balance
-                ) | formatAmount }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">General balance</div>
-                {{ validator.general_balance | formatAmount }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Escrow balance</div>
-                {{ validator.escrow_balance | formatAmount }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Escrow shares</div>
-                {{ validator.escrow_shares | formatAmount }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Unbonding balance</div>
-                {{ validator.debonding_balance | formatAmount }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Delegations balance</div>
-                {{ validator.delegations_balance | formatAmount }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">Debonding delegations balance</div>
-                {{ validator.debonding_delegations_balance | formatAmount }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">
-                  Delegators
-                </div>
-                {{ validator.depositors_count }}
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header">
-                  Status
-                </div>
-                <StatusIcon
-                  :status="validator.status === 'active'"
+                </a>
+                <a
+                  class="validator__contact"
+                  :class="{
+                    'validator__contact--active':
+                      validator.media_info.email_address,
+                  }"
+                  :href="validator.media_info.email_address
+                    ? `mailto:${validator.media_info.email_address}`
+                    : '#'
+                  "
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fa', iconName: 'envelope' }"
+                  />
+                </a>
+                <a
+                  class="validator__contact"
+                  :class="{
+                    'validator__contact--active': validator.media_info.tg_chat,
+                  }"
+                  :href="validator.media_info.tg_chat
+                    ? validator.media_info.tg_chat
+                    : '#'
+                  "
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fab', iconName: 'telegram' }"
+                  />
+                </a>
+                <a
+                  class="validator__contact"
+                  :class="{
+                    'validator__contact--active': validator.media_info.twitter_acc,
+                  }"
+                  :href="validator.media_info.twitter_acc
+                    ? validator.media_info.twitter_acc
+                    : '#'
+                  "
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fab', iconName: 'twitter' }"
+                  />
+                </a>
+                <a
+                  class="validator__contact"
+                  :class="{
+                    'validator__contact--active': validator.media_info.facebook_acc,
+                  }"
+                  :href="validator.media_info.facebook_acc
+                    ? validator.media_info.facebook_acc
+                    : '#'
+                  "
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fab', iconName: 'facebook' }"
+                  />
+                </a>
+                <a
+                  class="validator__contact"
+                  :class="{
+                    'validator__contact--active': validator.media_info.medium_link,
+                  }"
+                  :href="validator.media_info.medium_link
+                    ? validator.media_info.medium_link
+                    : '#'
+                  "
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fab', iconName: 'medium' }"
+                  />
+                </a>
+              </div>
+              <div
+                v-else
+                class="validator__contacts"
+              >
+                <a
+                  class="validator__contact"
+                  href="#"
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fa', iconName: 'globe' }"
+                  />
+                </a>
+                <a
+                  class="validator__contact"
+                  href="#"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fa', iconName: 'envelope' }"
+                  />
+                </a>
+                <a
+                  class="validator__contact"
+                  href="#"
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fab', iconName: 'telegram' }"
+                  />
+                </a>
+                <a
+                  class="validator__contact"
+                  href="#"
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fab', iconName: 'twitter' }"
+                  />
+                </a>
+                <a
+                  class="validator__contact"
+                  href="#"
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fab', iconName: 'facebook' }"
+                  />
+                </a>
+                <a
+                  class="validator__contact"
+                  href="#"
+                  target="_blank"
+                >
+                  <font-awesome-icon
+                    class="validator__icon"
+                    :icon="{ prefix: 'fab', iconName: 'medium' }"
+                  />
+                </a>
+              </div>
+              <div class="validator-note">
+                If you wish to add your validator info, contact us at inbox@everstake.one
+              </div>
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Address
+              </div>
+              <div
+                class="block__copy"
+                @click="copyToClipboard(validator.account_id)"
+              >
+                <span :ref="validator.account_id">
+                  {{ validator.account_id }}
+                </span>
+                <font-awesome-icon
+                  :icon="['fas', 'copy']"
+                  :class="{
+                    'icon--success': isHashCopied(validator.account_id),
+                  }"
+                  class="icon icon-copy delegator-card__icon"
                 />
-              </b-card-text>
-              <b-card-text class="block__content">
-                <div class="block__header" v-if="validator.validate_since">
-                  Registered
-                </div>
-                {{ validator.validate_since | formatDate }}
-                <div class="date-from-now">
-                  ({{ validator.validate_since | formatDaysAgo }})
-                </div>
-              </b-card-text>
-            </b-card>
+              </div>
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Signatures / Proposals
+              </div>
+              {{ validator.signatures_count }} / {{ validator.blocks_count }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Uptime
+              </div>
+              {{ String(validator.total_uptime * 100).slice(0, 4) }}%
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Total balance
+              </div>
+              {{ validator.general_balance + (
+                validator.escrow_balance + validator.debonding_balance
+              ) | formatAmount }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                General balance
+              </div>
+              {{ validator.general_balance | formatAmount }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Escrow balance
+              </div>
+              {{ validator.escrow_balance | formatAmount }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Escrow shares
+              </div>
+              {{ validator.escrow_shares | formatAmount }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Unbonding balance
+              </div>
+              {{ validator.debonding_balance | formatAmount }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Delegations balance
+              </div>
+              {{ validator.delegations_balance | formatAmount }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Debonding delegations balance
+              </div>
+              {{ validator.debonding_delegations_balance | formatAmount }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Delegators
+              </div>
+              {{ validator.depositors_count }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Status
+              </div>
+              <StatusIcon
+                :status="validator.status === 'active'"
+              />
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div
+                v-if="validator.validate_since"
+                class="block__header"
+              >
+                Registered
+              </div>
+              {{ validator.validate_since | formatDate }}
+              <div class="date-from-now">
+                ({{ validator.validate_since | formatDaysAgo }})
+              </div>
+            </b-card-text>
+          </b-card>
         </b-col>
 
-        <b-col cols="8" md="8">
+        <b-col
+          cols="8"
+          md="8"
+        >
           <div class="validator__cards-wrapper">
             <b-card
               class="validator__actions validator__actions--desktop"
@@ -277,10 +342,10 @@
             >
               <CommonTable
                 v-if="activeTab.key === 'rewards'"
-                headVariant="dark"
-                requestName="getValidatorRewardsStat"
+                head-variant="dark"
+                request-name="getValidatorRewardsStat"
                 :fields="rewardsFields"
-                :fetchParams="fetchParams"
+                :fetch-params="fetchParams"
                 height="min-content"
               >
                 <template #cell(total_reward)="{ item: { total_reward } }">
@@ -301,8 +366,8 @@
               </CommonTable>
 
               <CommonTable
-                :requestName="requestName"
-                :fetchParams="fetchParams"
+                :request-name="requestName"
+                :fetch-params="fetchParams"
                 :fields="fields"
                 height="min-content"
               >
@@ -444,8 +509,8 @@
                       :chart-data="getUptimeChartData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
-                      :yTicksCallback="uptimeTicksCallback"
-                      :tooltipsLabelCallback="uptimeTooltipsCallback"
+                      :y-ticks-callback="uptimeTicksCallback"
+                      :tooltips-label-callback="uptimeTooltipsCallback"
                     />
                   </b-card-text>
                 </b-card>
@@ -458,7 +523,7 @@
                       :chart-data="getStakeChartData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
-                      :yTicksCallback="chartsTicksCallback"
+                      :y-ticks-callback="chartsTicksCallback"
                     />
                   </b-card-text>
                 </b-card>
@@ -564,116 +629,6 @@ export default {
       xAxesMaxTicksLimit: 10,
       getRewardsItems: null,
     };
-  },
-  watch: {
-    $route: {
-      immediate: true,
-      async handler() {
-        await this.fetch('validator');
-      },
-    },
-    activeTab({ key }) {
-      switch (key) {
-        case 'delegators':
-          this.requestName = 'getValidatorDelegators';
-          break;
-        case 'rewards':
-          this.requestName = 'getValidatorRewards';
-          break;
-        case 'charts':
-          this.fetch('chart-stake');
-          break;
-        case 'other':
-        case 'addescrow/reclaimescrow':
-        case 'transfers':
-        default:
-          this.requestName = 'getTransactions';
-      }
-    },
-  },
-  methods: {
-    onClickTab(tab) {
-      this.activeTab = tab;
-    },
-    async fetch(dataType) {
-      this.loading = true;
-
-      try {
-        switch (dataType) {
-          case 'validator':
-            await this.fetchValidator();
-            break;
-          case 'chart-stake':
-            await this.fetchChartStake();
-            break;
-          default:
-        }
-      } catch (e) {
-        this.$router.push({ name: '404' });
-        console.error(e);
-      } finally {
-        this.loading = false;
-      }
-    },
-    async fetchChartStake() {
-      const [uptimeChart, stakeChart] = await Promise.all([
-        await this.$api.getChartUptime({
-          limit: 10,
-          from: this.datesInSeconds.monthAgo,
-          to: this.datesInSeconds.today,
-          frame: 'D',
-          id: this.$route.params.id,
-        }),
-        await this.$api.getChartStake({
-          limit: 10,
-          from: this.datesInSeconds.monthAgo,
-          to: this.datesInSeconds.today,
-          frame: 'D',
-          id: this.$route.params.id,
-        }),
-      ]);
-
-      if (uptimeChart.status !== 200 || stakeChart.status !== 200) {
-        throw new Error({ uptimeChart, stakeChart });
-      }
-
-      this.charts.uptime = uptimeChart.data;
-      this.charts.stake = stakeChart.data;
-    },
-    async fetchValidator() {
-      this.validator = null;
-
-      const response = await this.$api.getValidator({
-        id: this.$route.params.id,
-      });
-
-      if (response.status !== 200) {
-        throw new Error(response);
-      }
-
-      this.validator = response.data;
-    },
-    chartsTicksCallback(label) {
-      if (label > 1) {
-        return numeral(label / 1000000000).format('0,0.[000000000]');
-      }
-
-      return label.toFixed();
-    },
-    uptimeTicksCallback(label) {
-      return label;
-    },
-    // eslint-disable-next-line consistent-return
-    uptimeTooltipsCallback(t, d) {
-      const xLabel = d.datasets[t.datasetIndex].label;
-      const { yLabel } = t;
-
-      for (let i = 0; i <= 10; i += 1) {
-        if (t.datasetIndex === i) {
-          return `${xLabel}: ${yLabel}%`;
-        }
-      }
-    },
   },
   computed: {
     fetchParams() {
@@ -833,6 +788,116 @@ export default {
           return dayjs.unix(timestamp).format('MM.DD.YYYY');
         }),
       };
+    },
+  },
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        await this.fetch('validator');
+      },
+    },
+    activeTab({ key }) {
+      switch (key) {
+        case 'delegators':
+          this.requestName = 'getValidatorDelegators';
+          break;
+        case 'rewards':
+          this.requestName = 'getValidatorRewards';
+          break;
+        case 'charts':
+          this.fetch('chart-stake');
+          break;
+        case 'other':
+        case 'addescrow/reclaimescrow':
+        case 'transfers':
+        default:
+          this.requestName = 'getTransactions';
+      }
+    },
+  },
+  methods: {
+    onClickTab(tab) {
+      this.activeTab = tab;
+    },
+    async fetch(dataType) {
+      this.loading = true;
+
+      try {
+        switch (dataType) {
+          case 'validator':
+            await this.fetchValidator();
+            break;
+          case 'chart-stake':
+            await this.fetchChartStake();
+            break;
+          default:
+        }
+      } catch (e) {
+        this.$router.push({ name: '404' });
+        console.error(e);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async fetchChartStake() {
+      const [uptimeChart, stakeChart] = await Promise.all([
+        await this.$api.getChartUptime({
+          limit: 10,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
+          frame: 'D',
+          id: this.$route.params.id,
+        }),
+        await this.$api.getChartStake({
+          limit: 10,
+          from: this.datesInSeconds.monthAgo,
+          to: this.datesInSeconds.today,
+          frame: 'D',
+          id: this.$route.params.id,
+        }),
+      ]);
+
+      if (uptimeChart.status !== 200 || stakeChart.status !== 200) {
+        throw new Error({ uptimeChart, stakeChart });
+      }
+
+      this.charts.uptime = uptimeChart.data;
+      this.charts.stake = stakeChart.data;
+    },
+    async fetchValidator() {
+      this.validator = null;
+
+      const response = await this.$api.getValidator({
+        id: this.$route.params.id,
+      });
+
+      if (response.status !== 200) {
+        throw new Error(response);
+      }
+
+      this.validator = response.data;
+    },
+    chartsTicksCallback(label) {
+      if (label > 1) {
+        return numeral(label / 1000000000).format('0,0.[000000000]');
+      }
+
+      return label.toFixed();
+    },
+    uptimeTicksCallback(label) {
+      return label;
+    },
+    // eslint-disable-next-line consistent-return
+    uptimeTooltipsCallback(t, d) {
+      const xLabel = d.datasets[t.datasetIndex].label;
+      const { yLabel } = t;
+
+      for (let i = 0; i <= 10; i += 1) {
+        if (t.datasetIndex === i) {
+          return `${xLabel}: ${yLabel}%`;
+        }
+      }
     },
   },
 };

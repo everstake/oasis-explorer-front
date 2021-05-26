@@ -1,22 +1,34 @@
 <template>
   <div>
-    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
+    <Breadcrumbs
+      class="breadcrumbs"
+      :crumbs="breadcrumbs"
+    />
 
     <b-container fluid="lg">
       <b-row v-if="loading && !transaction">
         <b-col cols="12">
           <div class="text-center block__loading">
-            <font-awesome-icon class="icon block__icon" icon="spinner" spin />
+            <font-awesome-icon
+              class="icon block__icon"
+              icon="spinner"
+              spin
+            />
           </div>
         </b-col>
       </b-row>
       <b-row v-if="transaction">
-        <b-col cols="12" md="4">
+        <b-col
+          cols="12"
+          md="4"
+        >
           <b-card
             header="Operation information"
           >
             <b-card-text class="block__content">
-              <div class="block__header">Block height</div>
+              <div class="block__header">
+                Block height
+              </div>
               <router-link
                 :to="{ name: 'block', params: { id: transaction.level } }"
               >
@@ -24,10 +36,12 @@
               </router-link>
             </b-card-text>
             <b-card-text class="block__content">
-              <div class="block__header">Operation hash</div>
+              <div class="block__header">
+                Operation hash
+              </div>
               <div
-                @click="copyToClipboard(transaction.hash)"
                 class="block__copy"
+                @click="copyToClipboard(transaction.hash)"
               >
                 <span
                   :ref="transaction.hash"
@@ -43,12 +57,22 @@
                 />
               </div>
             </b-card-text>
-            <b-card-text v-if="transaction.epoch" class="block__content">
-              <div class="block__header">Epoch</div>
+            <b-card-text
+              v-if="transaction.epoch"
+              class="block__content"
+            >
+              <div class="block__header">
+                Epoch
+              </div>
               {{ transaction.epoch }}
             </b-card-text>
-            <b-card-text v-if="transaction.nonce" class="block__content">
-              <div class="block__header">Nonce</div>
+            <b-card-text
+              v-if="transaction.nonce"
+              class="block__content"
+            >
+              <div class="block__header">
+                Nonce
+              </div>
               {{ transaction.nonce }}
             </b-card-text>
             <b-card-text class="block__content">
@@ -59,12 +83,19 @@
                 :status="transaction.status"
               />
             </b-card-text>
-            <b-card-text v-if="transaction.type" class="block__content">
-              <div class="block__header">Type</div>
+            <b-card-text
+              v-if="transaction.type"
+              class="block__content"
+            >
+              <div class="block__header">
+                Type
+              </div>
               {{ transaction.type }}
             </b-card-text>
             <b-card-text class="block__content">
-              <div class="block__header">Date</div>
+              <div class="block__header">
+                Date
+              </div>
               {{ transaction.timestamp | formatDate }}
               <div class="block__time-ago">
                 ({{ transaction.timestamp | formatDaysAgo }})
@@ -72,14 +103,17 @@
             </b-card-text>
           </b-card>
         </b-col>
-        <b-col cols="12" md="8">
+        <b-col
+          cols="12"
+          md="8"
+        >
           <b-card
             no-body
           >
             <CommonTable
-              requestName="getTransactions"
+              request-name="getTransactions"
               :fields="fields"
-              :fetchParams="fetchParams"
+              :fetch-params="fetchParams"
               height="min-content"
             >
               <template #cell(hash)="{ item: { hash } }">
@@ -196,6 +230,10 @@ export default {
       ],
     };
   },
+  async created() {
+    this.setFetchParams();
+    this.fetch();
+  },
   methods: {
     setFetchParams() {
       const params = {};
@@ -230,10 +268,6 @@ export default {
         this.loading = false;
       }
     },
-  },
-  async created() {
-    this.setFetchParams();
-    this.fetch();
   },
 };
 </script>

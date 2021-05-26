@@ -1,27 +1,44 @@
 <template>
   <div class="transactions-list">
-    <div class="transactions-list__filter" v-if="filters">
-      <div class="transactions-list__title">Operations filters</div>
+    <div
+      v-if="filters"
+      class="transactions-list__filter"
+    >
+      <div class="transactions-list__title">
+        Operations filters
+      </div>
       <div class="transactions-list__container">
         <div class="transactions-list__reset">
-          <b-btn @click="clearFilters" class="transactions-list__btn">
-            <font-awesome-icon icon="sync" :spin="dropdownIsBusy" />
+          <b-btn
+            class="transactions-list__btn"
+            @click="clearFilters"
+          >
+            <font-awesome-icon
+              icon="sync"
+              :spin="dropdownIsBusy"
+            />
           </b-btn>
         </div>
-        <date-range-picker
-          class="transactions-list__calendar"
+        <DateRangePicker
           ref="picker"
+          :key="getLocaleData.format"
           v-model="dateRange"
+          class="transactions-list__calendar"
           :ranges="false"
           :opens="'right'"
           :min-date="getMinCalendarDate"
           :max-date="new Date()"
           :locale-data="getLocaleData"
-          :key="getLocaleData.format"
           @update="handleCalendarUpdate"
         >
-          <template v-slot:input="picker" style="min-width: 350px;">
-            <div class="transactions-list__label" slot="input">
+          <template
+            v-slot:input="picker"
+            style="min-width: 350px;"
+          >
+            <div
+              slot="input"
+              class="transactions-list__label"
+            >
               Select date
               <font-awesome-icon
                 class="transactions-list__icon"
@@ -29,16 +46,19 @@
               />
             </div>
             <span
-              class="transactions-list__date"
               v-if="dateRange.startDate && dateRange.endDate"
+              class="transactions-list__date"
             >
               {{ formatDate(picker.startDate) }} -
               {{ formatDate(picker.endDate) }}
             </span>
           </template>
-        </date-range-picker>
+        </DateRangePicker>
         <div class="transactions-dropdown">
-          <b-dropdown id="dropdown-1" text="Select type">
+          <b-dropdown
+            id="dropdown-1"
+            text="Select type"
+          >
             <b-dropdown-form
               class="transactions-dropdown__content"
               :disabled="dropdownIsBusy"
@@ -47,10 +67,10 @@
               }"
             >
               <b-form-checkbox
+                v-model="operations"
                 :disabled="
                   operations.length === 1 && operations[0] === 'transfer'
                 "
-                v-model="operations"
                 value="transfer"
                 class="mb-3"
               >
@@ -58,10 +78,10 @@
               </b-form-checkbox>
 
               <b-form-checkbox
+                v-model="operations"
                 :disabled="
                   operations.length === 1 && operations[0] === 'addescrow'
                 "
-                v-model="operations"
                 value="addescrow"
                 class="mb-3"
               >
@@ -69,10 +89,10 @@
               </b-form-checkbox>
 
               <b-form-checkbox
+                v-model="operations"
                 :disabled="
                   operations.length === 1 && operations[0] === 'reclaimescrow'
                 "
-                v-model="operations"
                 value="reclaimescrow"
                 class="mb-3"
               >
@@ -80,8 +100,8 @@
               </b-form-checkbox>
 
               <b-form-checkbox
-                disabled
                 v-model="operations"
+                disabled
                 value="burn"
                 class="mb-3"
               >
@@ -89,8 +109,8 @@
               </b-form-checkbox>
 
               <b-form-checkbox
-                :disabled="operations.length === 1 && operations[0] === 'other'"
                 v-model="operations"
+                :disabled="operations.length === 1 && operations[0] === 'other'"
                 value="other"
               >
                 Other
@@ -102,10 +122,10 @@
     </div>
     <CommonTable
       class="transactions-list__table"
-      requestName="getTransactions"
+      request-name="getTransactions"
       :fields="fields"
-      :isFetchOnScrollEnabled="isFetchOnScrollEnabled"
-      :fetchParams="fetchParams"
+      :is-fetch-on-scroll-enabled="isFetchOnScrollEnabled"
+      :fetch-params="fetchParams"
       :height="height"
     >
       <template #cell(level)="{ item: { level }}">
@@ -251,6 +271,33 @@ export default {
       fetchParams: {},
     };
   },
+  computed: {
+    ...mapState(['dateFormat']),
+    getMinCalendarDate() {
+      const now = new Date();
+
+      return dayjs(now.setFullYear(now.getFullYear() - 3)).$d;
+    },
+    getLocaleData() {
+      if (this.dateFormat === this.$constants.DATE_FORMAT_US) {
+        return {
+          format: 'mm/dd/yyyy',
+        };
+      }
+
+      return {
+        format: 'dd/mm/yyyy',
+      };
+    },
+    isDatePickerSelected() {
+      return this.dateRange.startDate && this.dateRange.endDate;
+    },
+    isSelectedDatesEqual() {
+      return (
+        this.dateRange.startDate.getTime() === this.dateRange.endDate.getTime()
+      );
+    },
+  },
   watch: {
     operations: {
       deep: true,
@@ -268,6 +315,9 @@ export default {
         this.dropdownIsBusy = false;
       },
     },
+  },
+  created() {
+    this.setFetchParams();
   },
   methods: {
     formatDate(date) {
@@ -335,36 +385,6 @@ export default {
 
       this.fetchParams = options;
     },
-  },
-  computed: {
-    ...mapState(['dateFormat']),
-    getMinCalendarDate() {
-      const now = new Date();
-
-      return dayjs(now.setFullYear(now.getFullYear() - 3)).$d;
-    },
-    getLocaleData() {
-      if (this.dateFormat === this.$constants.DATE_FORMAT_US) {
-        return {
-          format: 'mm/dd/yyyy',
-        };
-      }
-
-      return {
-        format: 'dd/mm/yyyy',
-      };
-    },
-    isDatePickerSelected() {
-      return this.dateRange.startDate && this.dateRange.endDate;
-    },
-    isSelectedDatesEqual() {
-      return (
-        this.dateRange.startDate.getTime() === this.dateRange.endDate.getTime()
-      );
-    },
-  },
-  created() {
-    this.setFetchParams();
   },
 };
 </script>

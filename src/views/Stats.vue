@@ -1,12 +1,19 @@
 <template>
   <div class="stats">
-    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
+    <Breadcrumbs
+      class="breadcrumbs"
+      :crumbs="breadcrumbs"
+    />
 
     <div class="stats__container">
       <b-row v-if="loading && items === null">
         <b-col cols="12">
           <div class="text-center account__loading">
-            <font-awesome-icon class="icon account__icon" icon="spinner" spin />
+            <font-awesome-icon
+              class="icon account__icon"
+              icon="spinner"
+              spin
+            />
           </div>
         </b-col>
       </b-row>
@@ -19,9 +26,16 @@
           </div>
         </b-col>
       </b-row>
-      <div class="stats__charts" v-else>
+      <div
+        v-else
+        class="stats__charts"
+      >
         <b-row>
-          <b-col class="stats__information" cols="12" md="6">
+          <b-col
+            class="stats__information"
+            cols="12"
+            md="6"
+          >
             <div class="stats__section">
               <b-card header="Escrow ratio">
                 <b-card-text class="stats__content">
@@ -30,16 +44,20 @@
                       :chart-data="getEscrowRatioData"
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
-                      :tooltipsLabelCallback="tooltipsLabelCallback"
+                      :tooltips-label-callback="tooltipsLabelCallback"
                       :y-ticks-callback="yTickEscrowCallback"
-                      :yTicksStepSize="1"
+                      :y-ticks-step-size="1"
                     />
                   </div>
                 </b-card-text>
               </b-card>
             </div>
           </b-col>
-          <b-col class="stats__information" cols="12" md="6">
+          <b-col
+            class="stats__information"
+            cols="12"
+            md="6"
+          >
             <div class="stats__section">
               <b-card header="Transfer volume">
                 <b-card-text class="stats__content">
@@ -59,25 +77,29 @@
           </b-col>
         </b-row>
         <b-row class="stats__information">
-          <b-col class="stats__information" cols="12" md="6">
+          <b-col
+            class="stats__information"
+            cols="12"
+            md="6"
+          >
             <div class="stats__section stats__section--filter">
               <b-card header="# of operations">
                 <b-button-group class="stats__actions">
                   <b-button
-                    @click="operationDateFormat = 'D'"
                     class="stats__switcher"
                     :class="{
                       'stats__switcher--active': operationDateFormat === 'D',
                     }"
+                    @click="operationDateFormat = 'D'"
                   >
                     day
                   </b-button>
                   <b-button
-                    @click="operationDateFormat = 'H'"
                     class="stats__switcher"
                     :class="{
                       'stats__switcher--active': operationDateFormat === 'H',
                     }"
+                    @click="operationDateFormat = 'H'"
                   >
                     hour
                   </b-button>
@@ -89,7 +111,7 @@
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
                       :tooltips-label-callback="tooltipsFeesLabelCallback"
-                      :yTicksCallback="formattedTicksCallback"
+                      :y-ticks-callback="formattedTicksCallback"
                       :y-ticks-step-size="100"
                     />
                   </div>
@@ -97,7 +119,11 @@
               </b-card>
             </div>
           </b-col>
-          <b-col class="stats__information" cols="12" md="6">
+          <b-col
+            class="stats__information"
+            cols="12"
+            md="6"
+          >
             <div class="stats__section">
               <b-card header="# of accounts">
                 <b-card-text class="stats__content">
@@ -107,7 +133,7 @@
                       :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                       :y-axes-begin-at-zero="false"
                       :tooltips-label-callback="tooltipsFeesLabelCallback"
-                      :yTicksCallback="formattedTicksCallback"
+                      :y-ticks-callback="formattedTicksCallback"
                       class="stats-accounts"
                       :y-ticks-step-size="10"
                     />
@@ -118,25 +144,29 @@
           </b-col>
         </b-row>
         <b-row class="stats__information">
-          <b-col class="stats__information" cols="12" md="6">
+          <b-col
+            class="stats__information"
+            cols="12"
+            md="6"
+          >
             <div class="stats__section stats__section--filter">
               <b-card header="Fee volume">
                 <b-button-group class="stats__actions">
                   <b-button
-                    @click="feesDateFormat = 'D'"
                     class="stats__switcher"
                     :class="{
                       'stats__switcher--active': feesDateFormat === 'D',
                     }"
+                    @click="feesDateFormat = 'D'"
                   >
                     day
                   </b-button>
                   <b-button
-                    @click="feesDateFormat = 'H'"
                     class="stats__switcher"
                     :class="{
                       'stats__switcher--active': feesDateFormat === 'H',
                     }"
+                    @click="feesDateFormat = 'H'"
                   >
                     hour
                   </b-button>
@@ -156,7 +186,11 @@
               </b-card>
             </div>
           </b-col>
-          <b-col class="stats__information" cols="12" md="6">
+          <b-col
+            class="stats__information"
+            cols="12"
+            md="6"
+          >
             <div class="stats__section">
               <b-card header="Top-10 voting power">
                 <b-card-text class="stats__content">

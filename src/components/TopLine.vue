@@ -7,22 +7,37 @@
       </div>
       <b-nav-item-dropdown class="top-line__item network-selection">
         <template slot="button-content">
-          <font-awesome-icon icon="network-wired" class="icon" />
+          <font-awesome-icon
+            icon="network-wired"
+            class="icon"
+          />
           Mainnet
         </template>
-        <b-dropdown-item disabled active-class="top-line__active">
-          <font-awesome-icon icon="network-wired" class="icon" />
+        <b-dropdown-item
+          disabled
+          active-class="top-line__active"
+        >
+          <font-awesome-icon
+            icon="network-wired"
+            class="icon"
+          />
           Testnet
         </b-dropdown-item>
       </b-nav-item-dropdown>
       <div class="top-line__item language">
         <b-nav-item-dropdown class="language-selection">
           <template slot="button-content">
-            <font-awesome-icon icon="flag" class="icon" />
+            <font-awesome-icon
+              icon="flag"
+              class="icon"
+            />
             En
           </template>
           <b-dropdown-item disabled>
-            <font-awesome-icon icon="flag" class="icon" />
+            <font-awesome-icon
+              icon="flag"
+              class="icon"
+            />
             Ru
           </b-dropdown-item>
         </b-nav-item-dropdown>

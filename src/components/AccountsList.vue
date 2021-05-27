@@ -1,7 +1,7 @@
 <template>
   <CommonTable
     class="accounts-list"
-    requestName="getAccounts"
+    request-name="getAccounts"
     :fields="fields"
   >
     <template #cell(number)="{ index }">

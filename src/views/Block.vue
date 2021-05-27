@@ -1,55 +1,81 @@
 <template>
-  <div class="block" :key="$route.params.id">
-    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
+  <div
+    :key="$route.params.id"
+    class="block"
+  >
+    <Breadcrumbs
+      class="breadcrumbs"
+      :crumbs="breadcrumbs"
+    />
 
-    <b-container class="block__container" fluid="lg">
+    <b-container
+      class="block__container"
+      fluid="lg"
+    >
       <b-row v-if="loading && !block">
         <b-col cols="12">
           <div class="text-center block__loading">
-            <font-awesome-icon class="icon block__icon" icon="spinner" spin />
+            <font-awesome-icon
+              class="icon block__icon"
+              icon="spinner"
+              spin
+            />
           </div>
         </b-col>
       </b-row>
       <b-row v-else-if="block">
-        <b-col cols="12" md="4">
+        <b-col
+          cols="12"
+          md="4"
+        >
           <b-card header="General information">
             <b-card-text class="block__content">
-              <div class="block__header">Block height</div>
+              <div class="block__header">
+                Block height
+              </div>
               <div class="block__navigation">
                 <div
                   :disabled="Number($route.params.id) === 0"
-                  @click="
-                    onNavigation('prev', Number($route.params.id) === 0)
-                  "
                   :class="{
                     'card__block-prev--disabled':
                       Number($route.params.id) === 0,
                   }"
                   class="card__block-prev"
+                  @click="
+                    onNavigation('prev', Number($route.params.id) === 0)
+                  "
                 >
-                  <font-awesome-icon icon="chevron-left" class="ml-1" />
+                  <font-awesome-icon
+                    icon="chevron-left"
+                    class="ml-1"
+                  />
                 </div>
                 {{ block.level }}
                 <div
                   :disabled="Number($route.params.id) === height"
-                  @click="
-                    onNavigation('next', Number($route.params.id) === height)
-                  "
                   :class="{
                     'card__block-prev--disabled':
                       Number($route.params.id) === height,
                   }"
                   class="card__block-next"
+                  @click="
+                    onNavigation('next', Number($route.params.id) === height)
+                  "
                 >
-                  <font-awesome-icon icon="chevron-right" class="mr-1" />
+                  <font-awesome-icon
+                    icon="chevron-right"
+                    class="mr-1"
+                  />
                 </div>
               </div>
             </b-card-text>
             <b-card-text class="block__content">
-              <div class="block__header">Block hash</div>
+              <div class="block__header">
+                Block hash
+              </div>
               <div
-                @click="copyToClipboard(block.hash)"
                 class="block__copy"
+                @click="copyToClipboard(block.hash)"
               >
                 <span :ref="block.hash">
                   {{ block.hash }}
@@ -64,7 +90,9 @@
               </div>
             </b-card-text>
             <b-card-text class="block__content">
-              <div class="block__header">Epoch</div>
+              <div class="block__header">
+                Epoch
+              </div>
               {{ block.epoch }}
             </b-card-text>
             <b-card-text class="block__content">
@@ -88,18 +116,27 @@
               </div>
             </b-card-text>
             <b-card-text
-              class="block__content"
               v-if="block.number_of_signatures"
+              class="block__content"
             >
-              <div class="block__header">Signatures</div>
+              <div class="block__header">
+                Signatures
+              </div>
               {{ block.number_of_signatures }}
             </b-card-text>
-            <b-card-text class="block__content" v-if="block.number_of_txs">
-              <div class="block__header">Operations</div>
+            <b-card-text
+              v-if="block.number_of_txs"
+              class="block__content"
+            >
+              <div class="block__header">
+                Operations
+              </div>
               {{ block.number_of_txs }}
             </b-card-text>
             <b-card-text class="block__content">
-              <div class="block__header">Date</div>
+              <div class="block__header">
+                Date
+              </div>
               {{ block.timestamp | formatDate }}
               <div class="block__time-ago">
                 ({{ block.timestamp | formatDaysAgo }})
@@ -107,14 +144,17 @@
             </b-card-text>
           </b-card>
         </b-col>
-        <b-col cols="12" md="8">
+        <b-col
+          cols="12"
+          md="8"
+        >
           <b-card
             no-body
           >
             <CommonTable
-              requestName="getTransactions"
+              request-name="getTransactions"
               :fields="fields"
-              :fetchParams="fetchParams"
+              :fetch-params="fetchParams"
               height="min-content"
             >
               <template #cell(fees)="{ item: { fees } }">
@@ -228,6 +268,18 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapState(['height']),
+  },
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        this.setFetchParams();
+        this.fetch();
+      },
+    },
+  },
   methods: {
     ...mapMutations(['setInfo']),
     onNavigation(position, disabled) {
@@ -302,18 +354,6 @@ export default {
       }
 
       [this.block] = response.data;
-    },
-  },
-  computed: {
-    ...mapState(['height']),
-  },
-  watch: {
-    $route: {
-      immediate: true,
-      async handler() {
-        this.setFetchParams();
-        this.fetch();
-      },
     },
   },
 };

@@ -21,7 +21,7 @@ describe('Account.vue', () => {
       mocks: {
         $route,
         $api: {
-          getAccount: () => jest.fn().mockReturnValue(serverResponse)
+          getAccount: () => jest.fn().mockReturnValue(serverResponse),
         },
       },
     });
@@ -37,7 +37,7 @@ describe('Account.vue', () => {
         $router,
         $route,
         $api: {
-          getAccount: () => jest.fn().mockReturnValue({ status: 404 })
+          getAccount: () => jest.fn().mockReturnValue({ status: 404 }),
         },
       },
     });

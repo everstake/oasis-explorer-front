@@ -1,17 +1,30 @@
 <template>
   <div :key="$route.params.id">
-    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
+    <Breadcrumbs
+      class="breadcrumbs"
+      :crumbs="breadcrumbs"
+    />
 
     <b-container fluid="lg">
-      <b-row v-if="loading && !account" class="account__empty">
+      <b-row
+        v-if="loading && !account"
+        class="account__empty"
+      >
         <b-col cols="12">
           <div class="text-center account__loading">
-            <font-awesome-icon class="icon account__icon" icon="spinner" spin />
+            <font-awesome-icon
+              class="icon account__icon"
+              icon="spinner"
+              spin
+            />
           </div>
         </b-col>
       </b-row>
 
-      <b-row class="account__information" v-else-if="account">
+      <b-row
+        v-else-if="account"
+        class="account__information"
+      >
         <b-col cols="4">
           <b-card
             header="Account information"
@@ -22,9 +35,14 @@
                   <div class="account__container">
                     <div class="account__item">
                       Address:
-                      <p class="account__value">{{ account.address }}</p>
+                      <p class="account__value">
+                        {{ account.address }}
+                      </p>
                     </div>
-                    <div class="account__item" v-if="account.entity_address">
+                    <div
+                      v-if="account.entity_address"
+                      class="account__item"
+                    >
                       Entity address:
                       <p class="account__value">
                         <router-link
@@ -40,7 +58,9 @@
                     </div>
                     <div class="account__item">
                       Type:
-                      <p class="account__value">{{account.type }}</p>
+                      <p class="account__value">
+                        {{ account.type }}
+                      </p>
                     </div>
                   </div>
                 </b-col>
@@ -48,43 +68,57 @@
                   <div class="account__container">
                     <div class="account__item">
                       Total balance:
-                      <p class="account__value">{{account.total_balance | formatAmount }}</p>
+                      <p class="account__value">
+                        {{ account.total_balance | formatAmount }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Liquid balance:
-                      <p class="account__value">{{ account.liquid_balance | formatAmount }}</p>
+                      <p class="account__value">
+                        {{ account.liquid_balance | formatAmount }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Escrow balance:
-                      <p class="account__value">{{account.escrow_balance | formatAmount }}</p>
+                      <p class="account__value">
+                        {{ account.escrow_balance | formatAmount }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Debonding balance:
-                      <p class="account__value">{{account.debonding_balance | formatAmount }}</p>
+                      <p class="account__value">
+                        {{ account.debonding_balance | formatAmount }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Delegations balance:
                       <p class="account__value">
-                        {{account.delegations_balance | formatAmount }}
+                        {{ account.delegations_balance | formatAmount }}
                       </p>
                     </div>
                     <div class="account__item">
                       Debonding delegations balance:
                       <p class="account__value">
-                        {{account.debonding_delegations_balance | formatAmount }}
+                        {{ account.debonding_delegations_balance | formatAmount }}
                       </p>
                     </div>
                     <div class="account__item">
                       Nonce:
-                      <p class="account__value">{{account.nonce }}</p>
+                      <p class="account__value">
+                        {{ account.nonce }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Last active:
-                      <p class="account__value">{{account.last_active | formatUTCDaysAgo }}</p>
+                      <p class="account__value">
+                        {{ account.last_active | formatUTCDaysAgo }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Created at:
-                      <p class="account__value">{{account.created_at | formatUTCDate }}</p>
+                      <p class="account__value">
+                        {{ account.created_at | formatUTCDate }}
+                      </p>
                     </div>
                   </div>
                 </b-col>
@@ -93,7 +127,10 @@
           </b-card>
         </b-col>
 
-        <b-col cols="8" md="8">
+        <b-col
+          cols="8"
+          md="8"
+        >
           <div class="account__cards-wrapper">
             <b-card
               class="account__actions account__actions--desktop"
@@ -116,9 +153,9 @@
               no-body
             >
               <CommonTable
-                requestName="getTransactions"
+                request-name="getTransactions"
                 :fields="fields"
-                :fetchParams="fetchParams"
+                :fetch-params="fetchParams"
                 height="min-content"
               >
                 <template #cell(block_level)="{ item: { block_level }}">
@@ -208,11 +245,11 @@
                 </template>
 
                 <template #cell(storage)="{ item: { storage } }">
-                  {{ storage || '-'}}
+                  {{ storage || '-' }}
                 </template>
 
                 <template #cell(gas_used)="{ item: { gas_used }}">
-                  {{ gas_used || '-'}}
+                  {{ gas_used || '-' }}
                 </template>
 
                 <template #cell(fees)="{ item: { fees } }">
@@ -240,14 +277,17 @@
                 :chart-data="stakeChartData"
                 :x-axes-max-ticks-limit="xAxesMaxTicksLimit"
                 :y-axes-begin-at-zero="false"
-                :yTicksCallback="chartsTicksCallback"
+                :y-ticks-callback="chartsTicksCallback"
               />
             </b-card>
           </div>
         </b-col>
       </b-row>
 
-      <b-row v-else class="account__content">
+      <b-row
+        v-else
+        class="account__content"
+      >
         <b-col cols="12">
           <div class="text-center block__empty">
             No data
@@ -255,7 +295,10 @@
         </b-col>
       </b-row>
 
-      <b-row class="account__validator" v-if="account && account.validator">
+      <b-row
+        v-if="account && account.validator"
+        class="account__validator"
+      >
         <b-col cols="12">
           <b-card
             header="Validator information"
@@ -276,43 +319,61 @@
                     </div>
                     <div class="account__item">
                       Consensus address:
-                      <p class="account__value">{{ account.validator.consensus_address }}</p>
+                      <p class="account__value">
+                        {{ account.validator.consensus_address }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Delegators count:
-                      <p class="account__value">{{ account.validator.depositors_count }}</p>
+                      <p class="account__value">
+                        {{ account.validator.depositors_count }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Blocks count:
-                      <p class="account__value">{{ account.validator.blocks_count }}</p>
+                      <p class="account__value">
+                        {{ account.validator.blocks_count }}
+                      </p>
                     </div>
                     <div class="account__item">
-                    Signatures count:
-                    <p class="account__value">{{ account.validator.signatures_count }}</p>
-                  </div>
+                      Signatures count:
+                      <p class="account__value">
+                        {{ account.validator.signatures_count }}
+                      </p>
+                    </div>
                   </div>
                 </b-col>
                 <b-col cols="6">
                   <div class="account__container">
                     <div class="account__item">
                       Rate change interval:
-                      <p class="account__value">{{ account.validator.rate_change_interval }}</p>
+                      <p class="account__value">
+                        {{ account.validator.rate_change_interval }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Rate bound lead:
-                      <p class="account__value">{{ account.validator.rate_bound_lead }}</p>
+                      <p class="account__value">
+                        {{ account.validator.rate_bound_lead }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Max rate steps:
-                      <p class="account__value">{{ account.validator.max_rate_steps }}</p>
+                      <p class="account__value">
+                        {{ account.validator.max_rate_steps }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Max bound steps:
-                      <p class="account__value">{{ account.validator.max_bound_steps }}</p>
+                      <p class="account__value">
+                        {{ account.validator.max_bound_steps }}
+                      </p>
                     </div>
                     <div class="account__item">
                       Status:
-                      <p class="account__value">{{ account.validator.status }}</p>
+                      <p class="account__value">
+                        {{ account.validator.status }}
+                      </p>
                     </div>
                   </div>
                 </b-col>
@@ -386,71 +447,6 @@ export default {
         'rgba(47, 72, 88, .4)',
       ],
     };
-  },
-  methods: {
-    onClickTab(tab) {
-      this.activeTab = tab;
-    },
-    chartsTicksCallback(label) {
-      if (label > 1) {
-        return numeral(label / 1000000000).format('0,0.[000000000]');
-      }
-
-      return label.toFixed();
-    },
-    async fetch(dataType) {
-      this.loading = true;
-
-      switch (dataType) {
-        case 'account':
-          await this.fetchAccount();
-          break;
-        case 'chart-stake':
-          await this.fetchChartStake();
-          break;
-        default:
-      }
-
-      this.loading = false;
-    },
-    async fetchAccount() {
-      this.account = null;
-
-      try {
-        const response = await this.$api.getAccount({
-          id: this.$route.params.id,
-        });
-
-        if (response.status !== 200) {
-          throw new Error(response);
-        }
-
-        const unixEpoch = '1970-01-01T00:00:00Z';
-        const mainnetStart = '2020-11-18T16:01:00Z';
-        const { created_at, last_active } = response.data;
-
-        if (created_at === unixEpoch && last_active === unixEpoch) {
-          response.data.created_at = mainnetStart;
-          response.data.last_active = mainnetStart;
-        }
-
-        this.account = response.data;
-      } catch (e) {
-        this.$router.push({ name: '404' });
-        console.error(e);
-      }
-    },
-    async fetchChartStake() {
-      const response = await this.$api.getChartStake({
-        limit: 10,
-        from: this.datesInSeconds.monthAgo,
-        to: this.datesInSeconds.today,
-        frame: 'D',
-        id: this.$route.params.id,
-      });
-
-      this.charts.stake = response.data;
-    },
   },
   computed: {
     stakeChartData() {
@@ -584,6 +580,71 @@ export default {
       if (key === 'charts') {
         this.fetch('chart-stake');
       }
+    },
+  },
+  methods: {
+    onClickTab(tab) {
+      this.activeTab = tab;
+    },
+    chartsTicksCallback(label) {
+      if (label > 1) {
+        return numeral(label / 1000000000).format('0,0.[000000000]');
+      }
+
+      return label.toFixed();
+    },
+    async fetch(dataType) {
+      this.loading = true;
+
+      switch (dataType) {
+        case 'account':
+          await this.fetchAccount();
+          break;
+        case 'chart-stake':
+          await this.fetchChartStake();
+          break;
+        default:
+      }
+
+      this.loading = false;
+    },
+    async fetchAccount() {
+      this.account = null;
+
+      try {
+        const response = await this.$api.getAccount({
+          id: this.$route.params.id,
+        });
+
+        if (response.status !== 200) {
+          throw new Error(response);
+        }
+
+        const unixEpoch = '1970-01-01T00:00:00Z';
+        const mainnetStart = '2020-11-18T16:01:00Z';
+        const { created_at, last_active } = response.data;
+
+        if (created_at === unixEpoch && last_active === unixEpoch) {
+          response.data.created_at = mainnetStart;
+          response.data.last_active = mainnetStart;
+        }
+
+        this.account = response.data;
+      } catch (e) {
+        this.$router.push({ name: '404' });
+        console.error(e);
+      }
+    },
+    async fetchChartStake() {
+      const response = await this.$api.getChartStake({
+        limit: 10,
+        from: this.datesInSeconds.monthAgo,
+        to: this.datesInSeconds.today,
+        frame: 'D',
+        id: this.$route.params.id,
+      });
+
+      this.charts.stake = response.data;
     },
   },
 };

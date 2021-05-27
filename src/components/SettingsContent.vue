@@ -2,8 +2,12 @@
   <div class="search__content">
     <b-container fluid="lg">
       <b-row class="search__row">
-        <p class="search__title">Oasis Monitor</p>
-        <p class="search__subtitle">Settings</p>
+        <p class="search__title">
+          Oasis Monitor
+        </p>
+        <p class="search__subtitle">
+          Settings
+        </p>
         <div class="search__controls search__controls--inline">
           <b-form>
             <b-form-group label="Date format">
@@ -14,7 +18,11 @@
               >
                 Standart format
               </b-form-radio>
-              <b-form-radio v-model="dateFormat" name="us" value="us">
+              <b-form-radio
+                v-model="dateFormat"
+                name="us"
+                value="us"
+              >
                 US format
               </b-form-radio>
             </b-form-group>
@@ -30,7 +38,10 @@
               }"
               :disabled="loading"
             >
-              <span v-if="loading" disabled>
+              <span
+                v-if="loading"
+                disabled
+              >
                 Saving
                 <font-awesome-icon
                   icon="sync-alt"
@@ -102,15 +113,6 @@ export default {
       },
     },
   },
-  methods: {
-    ...mapMutations(['setDateFormat']),
-    onSubmit(event) {
-      event.preventDefault();
-      const { email, name, subscribe } = this;
-      this.$emit('handleSubmit', { email, name, subscribe });
-      this.isFormSaved = true;
-    },
-  },
   created() {
     const isDateFormatAvailable = localStorage.getItem('dateFormat');
 
@@ -139,12 +141,14 @@ export default {
       this.subscribe = localStorage.getItem('subscribe');
     }
   },
+  methods: {
+    ...mapMutations(['setDateFormat']),
+    onSubmit(event) {
+      event.preventDefault();
+      const { email, name, subscribe } = this;
+      this.$emit('handleSubmit', { email, name, subscribe });
+      this.isFormSaved = true;
+    },
+  },
 };
 </script>
-
-<style lang="scss">
-.settings {
-  &__button {
-  }
-}
-</style>

@@ -1,11 +1,14 @@
-/*eslint-disable*/
 const webpack = require('webpack');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 module.exports = {
-  productionSourceMap: process.env.NODE_ENV != 'production',
+  productionSourceMap: process.env.NODE_ENV !== 'production',
   configureWebpack: {
     plugins: [
       new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /en|ru/),
+      new StyleLintPlugin({
+        files: ['src/{*,**/*}.{vue,scss}'],
+      }),
     ],
   },
   css: {

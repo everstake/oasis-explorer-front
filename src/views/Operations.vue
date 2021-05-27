@@ -1,6 +1,9 @@
 <template>
   <div class="transactions">
-    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
+    <Breadcrumbs
+      class="breadcrumbs"
+      :crumbs="breadcrumbs"
+    />
     <b-container fluid="lg">
       <OperationsList :filters="true" />
     </b-container>

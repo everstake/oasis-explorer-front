@@ -1,5 +1,5 @@
 <template>
-  <v-lazy-image
+  <VLazyImage
     :src-placeholder="placeholderSrc"
     :src="logoSrc"
     :alt="`${accountName} logotype`"

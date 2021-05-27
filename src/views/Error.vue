@@ -1,6 +1,9 @@
 <template>
   <div class="not-found">
-    <Breadcrumbs class="breadcrumbs" :crumbs="getBreadcrumbs" />
+    <Breadcrumbs
+      class="breadcrumbs"
+      :crumbs="getBreadcrumbs"
+    />
     <div class="not-found__content">
       {{ errorMessage }}
     </div>

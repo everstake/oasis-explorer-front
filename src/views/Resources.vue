@@ -1,55 +1,73 @@
 <template>
   <div class="resources">
-    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
+    <Breadcrumbs
+      class="breadcrumbs"
+      :crumbs="breadcrumbs"
+    />
 
-    <div class="container" fluid="lg">
+    <div
+      class="container"
+      fluid="lg"
+    >
       <div class="resources__content">
-        <p class="resources__title">Wallets</p>
+        <p class="resources__title">
+          Wallets
+        </p>
         <p class="resources__text">
           <a
             href="https://docs.oasis.dev/hsm/ledger.html#prerequisites"
             target="_blank"
-            >Ledger</a
-          >
+          >Ledger</a>
         </p>
 
-        <p class="resources__title">Social links</p>
+        <p class="resources__title">
+          Social links
+        </p>
         <p class="resources__text">
           <a
             href="https://app.slack.com/client/TK9CZ7USZ/CLZPDEWTA"
             target="_blank"
-            >Slack</a
-          >
+          >Slack</a>
         </p>
         <p class="resources__text">
-          <a href="https://t.me/oasisprotocolcommunity" target="_blank"
-            >Telegram</a
-          >
+          <a
+            href="https://t.me/oasisprotocolcommunity"
+            target="_blank"
+          >Telegram</a>
         </p>
         <p class="resources__text">
-          <a href="https://www.oasislabs.com/blog" target="_blank">Blog</a>
+          <a
+            href="https://www.oasislabs.com/blog"
+            target="_blank"
+          >Blog</a>
         </p>
         <p class="resources__text">
           <a
             href="https://oasisfoundation.typeform.com/to/aFYokz"
             target="_blank"
-            >Dev Accelerator</a
-          >
+          >Dev Accelerator</a>
         </p>
 
-        <p class="resources__title">Documentation</p>
-        <p class="resources__text">
-          <a href="https://docs.oasis.dev/overview.html" target="_blank"
-            >Docs</a
-          >
+        <p class="resources__title">
+          Documentation
         </p>
         <p class="resources__text">
-          <a href="https://github.com/oasislabs" target="_blank">Github</a>
+          <a
+            href="https://docs.oasis.dev/overview.html"
+            target="_blank"
+          >Docs</a>
         </p>
         <p class="resources__text">
-          <a href="https://oasisprotocol.org/papers" target="_blank"
-            >Research papers</a
-          >
+          <a
+            href="https://github.com/oasislabs"
+            target="_blank"
+          >Github</a>
+        </p>
+        <p class="resources__text">
+          <a
+            href="https://oasisprotocol.org/papers"
+            target="_blank"
+          >Research papers</a>
         </p>
       </div>
     </div>

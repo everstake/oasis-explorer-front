@@ -1,10 +1,10 @@
 <template>
   <CommonTable
     class="blocks-list"
-    requestName="getBlocks"
+    request-name="getBlocks"
     :fields="fields"
-    :fetchParams="listFetchParams"
-    :isFetchOnScrollEnabled="isFetchOnScrollEnabled"
+    :fetch-params="listFetchParams"
+    :is-fetch-on-scroll-enabled="isFetchOnScrollEnabled"
     :height="height"
   >
     <template #cell(level)="{ item: { level } }">

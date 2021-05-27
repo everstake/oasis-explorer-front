@@ -5,39 +5,80 @@
         <div class="footer__nav">
           <ul class="footer__list">
             <li class="footer__item">
-              <router-link class="footer__link" to="/">Home</router-link>
+              <router-link
+                class="footer__link"
+                to="/"
+              >
+                Home
+              </router-link>
             </li>
             <li class="footer__item">
-              <router-link class="footer__link" to="/blocks">Blocks</router-link>
+              <router-link
+                class="footer__link"
+                to="/blocks"
+              >
+                Blocks
+              </router-link>
             </li>
             <li class="footer__item">
-              <router-link class="footer__link" to="/operations">Operations</router-link>
+              <router-link
+                class="footer__link"
+                to="/operations"
+              >
+                Operations
+              </router-link>
             </li>
           </ul>
           <ul class="footer__list">
             <li class="footer__item">
-              <router-link class="footer__link" to="/validators">
+              <router-link
+                class="footer__link"
+                to="/validators"
+              >
                 Validators
               </router-link>
             </li>
             <li class="footer__item">
-              <router-link class="footer__link" to="/accounts">Accounts</router-link>
+              <router-link
+                class="footer__link"
+                to="/accounts"
+              >
+                Accounts
+              </router-link>
             </li>
             <li class="footer__item">
-              <router-link class="footer__link" to="/stats">Stats</router-link>
+              <router-link
+                class="footer__link"
+                to="/stats"
+              >
+                Stats
+              </router-link>
             </li>
           </ul>
           <ul class="footer__list">
             <li class="footer__item">
-              <a class="footer__link" href="https://github.com/everstake/oasis-explorer-front" target="_blank">Github Frontend</a>
+              <a
+                class="footer__link"
+                href="https://github.com/everstake/oasis-explorer-front"
+                target="_blank"
+              >Github Frontend</a>
             </li>
             <li class="footer__item">
-              <a class="footer__link" href="https://github.com/everstake/oasis-explorer" target="_blank">Github Backend</a>
+              <a
+                class="footer__link"
+                href="https://github.com/everstake/oasis-explorer"
+                target="_blank"
+              >Github Backend</a>
             </li>
           </ul>
           <ul class="footer__list">
             <li class="footer__item">
-              <router-link class="footer__link" to="/resources">Resources</router-link>
+              <router-link
+                class="footer__link"
+                to="/resources"
+              >
+                Resources
+              </router-link>
             </li>
             <li class="footer__item">
               <div class="footer__socials">
@@ -55,7 +96,9 @@
             <div class="footer-line__logo">
               <TheLogotype class="footer__logo logo--white" />
             </div>
-            <div class="footer-copyright">Oasis Monitor © 2020 All Rights Reserved</div>
+            <div class="footer-copyright">
+              Oasis Monitor © 2020 All Rights Reserved
+            </div>
           </div>
         </b-col>
       </b-row>

@@ -47,23 +47,9 @@
     </template>
 
     <template #cell(status)="{ item: { status } }">
-      <div
-        :class="['common-table__status', {
-          'common-table__status--active': status === 'active',
-          'common-table__status--inactive': status === 'inactive',
-        }]"
-      >
-        <font-awesome-icon
-          v-if="status === 'active'"
-          size="1x"
-          icon="check-circle"
-        />
-        <font-awesome-icon
-          v-else-if="status === 'inactive'"
-          size="1x"
-          icon="times-circle"
-        />
-      </div>
+      <StatusIcon
+        :status="status === 'active'"
+      />
     </template>
 
     <template #cell(node_address)="{ item: { node_address }}">
@@ -91,12 +77,14 @@
 <script>
 import ValidatorLogotype from '@/components/ValidatorLogotype.vue';
 import CommonTable from '@/components/CommonTable/CommonTable.vue';
+import StatusIcon from '@/components/StatusIcon.vue';
 
 export default {
   name: 'ValidatorsList',
   components: {
     CommonTable,
     ValidatorLogotype,
+    StatusIcon,
   },
   data() {
     return {
@@ -118,7 +106,7 @@ export default {
         { key: 'blocks_count', label: 'Proposals', sortable: true },
         { key: 'signatures_count', label: 'Signatures', sortable: true },
         { key: 'fee', label: 'Fee', sortable: true },
-        { key: 'status', label: 'Status' },
+        { key: 'status', label: 'Status', class: 'cell-center' },
         { key: 'validate_since', label: 'Registered', sortable: true },
       ],
     };

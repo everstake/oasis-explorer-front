@@ -172,6 +172,12 @@
         </span>
       </template>
 
+      <template #cell(status)="{ item: { status } }">
+        <StatusIcon
+          :status="status"
+        />
+      </template>
+
       <template #cell(timestamp)="{ item: { timestamp }}">
         {{ timestamp | formatDate }}
 
@@ -189,12 +195,14 @@ import DateRangePicker from 'vue-daterange-picker-light';
 import { mapState } from 'vuex';
 import dayjs from 'dayjs';
 import { DEFAULT_HEIGHT } from '@/components/CommonTable/constants';
+import StatusIcon from '@/components/StatusIcon.vue';
 
 export default {
   name: 'OperationsList',
   components: {
     DateRangePicker,
     CommonTable,
+    StatusIcon,
   },
   props: {
     fields: {
@@ -206,6 +214,7 @@ export default {
         { key: 'to', label: 'To' },
         { key: 'amount', label: 'Amount', sortable: true },
         { key: 'nonce', label: 'Nonce' },
+        { key: 'status', label: 'Status' },
         { key: 'type', label: 'Type' },
         { key: 'timestamp', label: 'Date', sortable: true },
       ],

@@ -1,39 +1,4 @@
 .home .card {
-  &--home {
-    height: 100%;
-
-    & .card-text {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 60px;
-    }
-
-    & .card-title {
-      font-size: 20px;
-      color: $color-gray-666;
-    }
-
-    & .card-text {
-      font-size: 26px;
-      color: #333;
-    }
-
-    & .card-body {
-      background-color: rgba(243, 243, 243, .8);
-    }
-  }
-  &--link {
-    & .card-body {
-      cursor: pointer;
-      background-color: rgba(243, 243, 243, .8);
-    }
-
-    & .card-text .home__link {
-      color: #4cd4a9;
-    }
-  }
-
   &-body {
     background-color: rgba(243, 243, 243, .8);
   }
@@ -50,5 +15,39 @@
     font-size: 16px;
     font-weight: 700;
     color: #333;
+  }
+
+  &--home {
+    height: 100%;
+
+    & .card-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60px;
+
+      font-size: 26px;
+      color: #333;
+    }
+
+    & .card-title {
+      font-size: 20px;
+      color: $color-gray-666;
+    }
+
+    & .card-body {
+      background-color: rgba(243, 243, 243, .8);
+    }
+  }
+
+  &--link {
+    & .card-body {
+      cursor: pointer;
+      background-color: rgba(243, 243, 243, .8);
+    }
+
+    & .card-text .home__link {
+      color: #4cd4a9;
+    }
   }
 }

@@ -397,7 +397,7 @@ export default {
   }
 
   &__icon {
-    margin-left: 10px;
+    margin-left: 5px;
 
     @include from-480-down {
       display: none;
@@ -459,12 +459,10 @@ export default {
     color: #fff;
   }
 
-  &__icon {
-    margin-left: 5px;
-  }
-
   &__table {
     position: relative;
+    box-shadow: $box-shadow-table;
+    margin-bottom: 16px;
 
     &--disabled {
       & a {
@@ -482,11 +480,6 @@ export default {
         background-color: $color-primary-transparent-01;
       }
     }
-  }
-
-  &__table {
-    box-shadow: $box-shadow-table;
-    margin-bottom: 16px;
   }
 }
 
@@ -512,16 +505,16 @@ export default {
       background-color: green!important;
     }
 
-    & .custom-checkbox .custom-control-input:checked:focus ~ .custom-control-label::before {
-      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 255, 0, 0.25)
-    }
-
     & .custom-checkbox .custom-control-input:focus ~ .custom-control-label::before {
       box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 0, 0, 0.25)
     }
 
     & .custom-checkbox .custom-control-input:active ~ .custom-control-label::before {
       background-color: #C8FFC8;
+    }
+
+    & .custom-checkbox .custom-control-input:checked:focus ~ .custom-control-label::before {
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 255, 0, 0.25)
     }
   }
 

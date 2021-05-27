@@ -167,21 +167,14 @@ export default {
       }
 
       &:not(:first-child) {
-        @include from-768-down {
-          margin-top: 30px;
-        }
-      }
-
-      &:not(:first-child) {
         margin-left: 100px;
+
+        @include from-768-down {
+          margin: 30px 0 30px 0;
+        }
 
         @include from-1200-down {
           margin-left: 30px;
-        }
-
-        @include from-768-down {
-          margin-left: 0;
-          margin-bottom: 30px;
         }
       }
     }

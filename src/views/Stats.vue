@@ -595,8 +595,6 @@ export default {
 
 <style lang="scss">
 .stats {
-  &__content {
-  }
   &__container {
     display: flex;
     flex-direction: column;

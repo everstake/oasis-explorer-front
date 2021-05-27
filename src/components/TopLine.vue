@@ -108,6 +108,16 @@ export default {
 
 .network-selection,
 .language-selection {
+  & > a {
+    color: #999;
+    @extend .animations__default;
+
+    &:hover {
+      color: $color-primary;
+      @extend .animations__default--hover;
+    }
+  }
+
   &.show {
     & > a {
       color: $color-primary;
@@ -117,16 +127,6 @@ export default {
         color: $color-primary;
         @extend .animations__default--hover;
       }
-    }
-  }
-
-  & > a {
-    color: #999;
-    @extend .animations__default;
-
-    &:hover {
-      color: $color-primary;
-      @extend .animations__default--hover;
     }
   }
 }

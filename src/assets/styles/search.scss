@@ -35,16 +35,16 @@
     top: 10px;
     right: 10px;
 
-    &:hover {
-      & svg {
-        @extend .animations__default--hover;
-      }
-    }
-
     & svg {
       font-size: 35px;
       color: $color-gray-999;
       @extend .animations__default;
+    }
+
+    &:hover {
+      & svg {
+        @extend .animations__default--hover;
+      }
     }
   }
 
@@ -140,8 +140,8 @@
     }
 
     &::-webkit-input-placeholder,
-    &:-ms-input-placeholder,
     &::-moz-placeholder,
+    &:-ms-input-placeholder,
     &:-moz-placeholder {
       font-size: 19px;
       font-weight: 300;

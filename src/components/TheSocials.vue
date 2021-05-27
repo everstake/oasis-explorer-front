@@ -1,32 +1,77 @@
 <template>
   <div class="social">
-    <div v-if="links.twitter" class="social__item">
-      <a :href="links.twitter" target="_blank">
-        <font-awesome-icon class="icon social__icon" :icon="['fab', 'twitter']" />
+    <div
+      v-if="links.twitter"
+      class="social__item"
+    >
+      <a
+        :href="links.twitter"
+        target="_blank"
+      >
+        <font-awesome-icon
+          class="icon social__icon"
+          :icon="['fab', 'twitter']"
+        />
       </a>
     </div>
 
-    <div v-if="links.facebook" class="social__item">
-      <a :href="links.facebook" target="_blank">
-        <font-awesome-icon class="icon social__icon" :icon="['fab', 'facebook-square']" />
+    <div
+      v-if="links.facebook"
+      class="social__item"
+    >
+      <a
+        :href="links.facebook"
+        target="_blank"
+      >
+        <font-awesome-icon
+          class="icon social__icon"
+          :icon="['fab', 'facebook-square']"
+        />
       </a>
     </div>
 
-    <div v-if="links.medium" class="social__item">
-      <a :href="links.medium" target="_blank">
-        <font-awesome-icon class="icon social__icon" :icon="['fab', 'medium-m']" />
+    <div
+      v-if="links.medium"
+      class="social__item"
+    >
+      <a
+        :href="links.medium"
+        target="_blank"
+      >
+        <font-awesome-icon
+          class="icon social__icon"
+          :icon="['fab', 'medium-m']"
+        />
       </a>
     </div>
 
-    <div v-if="links.telegram" class="social__item">
-      <a :href="links.telegram" target="_blank">
-        <font-awesome-icon class="icon social__icon" :icon="['fab', 'telegram']" />
+    <div
+      v-if="links.telegram"
+      class="social__item"
+    >
+      <a
+        :href="links.telegram"
+        target="_blank"
+      >
+        <font-awesome-icon
+          class="icon social__icon"
+          :icon="['fab', 'telegram']"
+        />
       </a>
     </div>
 
-    <div v-if="links.reddit" class="social__item">
-      <a :href="links.reddit" target="_blank">
-        <font-awesome-icon class="icon social__icon" :icon="['fab', 'reddit']" />
+    <div
+      v-if="links.reddit"
+      class="social__item"
+    >
+      <a
+        :href="links.reddit"
+        target="_blank"
+      >
+        <font-awesome-icon
+          class="icon social__icon"
+          :icon="['fab', 'reddit']"
+        />
       </a>
     </div>
   </div>

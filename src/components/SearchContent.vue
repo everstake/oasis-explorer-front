@@ -2,12 +2,17 @@
   <div class="search__content">
     <b-container fluid="lg">
       <b-row class="search__row">
-        <p class="search__title">Oasis Monitor</p>
+        <p class="search__title">
+          Oasis Monitor
+        </p>
         <p class="search__subtitle">
           Search by block height, account or operation
         </p>
         <div class="search__controls">
-          <label class="search__label" for="input">
+          <label
+            class="search__label"
+            for="input"
+          >
             <font-awesome-icon
               class="icon search__icon"
               :icon="['fas', 'search']"
@@ -15,36 +20,43 @@
           </label>
           <input
             v-if="search.completed"
-            :value="search.query"
             id="input"
+            :value="search.query"
             class="search__input"
             type="text"
             placeholder="Enter block height, account or operation"
             aria-label="Search"
-          />
+          >
           <input
             v-else-if="autofocus"
             id="input"
             v-model="query"
-            @keypress.enter.prevent="$emit('handleSubmit', query)"
+            v-autofocus
             class="search__input"
             type="text"
             placeholder="Enter block height, account or operation"
             aria-label="Search"
-            v-autofocus
-          />
+            @keypress.enter.prevent="$emit('handleSubmit', query)"
+          >
           <input
             v-else
             id="input"
             v-model="query"
-            @keypress.enter.prevent="$emit('handleSubmit', query)"
             class="search__input"
             type="text"
             placeholder="Enter block height, account or operation"
             aria-label="Search"
-          />
-          <button @click="$emit('handleSubmit', query)" class="search__submit">
-            <font-awesome-icon v-if="loading" icon="spinner" spin />
+            @keypress.enter.prevent="$emit('handleSubmit', query)"
+          >
+          <button
+            class="search__submit"
+            @click="$emit('handleSubmit', query)"
+          >
+            <font-awesome-icon
+              v-if="loading"
+              icon="spinner"
+              spin
+            />
             <span v-else>Search</span>
           </button>
         </div>

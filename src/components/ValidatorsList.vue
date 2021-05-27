@@ -1,7 +1,7 @@
 <template>
   <CommonTable
     class="validators-list"
-    requestName="getValidators"
+    request-name="getValidators"
     :fields="fields"
   >
     <template #cell(number)="{ index }">
@@ -15,7 +15,7 @@
         <span v-if="media_info && media_info.logotype">
           <ValidatorLogotype
             :src="media_info.logotype"
-            :accountName="account_name"
+            :account-name="account_name"
             class="validators-list__logo"
           />
         </span>

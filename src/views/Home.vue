@@ -4,11 +4,18 @@
       <b-container fluid="lg">
         <div class="home__cards">
           <b-row class="mb-5">
-            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
+            <b-col
+              class="home__col"
+              cols="12"
+              xs="12"
+              sm="12"
+              md="6"
+              lg="3"
+            >
               <b-card
-                @click="handleCardClick"
                 class="card--link card--home"
                 title="Current block height"
+                @click="handleCardClick"
               >
                 <b-card-text>
                   <span class="home__link">
@@ -23,8 +30,18 @@
                 </b-card-text>
               </b-card>
             </b-col>
-            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
-              <b-card title="Top-20 stake weight" class="card--home">
+            <b-col
+              class="home__col"
+              cols="12"
+              xs="12"
+              sm="12"
+              md="6"
+              lg="3"
+            >
+              <b-card
+                title="Top-20 stake weight"
+                class="card--home"
+              >
                 <b-card-text>
                   <font-awesome-icon
                     v-if="!topStakeWeight"
@@ -32,54 +49,74 @@
                     icon="spinner"
                     spin
                   />
-                  <span v-else
-                    >{{ parseFloat(topStakeWeight.toFixed(3)) }}%</span
-                  >
+                  <span
+                    v-else
+                  >{{ parseFloat(topStakeWeight.toFixed(3)) }}%</span>
                 </b-card-text>
               </b-card>
             </b-col>
-            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
+            <b-col
+              class="home__col"
+              cols="12"
+              xs="12"
+              sm="12"
+              md="6"
+              lg="3"
+            >
               <b-card
-                @click="handleChartClick()"
                 class="home-card__chart"
                 title="Escrow ratio"
+                @click="handleChartClick()"
               >
                 <b-card-text>
-                  <div v-if="!escrowRatio" class="home__loader">
+                  <div
+                    v-if="!escrowRatio"
+                    class="home__loader"
+                  >
                     <font-awesome-icon
                       class="icon home__icon"
                       icon="spinner"
                       spin
                     />
                   </div>
-                  <line-chart
+                  <LineChart
                     v-else
                     :height="60"
-                    :propsOptions="options"
+                    :props-options="options"
                     :chart-data="getEscrowData()"
                     class="home__chart"
                   />
                 </b-card-text>
               </b-card>
             </b-col>
-            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
+            <b-col
+              class="home__col"
+              cols="12"
+              xs="12"
+              sm="12"
+              md="6"
+              lg="3"
+            >
               <b-card
-                @click="handleChartClick()"
                 class="home-card__chart"
                 title="Transfer volume"
+                @click="handleChartClick()"
               >
                 <b-card-text class="home__chart">
-                  <div v-if="!transactionVolume" class="home__loader">
+                  <div
+                    v-if="!transactionVolume"
+                    class="home__loader"
+                  >
                     <font-awesome-icon
                       class="icon home__icon"
                       icon="spinner"
                       spin
                     />
                   </div>
-                  <line-chart
+                  <LineChart
                     v-else
                     :height="60"
-                    :propsOptions="options"
+                    :props-options="options"
                     :chart-data="getTransactionVolumeData()"
                     class="home__chart"
                   />
@@ -88,8 +125,18 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
-              <b-card class="card--home" title="Price">
+            <b-col
+              class="home__col"
+              cols="12"
+              xs="12"
+              sm="12"
+              md="6"
+              lg="3"
+            >
+              <b-card
+                class="card--home"
+                title="Price"
+              >
                 <b-card-text>
                   <font-awesome-icon
                     v-if="!price"
@@ -101,8 +148,18 @@
                 </b-card-text>
               </b-card>
             </b-col>
-            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
-              <b-card title="Market cap" class="card--home">
+            <b-col
+              class="home__col"
+              cols="12"
+              xs="12"
+              sm="12"
+              md="6"
+              lg="3"
+            >
+              <b-card
+                title="Market cap"
+                class="card--home"
+              >
                 <b-card-text>
                   <font-awesome-icon
                     v-if="!marketCup"
@@ -114,8 +171,18 @@
                 </b-card-text>
               </b-card>
             </b-col>
-            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
-              <b-card class="card--home" title="Trading volume">
+            <b-col
+              class="home__col"
+              cols="12"
+              xs="12"
+              sm="12"
+              md="6"
+              lg="3"
+            >
+              <b-card
+                class="card--home"
+                title="Trading volume"
+              >
                 <b-card-text>
                   <font-awesome-icon
                     v-if="!tradingVolume"
@@ -127,8 +194,18 @@
                 </b-card-text>
               </b-card>
             </b-col>
-            <b-col class="home__col" cols="12" xs="12" sm="12" md="6" lg="3">
-              <b-card class="card--home" title="Circulating supply">
+            <b-col
+              class="home__col"
+              cols="12"
+              xs="12"
+              sm="12"
+              md="6"
+              lg="3"
+            >
+              <b-card
+                class="card--home"
+                title="Circulating supply"
+              >
                 <b-card-text>
                   <font-awesome-icon
                     v-if="!circulatingSupply"
@@ -143,11 +220,20 @@
           </b-row>
         </div>
         <b-row class="home__section">
-          <b-col class="home__col" cols="12" xs="12" sm="12" md="12" lg="6">
-            <p class="home__title">Blocks list</p>
+          <b-col
+            class="home__col"
+            cols="12"
+            xs="12"
+            sm="12"
+            md="12"
+            lg="6"
+          >
+            <p class="home__title">
+              Blocks list
+            </p>
             <BlocksList
-              :listFetchParams="listFetchParams"
-              :isFetchOnScrollEnabled="false"
+              :list-fetch-params="listFetchParams"
+              :is-fetch-on-scroll-enabled="false"
               :fields="[
                 { key: 'level', label: 'Height' },
                 { key: 'hash', label: 'Hash' },
@@ -165,11 +251,20 @@
               Show more
             </b-button>
           </b-col>
-          <b-col class="home__col" cols="12" xs="12" sm="12" md="12" lg="6">
-            <p class="home__title">Operations list</p>
+          <b-col
+            class="home__col"
+            cols="12"
+            xs="12"
+            sm="12"
+            md="12"
+            lg="6"
+          >
+            <p class="home__title">
+              Operations list
+            </p>
             <OperationsList
-              :listFetchParams="listFetchParams"
-              :isFetchOnScrollEnabled="false"
+              :list-fetch-params="listFetchParams"
+              :is-fetch-on-scroll-enabled="false"
               :fields="[
                 { key: 'level', label: 'Height' },
                 { key: 'hash', label: 'Hash' },

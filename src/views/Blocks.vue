@@ -1,6 +1,9 @@
 <template>
   <div class="blocks">
-    <Breadcrumbs class="breadcrumbs" :crumbs="breadcrumbs" />
+    <Breadcrumbs
+      class="breadcrumbs"
+      :crumbs="breadcrumbs"
+    />
 
     <b-container fluid="lg">
       <BlocksList />

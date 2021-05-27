@@ -52,7 +52,6 @@
 
 <script>
 import debounce from 'lodash/debounce';
-import api from '@/services/api.service';
 import {
   DEFAULT_LIMIT,
   START_OFFSET,
@@ -71,9 +70,6 @@ export default {
     requestName: {
       type: String,
       required: true,
-      validator(value) {
-        return Object.keys(api).includes(value);
-      },
     },
     fetchParams: {
       type: Object,

@@ -58,19 +58,14 @@ export default {
     fields: {
       type: Array,
       default: () => [
-        { key: 'level', label: 'Height', sortable: true },
+        { key: 'level', label: 'Height' },
         { key: 'hash', label: 'Block hash' },
         { key: 'proposer', label: 'Proposer' },
         { key: 'number_of_signatures', label: 'Signatures' },
-        {
-          key: 'number_of_txs',
-          label: '# of Ops',
-          sortable: true,
-          class: 'cell-center',
-        },
+        { key: 'number_of_txs', label: '# of Ops', class: 'cell-center' },
         { key: 'epoch', label: 'Epoch' },
         { key: 'fees', label: 'Fees' },
-        { key: 'timestamp', label: 'Date', sortable: true },
+        { key: 'timestamp', label: 'Date' },
       ],
     },
     listFetchParams: {

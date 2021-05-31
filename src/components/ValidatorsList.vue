@@ -3,6 +3,8 @@
     class="validators-list"
     request-name="getValidators"
     :fields="fields"
+    :fetch-params="fetchParams"
+    :is-fetch-on-scroll-enabled="false"
   >
     <template #cell(number)="{ index }">
       {{ index + 1 }}
@@ -109,6 +111,9 @@ export default {
         { key: 'status', label: 'Status', class: 'cell-center' },
         { key: 'validate_since', label: 'Registered', sortable: true },
       ],
+      fetchParams: {
+        limit: 200,
+      },
     };
   },
 };

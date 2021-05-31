@@ -21,7 +21,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 config.mocks.$api = {
   getAccounts: () => Promise.resolve({ data: ['mock'], status: 200 }),
-  getAccount: () => Promise.resolve({ data: ['mock'], status: 200 }),
+  getAccount: () => Promise.resolve({ data: { address: 'mock' }, status: 200 }),
   getValidators: () => Promise.resolve({ data: ['mock'], status: 200 }),
   getTransactions: () => Promise.resolve({ data: ['mock'], status: 200 }),
   getBlocks: () => Promise.resolve({ data: ['mock'], status: 200 }),

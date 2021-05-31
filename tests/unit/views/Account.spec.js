@@ -1,4 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
+import { nextTick } from 'vue';
 import Account from '@/views/Account.vue';
 
 const $router = { push: jest.fn() };
@@ -10,23 +11,14 @@ const $route = {
 };
 
 describe('Account.vue', () => {
-  let serverResponse;
-
-  beforeEach(() => {
-    serverResponse = { data: { address: 'oasis1account' }, status: 200 };
-  });
-
   test('Should test 200 response and render an account', async () => {
     const wrapper = shallowMount(Account, {
       mocks: {
         $route,
-        $api: {
-          getAccount: () => jest.fn().mockReturnValue(serverResponse),
-        },
       },
     });
 
-    await wrapper.vm.fetchData();
+    await nextTick();
 
     expect(wrapper.find('.account__information').isVisible()).toBe(true);
   });
@@ -37,12 +29,12 @@ describe('Account.vue', () => {
         $router,
         $route,
         $api: {
-          getAccount: () => jest.fn().mockReturnValue({ status: 404 }),
+          getAccount: () => ({ status: 404 }),
         },
       },
     });
 
-    await wrapper.vm.fetchData();
+    await nextTick();
 
     expect(wrapper.vm.$router.push).toHaveBeenCalled();
   });

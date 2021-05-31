@@ -234,7 +234,7 @@ export default {
         { key: 'to', label: 'To' },
         { key: 'amount', label: 'Amount' },
         { key: 'nonce', label: 'Nonce' },
-        { key: 'status', label: 'Status' },
+        { key: 'status', label: 'Status', class: 'cell-center' },
         { key: 'type', label: 'Type' },
         { key: 'timestamp', label: 'Date' },
       ],

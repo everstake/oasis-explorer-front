@@ -232,11 +232,11 @@ export default {
         { key: 'hash', label: 'Operation Hash' },
         { key: 'from', label: 'From' },
         { key: 'to', label: 'To' },
-        { key: 'amount', label: 'Amount', sortable: true },
+        { key: 'amount', label: 'Amount' },
         { key: 'nonce', label: 'Nonce' },
         { key: 'status', label: 'Status' },
         { key: 'type', label: 'Type' },
-        { key: 'timestamp', label: 'Date', sortable: true },
+        { key: 'timestamp', label: 'Date' },
       ],
     },
     filters: {

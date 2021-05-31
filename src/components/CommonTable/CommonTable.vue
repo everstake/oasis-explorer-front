@@ -11,8 +11,8 @@
       :items="items"
       :busy="loading"
       :head-variant="headVariant"
-      :show-empty="!loading && items.length === 0"
-      :no-local-sorting="!hasTableAllData"
+      :show-empty="showEmpty"
+      :no-local-sorting="!shouldSortLocal"
 
       sticky-header="100%"
 
@@ -85,6 +85,11 @@ export default {
       required: false,
       default: true,
     },
+    isSortViaApiEnabled: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     height: {
       type: String,
       required: false,
@@ -107,14 +112,23 @@ export default {
       loading: false,
       error: false,
       hasTableAllData: false,
+      sortParams: {},
       offset: START_OFFSET,
     };
+  },
+  computed: {
+    shouldSortLocal() {
+      return this.isSortViaApiEnabled ? this.hasTableAllData : true;
+    },
+    showEmpty() {
+      return !this.loading && this.items.length === 0;
+    },
   },
   watch: {
     fetchParams: {
       immediate: true,
       handler() {
-        this.items = [];
+        this.sortParams = {};
         this.fetch();
       },
     },
@@ -134,13 +148,13 @@ export default {
   },
   methods: {
     async fetch(options = {}) {
-      this.error = false;
-      this.loading = true;
-
       const {
-        params = {},
         concat = false,
       } = options;
+
+      this.error = false;
+      this.items = concat ? this.items : [];
+      this.loading = true;
 
       const limit = this.fetchParams.limit || DEFAULT_LIMIT;
       const offset = concat ? this.offset + limit : START_OFFSET;
@@ -150,7 +164,7 @@ export default {
           limit,
           offset,
           ...this.fetchParams,
-          ...params,
+          ...this.sortParams,
         });
 
         if (response.status !== 200) {
@@ -161,7 +175,7 @@ export default {
           ? response.data
           : [response.data];
 
-        this.items = concat ? [...this.items, ...data] : data;
+        this.items = [...this.items, ...data];
         this.offset = offset;
         this.hasTableAllData = data.length < limit;
       } catch (e) {
@@ -172,12 +186,16 @@ export default {
       }
     },
     fetchSorted({ sortBy, sortDesc }) {
-      const params = {
+      if (this.shouldSortLocal) {
+        return;
+      }
+
+      this.sortParams = {
         sort_column: sortBy,
         sort_side: sortDesc ? 'desc' : 'asc',
       };
 
-      this.fetch({ params });
+      this.fetch();
     },
     onScroll() {
       if (this.loading || this.hasTableAllData) {

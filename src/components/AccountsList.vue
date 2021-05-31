@@ -3,6 +3,7 @@
     class="accounts-list"
     request-name="getAccounts"
     :fields="fields"
+    is-sort-via-api-enabled
   >
     <template #cell(number)="{ index }">
       {{ index + 1 }}

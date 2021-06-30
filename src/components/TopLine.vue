@@ -76,8 +76,6 @@ export default {
       },
     } = this;
 
-    console.log(this.$constants);
-
     this.isMainnet = NETWORK_TYPE === NETWORK_TYPES.mainnet;
   },
 };

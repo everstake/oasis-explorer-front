@@ -11,17 +11,19 @@
             icon="network-wired"
             class="icon"
           />
-          Mainnet
+          {{ isMainnet ? 'Mainnet' : 'Testnet' }}
         </template>
         <b-dropdown-item
-          disabled
           active-class="top-line__active"
+          :href="isMainnet ? $constants.TESTNET_URL : $constants.MAINNET_URL"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           <font-awesome-icon
             icon="network-wired"
             class="icon"
           />
-          Testnet
+          {{ isMainnet ? 'Testnet' : 'Mainnet' }}
         </b-dropdown-item>
       </b-nav-item-dropdown>
       <div class="top-line__item language">
@@ -60,6 +62,23 @@ export default {
     TheSearch,
     TheSettings,
     TheLogotype,
+  },
+  data() {
+    return {
+      isMainnet: true,
+    };
+  },
+  created() {
+    const {
+      $constants: {
+        NETWORK_TYPE,
+        NETWORK_TYPES,
+      },
+    } = this;
+
+    console.log(this.$constants);
+
+    this.isMainnet = NETWORK_TYPE === NETWORK_TYPES.mainnet;
   },
 };
 </script>

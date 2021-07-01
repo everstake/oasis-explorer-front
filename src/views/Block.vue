@@ -336,7 +336,7 @@ export default {
     async fetchInfo() {
       const response = await this.$api.getInfo();
 
-      if (response.status !== 200) {
+      if (!this.$constants.RESPONSE_STATUSES.includes(response.status)) {
         throw new Error(response);
       }
 
@@ -349,7 +349,7 @@ export default {
         ...this.fetchParams,
       });
 
-      if (response.status !== 200) {
+      if (!this.$constants.RESPONSE_STATUSES.includes(response.status)) {
         throw new Error(response);
       }
 

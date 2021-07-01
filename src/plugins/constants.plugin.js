@@ -5,6 +5,11 @@ const networksTypes = {
   testnet: 'testnet',
 };
 
+const responseStatuses = [
+  200,
+  301,
+];
+
 const constants = {
   DATE_FORMAT: 'HH:mm DD.MM.YYYY',
   DATE_FORMAT_US: 'hh:mm A MM.DD.YYYY',
@@ -13,6 +18,7 @@ const constants = {
   TESTNET_URL: process.env.VUE_APP_TESTNET_URL,
   NETWORK_TYPE: process.env.VUE_APP_NETWORK_TYPE,
   NETWORK_TYPES: networksTypes,
+  RESPONSE_STATUSES: responseStatuses,
 };
 
 Vue.use({

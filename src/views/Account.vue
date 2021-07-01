@@ -616,7 +616,7 @@ export default {
           id: this.$route.params.id,
         });
 
-        if (response.status !== 200) {
+        if (!this.$constants.RESPONSE_STATUSES.includes(response.status)) {
           throw new Error(response);
         }
 

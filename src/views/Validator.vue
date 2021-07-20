@@ -247,7 +247,8 @@
                 Total balance
               </div>
               {{ validator.general_balance + (
-                validator.escrow_balance + validator.debonding_balance
+                (validator.escrow_balance - validator.self_delegation_balance)
+                + validator.delegations_balance + validator.debonding_delegations_balance
               ) | formatAmount }}
             </b-card-text>
             <b-card-text class="block__content">
@@ -285,6 +286,69 @@
                 Debonding delegations balance
               </div>
               {{ validator.debonding_delegations_balance | formatAmount }}
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Commission rates
+              </div>
+              {{
+                (validator.commission_schedule.rates
+                  && validator.commission_schedule.rates[0].rate) | formatPercent
+              }}%
+
+              <font-awesome-icon
+                id="rates"
+                :icon="['fa', 'exclamation-circle']"
+              />
+
+              <b-tooltip
+                target="rates"
+                placement="right"
+              >
+                <div
+                  v-for="(item, index) in validator.commission_schedule.rates"
+                  :key="index"
+                  :disabled="!validator.commission_schedule.rates"
+                >
+                  {{ item.rate | formatPercent }}% (start at epoch {{ item.start }})
+                </div>
+              </b-tooltip>
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Commission bounds
+              </div>
+              <span>
+                {{ (validator.commission_schedule.bounds
+                  && validator.commission_schedule.bounds[0].rate_min) | formatPercent }}% ~
+                {{ (validator.commission_schedule.bounds
+                  && validator.commission_schedule.bounds[0].rate_max) | formatPercent }}%
+
+                <font-awesome-icon
+                  id="commission-bounds"
+                  :icon="['fa', 'exclamation-circle']"
+                />
+
+                <b-tooltip
+                  target="commission-bounds"
+                  placement="right"
+                  :disabled="!validator.commission_schedule.bounds"
+                >
+                  <div
+                    v-for="(item, index) in validator.commission_schedule.bounds"
+                    :key="index"
+                  >
+                    {{ item.rate_min | formatPercent }}%~{{ item.rate_max | formatPercent
+                    }}% (start at epoch {{ item.start }})
+                  </div>
+                </b-tooltip>
+              </span>
+            </b-card-text>
+            <b-card-text class="block__content">
+              <div class="block__header">
+                Self stake
+              </div>
+              {{ validator.self_delegation_balance | formatAmount }}
             </b-card-text>
             <b-card-text class="block__content">
               <div class="block__header">
@@ -563,8 +627,8 @@ const tabs = [
   { key: 'addescrow/reclaimescrow', label: 'Escrow events' },
   { key: 'other', label: 'Other ops' },
   { key: 'delegators', label: 'Delegators' },
-  { key: 'charts', label: 'Charts' },
   { key: 'rewards', label: 'Rewards' },
+  { key: 'charts', label: 'Charts' },
 ];
 
 export default {

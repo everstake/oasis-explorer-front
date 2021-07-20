@@ -87,7 +87,7 @@
                     <div class="account__item">
                       Debonding balance:
                       <p class="account__value">
-                        {{ account.debonding_balance | formatAmount }}
+                        {{ account.escrow_debonding_balance | formatAmount }}
                       </p>
                     </div>
                     <div class="account__item">
@@ -100,6 +100,12 @@
                       Debonding delegations balance:
                       <p class="account__value">
                         {{ account.debonding_delegations_balance | formatAmount }}
+                      </p>
+                    </div>
+                    <div class="account__item">
+                      Self stake:
+                      <p class="account__value">
+                        {{ account.self_delegation_balance | formatAmount }}
                       </p>
                     </div>
                     <div class="account__item">
@@ -153,7 +159,32 @@
               no-body
             >
               <CommonTable
-                request-name="getTransactions"
+                v-if="activeTab.key === 'rewards'"
+                head-variant="dark"
+                request-name="getAccountRewardsStat"
+                :fields="rewardsFields"
+                :fetch-params="fetchParams"
+                height="min-content"
+              >
+                <template #cell(total_reward)="{ item: { total_reward } }">
+                  {{ total_reward | formatAmount }}
+                </template>
+
+                <template #cell(day_reward)="{ item: { day_reward } }">
+                  {{ day_reward | formatAmount }}
+                </template>
+
+                <template #cell(week_reward)="{ item: { week_reward } }">
+                  {{ week_reward | formatAmount }}
+                </template>
+
+                <template #cell(month_reward)="{ item: { month_reward } }">
+                  {{ month_reward | formatAmount }}
+                </template>
+              </CommonTable>
+
+              <CommonTable
+                :request-name="requestName"
                 :fields="fields"
                 :fetch-params="fetchParams"
                 height="min-content"
@@ -254,6 +285,14 @@
 
                 <template #cell(fees)="{ item: { fees } }">
                   {{ fees || '-' }}
+                </template>
+
+                <template #cell(validator_address)="{ item: { validator_address } }">
+                  <router-link
+                    :to="{ name: 'validator', params: { id: validator_address } }"
+                  >
+                    {{ validator_address | trimHashFromTo(6, -6) }}
+                  </router-link>
                 </template>
               </CommonTable>
             </b-card>
@@ -400,6 +439,7 @@ const tabs = [
   { key: 'transfers', label: 'Transfers' },
   { key: 'addescrow/reclaimescrow', label: 'Escrow events' },
   { key: 'other', label: 'Other ops' },
+  { key: 'rewards', label: 'Rewards' },
   { key: 'charts', label: 'Charts' },
 ];
 
@@ -432,8 +472,15 @@ export default {
           active: true,
         },
       ],
+      rewardsFields: [
+        { key: 'total_reward', label: 'Total rewards' },
+        { key: 'day_reward', label: 'Daily rewards' },
+        { key: 'week_reward', label: 'Weekly rewards' },
+        { key: 'month_reward', label: 'Monthly rewards' },
+      ],
       activeTab: tabs[0],
       tabs,
+      requestName: 'getTransactions',
       charts: {
         stake: null,
       },
@@ -531,6 +578,10 @@ export default {
             'registerruntime',
           ];
           break;
+        case 'rewards':
+          return {
+            id: fetchParams.account_id,
+          };
         case 'transfers':
         default:
           fetchParams.operation_kind = 'transfer';
@@ -556,6 +607,14 @@ export default {
             { key: 'escrow_amount', label: 'Escrow amount' },
             { key: 'timestamp', label: 'Date' },
           ];
+        case 'rewards':
+          return [
+            { key: 'block_level', label: 'Height' },
+            { key: 'validator_address', label: 'Validator address' },
+            { key: 'epoch', label: 'Epoch' },
+            { key: 'amount', label: 'Amount' },
+            { key: 'created_at', label: 'Date' },
+          ];
         case 'transfers':
         default:
           return [
@@ -577,9 +636,19 @@ export default {
       },
     },
     activeTab({ key }) {
-      if (key === 'charts') {
-        this.fetch('chart-stake');
+      switch (key) {
+        case 'charts':
+          this.fetch('chart-stake');
+          break;
+        case 'rewards':
+          this.requestName = 'getAccountRewards';
+          break;
+        default:
+          this.requestName = 'getTransactions';
       }
+      // if (key === 'charts') {
+      //   this.fetch('chart-stake');
+      // }
     },
   },
   methods: {
@@ -735,7 +804,7 @@ export default {
     }
 
     &__btn {
-      width: 25%;
+      width: calc(100% / 5);
       padding: 7px 0;
       border-left: none;
       border-radius: 0;

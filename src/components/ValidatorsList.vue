@@ -62,8 +62,8 @@
       </router-link>
     </template>
 
-    <template #cell(fee)="{ item: { fee }}">
-      {{ fee }}%
+    <template #cell(commission_schedule)="{ item: { commission_schedule }}">
+      {{ (commission_schedule.rates && commission_schedule.rates[0].rate) | formatPercent }}%
     </template>
 
     <template #cell(validate_since)="{ item: { validate_since } }">
@@ -107,7 +107,7 @@ export default {
         { key: 'depositors_count', label: 'Delegators' },
         { key: 'blocks_count', label: 'Proposals', sortable: true },
         { key: 'signatures_count', label: 'Signatures', sortable: true },
-        { key: 'fee', label: 'Fee', sortable: true },
+        { key: 'commission_schedule', label: 'Fee', sortable: true },
         { key: 'status', label: 'Status', class: 'cell-center' },
         { key: 'validate_since', label: 'Registered', sortable: true },
       ],

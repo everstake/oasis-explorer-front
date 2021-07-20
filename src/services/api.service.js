@@ -34,4 +34,8 @@ export default {
     http.get(`/data/validator/${params.id}/rewards`, { params }),
   getValidatorRewardsStat: (params) =>
     http.get(`/data/validator/${params.id}/rewards/stat`, { params }),
+  getAccountRewards: (params) =>
+    http.get(`/data/accounts/${params.id}/rewards`, {params}),
+  getAccountRewardsStat: (params) =>
+    http.get(`/data/accounts/${params.id}/rewards/stat`, { params })
 };

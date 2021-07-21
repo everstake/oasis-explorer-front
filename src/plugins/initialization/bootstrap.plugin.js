@@ -15,6 +15,7 @@ import {
   FormGroupPlugin,
   FormRadioPlugin,
   FormInputPlugin,
+  TooltipPlugin,
 } from 'bootstrap-vue';
 
 Vue.use(LayoutPlugin);
@@ -31,3 +32,4 @@ Vue.use(ButtonGroupPlugin);
 Vue.use(FormGroupPlugin);
 Vue.use(FormRadioPlugin);
 Vue.use(FormInputPlugin);
+Vue.use(TooltipPlugin);

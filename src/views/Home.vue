@@ -342,6 +342,7 @@ export default {
           ],
           yAxes: [
             {
+              type: 'logarithmic',
               ticks: {
                 display: false,
               },

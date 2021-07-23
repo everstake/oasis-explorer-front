@@ -68,9 +68,7 @@
             >
               <b-form-checkbox
                 v-model="operations"
-                :disabled="
-                  operations.length === 1 && operations[0] === 'transfer'
-                "
+                :disabled="operations.length === 1 && operations[0] === 'transfer'"
                 value="transfer"
                 class="mb-3"
               >
@@ -79,9 +77,7 @@
 
               <b-form-checkbox
                 v-model="operations"
-                :disabled="
-                  operations.length === 1 && operations[0] === 'addescrow'
-                "
+                :disabled="operations.length === 1 && operations[0] === 'addescrow'"
                 value="addescrow"
                 class="mb-3"
               >
@@ -90,9 +86,7 @@
 
               <b-form-checkbox
                 v-model="operations"
-                :disabled="
-                  operations.length === 1 && operations[0] === 'reclaimescrow'
-                "
+                :disabled="operations.length === 1 && operations[0] === 'reclaimescrow'"
                 value="reclaimescrow"
                 class="mb-3"
               >
@@ -129,17 +123,13 @@
       :height="height"
     >
       <template #cell(level)="{ item: { level }}">
-        <router-link
-          :to="{ name: 'block', params: { id: level } }"
-        >
+        <router-link :to="{ name: 'block', params: { id: level } }">
           {{ level }}
         </router-link>
       </template>
 
       <template #cell(hash)="{ item: { hash }}">
-        <router-link
-          :to="{ name: 'operation', params: { id: hash } }"
-        >
+        <router-link :to="{ name: 'operation', params: { id: hash } }">
           {{ hash | trimHash }}
         </router-link>
       </template>
@@ -193,9 +183,7 @@
       </template>
 
       <template #cell(status)="{ item: { status } }">
-        <StatusIcon
-          :status="status"
-        />
+        <StatusIcon :status="status" />
       </template>
 
       <template #cell(timestamp)="{ item: { timestamp }}">
@@ -228,15 +216,43 @@ export default {
     fields: {
       type: Array,
       default: () => [
-        { key: 'level', label: 'Height' },
-        { key: 'hash', label: 'Operation Hash' },
-        { key: 'from', label: 'From' },
-        { key: 'to', label: 'To' },
-        { key: 'amount', label: 'Amount' },
-        { key: 'nonce', label: 'Nonce' },
-        { key: 'status', label: 'Status', class: 'cell-center' },
-        { key: 'type', label: 'Type' },
-        { key: 'timestamp', label: 'Date' },
+        {
+          key: 'level',
+          label: 'Height',
+        },
+        {
+          key: 'hash',
+          label: 'Operation Hash',
+        },
+        {
+          key: 'from',
+          label: 'From',
+        },
+        {
+          key: 'to',
+          label: 'To',
+        },
+        {
+          key: 'amount',
+          label: 'Amount',
+        },
+        {
+          key: 'nonce',
+          label: 'Nonce',
+        },
+        {
+          key: 'status',
+          label: 'Status',
+          class: 'cell-center',
+        },
+        {
+          key: 'type',
+          label: 'Type',
+        },
+        {
+          key: 'timestamp',
+          label: 'Date',
+        },
       ],
     },
     filters: {
@@ -266,7 +282,16 @@ export default {
         endDate: null,
       },
       operations: ['transfer', 'addescrow', 'reclaimescrow', 'other'],
-      otherOperations: ['registernode', 'registerentity', 'amendcommissionschedule', 'registerruntime'],
+      otherOperations: [
+        'registernode',
+        'registerentity',
+        'amendcommissionschedule',
+        'registerruntime',
+        'pvsscommit',
+        'pvssreveal',
+        'executorcommit',
+        'executorproposertimeout',
+      ],
       dropdownIsBusy: false,
       fetchParams: {},
     };
@@ -293,9 +318,7 @@ export default {
       return this.dateRange.startDate && this.dateRange.endDate;
     },
     isSelectedDatesEqual() {
-      return (
-        this.dateRange.startDate.getTime() === this.dateRange.endDate.getTime()
-      );
+      return this.dateRange.startDate.getTime() === this.dateRange.endDate.getTime();
     },
   },
   watch: {
@@ -307,7 +330,10 @@ export default {
         if (this.isDatePickerSelected) {
           const from = +this.dateRange.startDate / 1000;
           const to = +this.dateRange.endDate / 1000;
-          this.setFetchParams({ from, to });
+          this.setFetchParams({
+            from,
+            to,
+          });
         } else {
           this.setFetchParams();
         }
@@ -329,7 +355,8 @@ export default {
         format = 'DD.MM.YYYY';
       }
 
-      return dayjs(date).format(format);
+      return dayjs(date)
+        .format(format);
     },
     async clearFilters() {
       this.dateRange.startDate = null;
@@ -342,13 +369,14 @@ export default {
       let to = +val.endDate / 1000;
 
       if (this.isSelectedDatesEqual) {
-        this.dateRange.endDate.setTime(
-          this.dateRange.endDate.getTime() + 12 * 60 * 60 * 1000,
-        );
+        this.dateRange.endDate.setTime(this.dateRange.endDate.getTime() + 12 * 60 * 60 * 1000);
         to = +this.dateRange.endDate / 1000;
       }
 
-      this.setFetchParams({ from, to });
+      this.setFetchParams({
+        from,
+        to,
+      });
 
       this.dropdownIsBusy = false;
     },
@@ -359,13 +387,9 @@ export default {
         operation_kind: this.operations,
       };
 
-      const isOperationOtherSelected = this.operations.some(
-        (operation) => operation === 'other',
-      );
+      const isOperationOtherSelected = this.operations.some((operation) => operation === 'other');
 
-      const otherOperationIndex = this.operations.findIndex(
-        (operation) => operation === 'other',
-      );
+      const otherOperationIndex = this.operations.findIndex((operation) => operation === 'other');
 
       if (isOperationOtherSelected && otherOperationIndex >= 0) {
         options.operation_kind = [
@@ -418,6 +442,7 @@ export default {
 
   &__reset {
     margin-right: 10px;
+
     & .btn-secondary {
       background-color: $color-primary !important;
       border-color: $color-primary !important;
@@ -502,19 +527,19 @@ export default {
     }
 
     & .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
-      background-color: green!important;
+      background-color: green !important;
     }
 
     & .custom-checkbox .custom-control-input:focus ~ .custom-control-label::before {
-      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 0, 0, 0.25)
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
     }
 
     & .custom-checkbox .custom-control-input:active ~ .custom-control-label::before {
-      background-color: #C8FFC8;
+      background-color: #c8ffc8;
     }
 
     & .custom-checkbox .custom-control-input:checked:focus ~ .custom-control-label::before {
-      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 255, 0, 0.25)
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(0, 255, 0, 0.25);
     }
   }
 

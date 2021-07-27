@@ -19,6 +19,7 @@ import {
   faEnvelope,
   faSyncAlt,
   faTimes,
+  faExclamationCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
 import {
@@ -54,6 +55,7 @@ library.add(
   faTelegram,
   faFacebook,
   faMedium,
+  faExclamationCircle,
 );
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);

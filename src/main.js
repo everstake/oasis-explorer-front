@@ -9,6 +9,7 @@ import './plugins/constants.plugin';
 import './filters/date.filter';
 import './filters/amount.filter';
 import './filters/trim.hash.filter';
+import './filters/percent.filter';
 import store from './store';
 
 Vue.config.productionTip = false;

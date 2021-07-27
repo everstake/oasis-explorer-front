@@ -95,7 +95,6 @@
 
               <b-form-checkbox
                 v-model="operations"
-                disabled
                 value="burn"
                 class="mb-3"
               >
@@ -281,7 +280,7 @@ export default {
         startDate: null,
         endDate: null,
       },
-      operations: ['transfer', 'addescrow', 'reclaimescrow', 'other'],
+      operations: ['transfer', 'addescrow', 'reclaimescrow', 'burn', 'other'],
       otherOperations: [
         'registernode',
         'registerentity',

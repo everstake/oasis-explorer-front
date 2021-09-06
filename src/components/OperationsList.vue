@@ -197,10 +197,10 @@
 </template>
 
 <script>
-import CommonTable from '@/components/CommonTable/CommonTable.vue';
 import DateRangePicker from 'vue-daterange-picker-light';
 import { mapState } from 'vuex';
 import dayjs from 'dayjs';
+import CommonTable from '@/components/CommonTable/CommonTable.vue';
 import { DEFAULT_HEIGHT } from '@/components/CommonTable/constants';
 import StatusIcon from '@/components/StatusIcon.vue';
 

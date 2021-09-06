@@ -291,9 +291,9 @@
 
 <script>
 import dayjs from 'dayjs';
+import numeral from 'numeral';
 import { mapMutations, mapState } from 'vuex';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
-import numeral from 'numeral';
 
 const LineChart = () => import(/* webpackPreload: true */ '@/components/charts/LineChart.vue');
 const BlocksList = () => import(/* webpackPreload: true */ '@/components/BlocksList.vue');

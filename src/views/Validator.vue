@@ -618,13 +618,13 @@
 
 <script>
 /* eslint-disable camelcase */
+import numeral from 'numeral';
+import { state } from '@/store';
+import dayjs from 'dayjs';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import ValidatorLogotype from '@/components/ValidatorLogotype.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
-import numeral from 'numeral';
-import { state } from '@/store';
-import dayjs from 'dayjs';
 import LineChart from '@/components/charts/LineChart.vue';
 import uuid from '@/mixins/uuid';
 import StatusIcon from '@/components/StatusIcon.vue';
@@ -1030,6 +1030,7 @@ export default {
         }
       } catch (e) {
         this.$router.push({ name: '404' });
+        //* eslint-disable no-console */
         console.error(e);
       } finally {
         this.loading = false;

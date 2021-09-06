@@ -225,9 +225,9 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
-import { mapState, mapMutations } from 'vuex';
 import CommonTable from '../components/CommonTable/CommonTable.vue';
 
 export default {

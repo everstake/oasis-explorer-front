@@ -240,7 +240,8 @@
               <div class="block__header">
                 Uptime
               </div>
-              {{ String(validator.total_uptime * 100).slice(0, 4) }}%
+              {{ String(validator.total_uptime * 100)
+                .slice(0, 4) }}%
             </b-card-text>
             <b-card-text class="block__content">
               <div class="block__header">
@@ -293,7 +294,7 @@
               </div>
               {{
                 (validator.commission_schedule.rates
-                  && validator.commission_schedule.rates[0].rate) | formatPercent
+                  && getCommissionRate.rate) | formatPercent
               }}%
 
               <font-awesome-icon
@@ -310,7 +311,14 @@
                   :key="index"
                   :disabled="!validator.commission_schedule.rates"
                 >
-                  {{ item.rate | formatPercent }}% (start at epoch {{ item.start }})
+                  <span>
+                    <font-awesome-icon
+                      v-show="item.rate === getCommissionRate.rate"
+                      :icon="['fa', 'check']"
+                    />
+                    {{ item.rate | formatPercent }}% (start at epoch {{ item.start || '0'
+                    }})
+                  </span>
                 </div>
               </b-tooltip>
             </b-card-text>
@@ -623,12 +631,30 @@ import StatusIcon from '@/components/StatusIcon.vue';
 import CommonTable from '../components/CommonTable/CommonTable.vue';
 
 const tabs = [
-  { key: 'transfers', label: 'Transfers' },
-  { key: 'addescrow/reclaimescrow', label: 'Escrow events' },
-  { key: 'other', label: 'Other ops' },
-  { key: 'delegators', label: 'Delegators' },
-  { key: 'rewards', label: 'Rewards' },
-  { key: 'charts', label: 'Charts' },
+  {
+    key: 'transfers',
+    label: 'Transfers',
+  },
+  {
+    key: 'addescrow/reclaimescrow',
+    label: 'Escrow events',
+  },
+  {
+    key: 'other',
+    label: 'Other ops',
+  },
+  {
+    key: 'delegators',
+    label: 'Delegators',
+  },
+  {
+    key: 'rewards',
+    label: 'Rewards',
+  },
+  {
+    key: 'charts',
+    label: 'Charts',
+  },
 ];
 
 export default {
@@ -665,10 +691,22 @@ export default {
         },
       ],
       rewardsFields: [
-        { key: 'total_reward', label: 'Total rewards' },
-        { key: 'day_reward', label: 'Daily rewards' },
-        { key: 'week_reward', label: 'Weekly rewards' },
-        { key: 'month_reward', label: 'Monthly rewards' },
+        {
+          key: 'total_reward',
+          label: 'Total rewards',
+        },
+        {
+          key: 'day_reward',
+          label: 'Daily rewards',
+        },
+        {
+          key: 'week_reward',
+          label: 'Weekly rewards',
+        },
+        {
+          key: 'month_reward',
+          label: 'Monthly rewards',
+        },
       ],
       tabs,
       activeTab: tabs[0],
@@ -730,45 +768,123 @@ export default {
       switch (this.activeTab.key) {
         case 'addescrow/reclaimescrow':
           return [
-            { key: 'level', label: 'Height' },
-            { key: 'hash', label: 'Operation hash' },
-            { key: 'type', label: 'Type' },
-            { key: 'escrow_amount', label: 'Escrow amount' },
-            { key: 'timestamp', label: 'Date' },
+            {
+              key: 'level',
+              label: 'Height',
+            },
+            {
+              key: 'hash',
+              label: 'Operation hash',
+            },
+            {
+              key: 'type',
+              label: 'Type',
+            },
+            {
+              key: 'escrow_amount',
+              label: 'Escrow amount',
+            },
+            {
+              key: 'timestamp',
+              label: 'Date',
+            },
           ];
         case 'other':
           return [
-            { key: 'level', label: 'Height' },
-            { key: 'hash', label: 'Hash' },
-            { key: 'amount', label: 'Amount' },
-            { key: 'from', label: 'From' },
-            { key: 'to', label: 'To' },
-            { key: 'nonce', label: 'Nonce' },
-            { key: 'type', label: 'Type' },
-            { key: 'timestamp', label: 'Date' },
+            {
+              key: 'level',
+              label: 'Height',
+            },
+            {
+              key: 'hash',
+              label: 'Hash',
+            },
+            {
+              key: 'amount',
+              label: 'Amount',
+            },
+            {
+              key: 'from',
+              label: 'From',
+            },
+            {
+              key: 'to',
+              label: 'To',
+            },
+            {
+              key: 'nonce',
+              label: 'Nonce',
+            },
+            {
+              key: 'type',
+              label: 'Type',
+            },
+            {
+              key: 'timestamp',
+              label: 'Date',
+            },
           ];
         case 'delegators':
           return [
-            { key: 'account_id', label: 'Account' },
-            { key: 'escrow_amount', label: 'Escrow amount' },
-            { key: 'delegate_since', label: 'Delegate since' },
+            {
+              key: 'account_id',
+              label: 'Account',
+            },
+            {
+              key: 'escrow_amount',
+              label: 'Escrow amount',
+            },
+            {
+              key: 'delegate_since',
+              label: 'Delegate since',
+            },
           ];
         case 'rewards':
           return [
-            { key: 'block_level', label: 'Height' },
-            { key: 'epoch', label: 'Epoch' },
-            { key: 'amount', label: 'Amount' },
-            { key: 'created_at', label: 'Date' },
+            {
+              key: 'block_level',
+              label: 'Height',
+            },
+            {
+              key: 'epoch',
+              label: 'Epoch',
+            },
+            {
+              key: 'amount',
+              label: 'Amount',
+            },
+            {
+              key: 'created_at',
+              label: 'Date',
+            },
           ];
         case 'transfers':
         default:
           return [
-            { key: 'level', label: 'Height' },
-            { key: 'hash', label: 'Transaction hash' },
-            { key: 'from', label: 'From' },
-            { key: 'to', label: 'To' },
-            { key: 'amount', label: 'Amount' },
-            { key: 'timestamp', label: 'Date' },
+            {
+              key: 'level',
+              label: 'Height',
+            },
+            {
+              key: 'hash',
+              label: 'Transaction hash',
+            },
+            {
+              key: 'from',
+              label: 'From',
+            },
+            {
+              key: 'to',
+              label: 'To',
+            },
+            {
+              key: 'amount',
+              label: 'Amount',
+            },
+            {
+              key: 'timestamp',
+              label: 'Date',
+            },
           ];
       }
     },
@@ -784,8 +900,10 @@ export default {
         }],
         labels: this.charts.uptime.map(
           state.dateFormat === this.$constants.DATE_FORMAT
-            ? ({ timestamp }) => dayjs.unix(timestamp).format('DD.MM.YYYY')
-            : ({ timestamp }) => dayjs.unix(timestamp).format('MM.DD.YYYY'),
+            ? ({ timestamp }) => dayjs.unix(timestamp)
+              .format('DD.MM.YYYY')
+            : ({ timestamp }) => dayjs.unix(timestamp)
+              .format('MM.DD.YYYY'),
         ),
       };
     },
@@ -846,12 +964,25 @@ export default {
         ],
         labels: this.charts.stake.map(({ timestamp }) => {
           if (state.dateFormat === this.$constants.DATE_FORMAT) {
-            return dayjs.unix(timestamp).format('DD.MM.YYYY');
+            return dayjs.unix(timestamp)
+              .format('DD.MM.YYYY');
           }
 
-          return dayjs.unix(timestamp).format('MM.DD.YYYY');
+          return dayjs.unix(timestamp)
+            .format('MM.DD.YYYY');
         }),
       };
+    },
+    getCommissionRate() {
+      const reversArr = [...this.validator.commission_schedule.rates];
+      return reversArr.reverse()
+        .find((e) => {
+          if (!e.start) {
+            return e;
+          }
+
+          return this.validator.current_epoch >= e.start;
+        });
     },
   },
   watch: {
@@ -923,7 +1054,10 @@ export default {
       ]);
 
       if (uptimeChart.status !== 200 || stakeChart.status !== 200) {
-        throw new Error({ uptimeChart, stakeChart });
+        throw new Error({
+          uptimeChart,
+          stakeChart,
+        });
       }
 
       this.charts.uptime = uptimeChart.data;
@@ -944,7 +1078,8 @@ export default {
     },
     chartsTicksCallback(label) {
       if (label > 1) {
-        return numeral(label / 1000000000).format('0,0.[000000000]');
+        return numeral(label / 1000000000)
+          .format('0,0.[000000000]');
       }
 
       return label.toFixed();

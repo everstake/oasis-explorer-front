@@ -426,11 +426,11 @@
 </template>
 <script>
 /* eslint-disable camelcase */
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import copyToClipboard from '@/mixins/copyToClipboard';
 import { state } from '@/store';
 import dayjs from 'dayjs';
 import numeral from 'numeral';
+import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import copyToClipboard from '@/mixins/copyToClipboard';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';
 import LineChart from '@/components/charts/LineChart.vue';
 import CommonTable from '@/components/CommonTable/CommonTable.vue';
@@ -701,6 +701,7 @@ export default {
         this.account = response.data;
       } catch (e) {
         this.$router.push({ name: '404' });
+        //* eslint-disable no-console */
         console.error(e);
       }
     },

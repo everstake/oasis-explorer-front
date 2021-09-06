@@ -426,9 +426,9 @@
 </template>
 <script>
 /* eslint-disable camelcase */
-import { state } from '@/store';
 import dayjs from 'dayjs';
 import numeral from 'numeral';
+import { state } from '@/store';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';
 import getDatesInSeconds from '@/mixins/getDatesInSeconds';

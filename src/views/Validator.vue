@@ -619,8 +619,8 @@
 <script>
 /* eslint-disable camelcase */
 import numeral from 'numeral';
-import { state } from '@/store';
 import dayjs from 'dayjs';
+import { state } from '@/store';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import ValidatorLogotype from '@/components/ValidatorLogotype.vue';
 import copyToClipboard from '@/mixins/copyToClipboard';

@@ -11,9 +11,7 @@
     </template>
 
     <template #cell(account_id)="{ item: { account_id, media_info, account_name } }">
-      <router-link
-        :to="{ name: 'validator', params: { id: account_id } }"
-      >
+      <router-link :to="{ name: 'validator', params: { id: account_id } }">
         <span v-if="media_info && media_info.logotype">
           <ValidatorLogotype
             :src="media_info.logotype"
@@ -44,26 +42,24 @@
     </template>
 
     <template #cell(day_uptime)="{ item: { day_uptime, total_uptime }}">
-      {{ String(day_uptime * 100).slice(0, 4) }}% /
-      {{ String(total_uptime * 100).slice(0, 4) }}%
+      {{ String(day_uptime * 100).slice(0, 4) }}% / {{ String(total_uptime * 100).slice(0, 4) }}%
     </template>
 
     <template #cell(status)="{ item: { status } }">
-      <StatusIcon
-        :status="status === 'active'"
-      />
+      <StatusIcon :status="status === 'active'" />
     </template>
 
     <template #cell(node_address)="{ item: { node_address }}">
-      <router-link
-        :to="{ name: 'account', params: { id: node_address } }"
-      >
+      <router-link :to="{ name: 'account', params: { id: node_address } }">
         {{ node_address }}
       </router-link>
     </template>
 
-    <template #cell(commission_schedule)="{ item: { commission_schedule }}">
-      {{ (commission_schedule.rates && commission_schedule.rates[0].rate) | formatPercent }}%
+    <template #cell(commission_schedule)="{ item: { commission_schedule, current_epoch }}">
+      {{
+        (commission_schedule.rates && getCommissionRate(commission_schedule, current_epoch))
+          | formatPercent
+      }}%
     </template>
 
     <template #cell(validate_since)="{ item: { validate_since } }">
@@ -115,6 +111,19 @@ export default {
         limit: 200,
       },
     };
+  },
+  methods: {
+    getCommissionRate(commission, epoch) {
+      const reversArr = [...commission.rates];
+      const findRate = reversArr.reverse().find((e) => {
+        if (epoch >= e.start) {
+          return e;
+        }
+        return e;
+      });
+
+      return findRate.rate;
+    },
   },
 };
 </script>

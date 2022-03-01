@@ -6,6 +6,8 @@
   >
     <TheHeader class="page__header" />
 
+    <Banner />
+
     <main class="page__main">
       <router-view />
     </main>
@@ -22,10 +24,12 @@
 <script>
 import TheHeader from '@/components/TheHeader.vue';
 import TheFooter from '@/components/TheFooter.vue';
+import Banner from './components/Banner.vue';
 
 export default {
   name: 'App',
   components: {
+    Banner,
     TheHeader,
     TheFooter,
   },
@@ -33,5 +37,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~@/assets/styles/index.scss';
+@import './assets/styles/index';
 </style>

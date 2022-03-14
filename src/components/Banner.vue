@@ -2,7 +2,7 @@
   <div :class="['banner']">
     <b-container>
       <a
-        href="https://nation.io/dao/ukraine"
+        href="https://donate.thedigital.gov.ua/"
         target="_blank"
         rel="noreferrer"
       >

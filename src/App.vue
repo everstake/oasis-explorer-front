@@ -6,7 +6,7 @@
   >
     <TheHeader class="page__header" />
 
-    <Banner />
+    <!--    <Banner />-->
 
     <main class="page__main">
       <router-view />
@@ -24,12 +24,12 @@
 <script>
 import TheHeader from '@/components/TheHeader.vue';
 import TheFooter from '@/components/TheFooter.vue';
-import Banner from './components/Banner.vue';
+// import Banner from './components/Banner.vue';
 
 export default {
   name: 'App',
   components: {
-    Banner,
+    // Banner,
     TheHeader,
     TheFooter,
   },

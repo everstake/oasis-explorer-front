@@ -10,14 +10,21 @@
         alt="Oasis logotype"
       >
     </router-link>
-    <span class="logo__note">
-      by
-      <img
-        class="logo__everstake"
-        src="../assets/images/logo-everstake.svg"
-        alt="Everstake logotype"
-      >
-    </span>
+    <a
+      href="https://everstake.one/"
+      class="logo__link"
+      target="_blank"
+      rel="referrer"
+    >
+      <span class="logo__note">
+        by
+        <img
+          class="logo__everstake"
+          src="../assets/images/logo-everstake.svg"
+          alt="Everstake logotype"
+        >
+      </span>
+    </a>
   </div>
 </template>
 

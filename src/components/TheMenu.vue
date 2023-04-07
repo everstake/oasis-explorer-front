@@ -69,7 +69,7 @@
     <li class="nav-item page-nav__item page-nav__link">
       <a
         class="page__link page-nav__link"
-        :href="apiAddress"
+        href="/docs"
         target="_blank"
       >API</a>
     </li>
@@ -79,11 +79,6 @@
 <script>
 export default {
   name: 'TheMenu',
-  computed: {
-    apiAddress() {
-      return process.env.VUE_APP_NETWORK_TYPE === 'testnet' ? `${process.env.VUE_APP_TESTNET_URL}/docs` : `${process.env.VUE_APP_MAINNET_URL}/docs`;
-    },
-  },
 };
 </script>
 

@@ -18,7 +18,7 @@ Vue.config.productionTip = false;
 Vue.use(
   VueGtag,
   {
-    config: { id: process.env.VUE_APP_GOOGLE_ANALYTICS_ID },
+    config: { id: 'UA-136304668-4' },
   },
   router,
 );

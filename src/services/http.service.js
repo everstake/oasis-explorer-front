@@ -1,9 +1,10 @@
 import axios from 'axios';
 import qs from 'qs';
 import { startLoader, stopLoader } from '@/plugins/loader.plugin';
+import constants from '@/plugins/constants.plugin';
 
 const http = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: constants.API_URL,
   headers: {
     'Content-Type': 'application/json',
   },

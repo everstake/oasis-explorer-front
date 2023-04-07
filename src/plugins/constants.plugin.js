@@ -11,23 +11,23 @@ const env = {
   TESTNET_URL: '',
   NETWORK_TYPE: '',
 };
-
-if (window.location.href.includes('oasismonitor.com')) {
+console.log(window.location.href);
+if (window.location.origin === 'https://oasismonitor.com') {
   env.API_URL = 'https://api.oasismonitor.com';
   env.NETWORK_TYPE = 'mainnet';
   env.MAINNET_URL = 'https://oasismonitor.com';
   env.TESTNET_URL = 'https://testnet.oasismonitor.com';
-} else if (window.location.href.includes('stage.oasismonitor.com')) {
+} else if (window.location.origin === 'https://stage.oasismonitor.com') {
   env.API_URL = 'https://api-stage.oasismonitor.com';
   env.NETWORK_TYPE = 'mainnet';
   env.MAINNET_URL = 'https://stage.oasismonitor.com';
   env.TESTNET_URL = 'https://testnet-stage.oasismonitor.com';
-} else if (window.location.href.includes('testnet.oasismonitor.com')) {
+} else if (window.location.origin === 'https://testnet.oasismonitor.com') {
   env.API_URL = 'https://testnet-api.oasismonitor.com';
   env.NETWORK_TYPE = 'testnet';
   env.MAINNET_URL = 'https://oasismonitor.com';
   env.TESTNET_URL = 'https://testnet.oasismonitor.com';
-} else if (window.location.href.includes('testnet-stage.oasismonitor.com')) {
+} else if (window.location.origin === 'https://testnet-stage.oasismonitor.com') {
   env.API_URL = 'https://testnet-api-stage.oasismonitor.com';
   env.NETWORK_TYPE = 'testnet';
   env.MAINNET_URL = 'https://stage.oasismonitor.com';
